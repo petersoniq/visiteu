@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/petersoniq/visiteu/compare/v1.2.0...v1.2.1) (2026-08-07)
+
+
+### Bug Fixes
+
+* zjednotenie písma v denníku a kompaktnejšia infografika ([d208090](https://github.com/petersoniq/visiteu/commit/d208090fdab0e227e3ccf9b4873ca1c716878dcf))
+
 ## [1.2.0](https://github.com/petersoniq/visiteu/compare/v1.1.0...v1.2.0) (2026-08-07)
 
 

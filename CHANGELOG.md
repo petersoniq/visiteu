@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/petersoniq/visiteu/compare/v1.0.0...v1.1.0) (2026-08-07)
+
+
+### Features
+
+* PWA inštalovateľnosť a správa profilu ([097e17f](https://github.com/petersoniq/visiteu/commit/097e17fe7deed7c581bb99cda7e57ea5fcf3d265))
+
 ## 1.0.0 (2026-08-07)
 
 

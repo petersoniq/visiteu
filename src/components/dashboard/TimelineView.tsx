@@ -59,7 +59,7 @@ export function TimelineView({ visits, loading }: Props) {
   return (
     <div className="bg-paper rounded-3xl border border-hairline p-6 sm:p-12">
       <div className="flex items-center justify-between mb-10">
-        <h3 className="font-serif text-lg text-ink">Cestovný denník</h3>
+        <h3 className="text-base font-semibold text-ink">Cestovný denník</h3>
 
         {years.length > 0 && (
           <div className="flex items-center gap-5 overflow-x-auto">
@@ -92,7 +92,7 @@ export function TimelineView({ visits, loading }: Props) {
 
       {filteredVisits.length === 0 ? (
         <div className="text-center py-16">
-          <p className="font-serif text-xl text-ink-muted">Zatiaľ žiadne spomienky</p>
+          <p className="text-lg font-medium text-ink-muted">Zatiaľ žiadne spomienky</p>
           <p className="text-sm text-ink-faint mt-2">
             Prvá zaznamenaná návšteva sa tu objaví ako prvá zastávka na tvojej ceste.
           </p>
@@ -126,7 +126,7 @@ export function TimelineView({ visits, loading }: Props) {
                       </div>
                     )}
 
-                    <h4 className="font-serif text-xl text-ink leading-tight">{visit.capital.city}</h4>
+                    <h4 className="text-lg font-semibold text-ink leading-tight">{visit.capital.city}</h4>
                     <p className="text-xs uppercase tracking-wide text-ink-faint mt-1">{visit.capital.country}</p>
                     <p className="text-sm text-ink-muted mt-3">{formatVisitDate(visit)}</p>
 

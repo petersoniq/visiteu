@@ -8,8 +8,6 @@
  * osobná kronika, nie ako "dashboard".
  */
 @theme {
-  --font-serif: "Fraunces", ui-serif, Georgia, "Times New Roman", serif;
-
   --color-paper: #f7f5f0;      /* teplý papierový podklad */
   --color-paper-dim: #f1efe8;  /* jemne tmavší odtieň papiera (striedanie sekcií) */
   --color-ink: #33312c;        /* primárny text - teplá antracitová, nie čierna */

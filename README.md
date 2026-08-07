@@ -5,6 +5,8 @@ Webová aplikácia na sledovanie a zaznamenávanie návštev hlavných miest Eur
 ## Funkcie
 
 - 🔐 Registrácia a prihlásenie (Supabase Auth)
+- 👤 Správa profilu – zmena prezývky, mena, profilovej fotky (avatar) a hesla
+- 📱 Inštalovateľná PWA appka (funguje offline pre statický obsah, dá sa pridať na plochu/domovskú obrazovku)
 - 🗺️ Interaktívna mapa 27 hlavných miest EÚ (Leaflet) s farebným rozlíšením navštívených/nenavštívených miest
 - 📓 Cestovateľský denník – dátum, doprava, dĺžka pobytu, poznámky, hodnotenie
 - 📸 Fotogaléria k návštevám (Supabase Storage)
@@ -28,7 +30,9 @@ SQL súbory na nastavenie Supabase projektu sú v priečinku [`supabase/`](./sup
 2. `seed_capitals.sql` – 27 hlavných miest EÚ so súradnicami
 3. `seed_badges.sql` – definícia gamifikačných odznakov
 
-Spusti ich v tomto poradí v Supabase SQL Editore. Pred `schema.sql` (storage časť) vytvor v **Storage** bucket s názvom `visit-photos` (public).
+Spusti ich v tomto poradí v Supabase SQL Editore. Pred `schema.sql` (storage časť) vytvor v **Storage** dva buckety:
+- `visit-photos` (public) – fotky z návštev
+- `avatars` (public) – profilové fotky používateľov
 
 ## Lokálny vývoj
 

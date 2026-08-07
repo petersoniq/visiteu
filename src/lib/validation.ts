@@ -43,3 +43,26 @@ export const visitSchema = z.object({
 })
 
 export type VisitFormData = z.infer<typeof visitSchema>
+
+export const profileSchema = z.object({
+  username: z
+    .string()
+    .min(3, 'Prezývka musí mať aspoň 3 znaky')
+    .max(20, 'Prezývka môže mať max. 20 znakov')
+    .regex(/^[a-zA-Z0-9_]+$/, 'Len písmená, čísla a podčiarkovník'),
+  full_name: z.string().max(80, 'Max. 80 znakov').optional(),
+})
+
+export type ProfileFormData = z.infer<typeof profileSchema>
+
+export const passwordChangeSchema = z
+  .object({
+    newPassword: z.string().min(6, 'Heslo musí mať aspoň 6 znakov'),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: 'Heslá sa nezhodujú',
+    path: ['confirmPassword'],
+  })
+
+export type PasswordChangeFormData = z.infer<typeof passwordChangeSchema>

@@ -6,6 +6,7 @@ import { RegisterForm } from './components/auth/RegisterForm'
 import { Navbar } from './components/layout/Navbar'
 import { DashboardPage } from './pages/DashboardPage'
 import { AdminPage } from './pages/AdminPage'
+import { ProfilePage } from './pages/ProfilePage'
 
 function AuthLayout({ children }: { children: React.ReactNode }) {
   return <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">{children}</div>
@@ -31,6 +32,7 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route element={<AppLayout />}>
               <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
               <Route element={<AdminRoute />}>
                 <Route path="/admin" element={<AdminPage />} />
               </Route>

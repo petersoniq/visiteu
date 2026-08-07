@@ -42,3 +42,10 @@ export interface VisitPhoto {
   caption: string | null
   created_at: string
 }
+
+/** Návšteva obohatená o detail mesta a titulnú fotku – pre Timeline / Infografiku */
+export interface VisitWithDetails extends Visit {
+  capital: EuCapital
+  photoCount: number
+  coverPhotoUrl: string | null
+}

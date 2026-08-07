@@ -1,1 +1,28 @@
 @import "tailwindcss";
+
+/*
+ * Dizajnový systém pre sekciu "Cestovný denník" (Timeline + Infografika).
+ * Tlmená, pastelová paleta inšpirovaná starým cestovným pasom a jeho
+ * atramentovými pečiatkami – zámerne odlišná od sýtej emerald farby
+ * použitej v interaktívnej mape, aby denníková sekcia pôsobila ako
+ * osobná kronika, nie ako "dashboard".
+ */
+@theme {
+  --font-serif: "Fraunces", ui-serif, Georgia, "Times New Roman", serif;
+
+  --color-paper: #f7f5f0;      /* teplý papierový podklad */
+  --color-paper-dim: #f1efe8;  /* jemne tmavší odtieň papiera (striedanie sekcií) */
+  --color-ink: #33312c;        /* primárny text - teplá antracitová, nie čierna */
+  --color-ink-muted: #6b6862;  /* sekundárny text */
+  --color-ink-faint: #726f67;  /* terciárny text / captions (min. 4.5:1 na paper) */
+  --color-hairline: #e3dfd3;   /* tenké deliace linky */
+
+  --color-sage: #74836a;       /* tlmená šalviová zelená - primárny akcent */
+  --color-sage-light: #e4e9df;
+
+  --color-ochre: #a67940;      /* tlmené zlato/okrová - "atramentová pečiatka" akcent */
+  --color-ochre-light: #f2e6d3;
+
+  --color-dusk: #7c93a0;       /* tlmená modrošedá - sekundárny akcent */
+  --color-dusk-light: #e6ebed;
+}

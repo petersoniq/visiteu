@@ -12,37 +12,39 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
+      injectRegister: 'auto',
+      includeAssets: ['apple-touch-icon.png', 'favicon-192.png'],
       manifest: {
-        name: 'visitEU – Cestovateľský denník',
+        id: '/visiteu/',
+        name: 'visitEU – cestovateľský denník po EÚ',
         short_name: 'visitEU',
-        description: 'Sledovanie a zaznamenávanie návštev hlavných miest Európskej únie.',
-        theme_color: '#059669',
-        background_color: '#f8fafc',
-        display: 'standalone',
+        description: 'Sleduj a zaznamenávaj svoje návštevy hlavných miest Európskej únie.',
         start_url: '/visiteu/',
         scope: '/visiteu/',
+        display: 'standalone',
+        background_color: '#f8fafc',
+        theme_color: '#059669',
         lang: 'sk',
         icons: [
-          { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
-          { src: 'pwa-512x512.png', sizes: '512x512', type: 'image/png' },
-          { src: 'pwa-maskable-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+          { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+          { src: 'icons/icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
       },
       workbox: {
-        // Nechceme cachovať Supabase API volania - dáta majú byť vždy čerstvé zo servera
-        navigateFallbackDenylist: [/^\/api/],
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,webmanifest}'],
+        // Supabase dáta majú byť vždy čerstvé - necachujeme API volania
         runtimeCaching: [
           {
-            urlPattern: /^https:\/\/.*\.supabase\.co\/.*/i,
+            urlPattern: ({ url }: { url: URL }) => url.hostname.endsWith('.supabase.co'),
             handler: 'NetworkOnly',
           },
           {
-            urlPattern: /^https:\/\/[abc]\.tile\.openstreetmap\.org\/.*/i,
+            urlPattern: ({ url }: { url: URL }) => url.hostname.includes('tile.openstreetmap.org'),
             handler: 'CacheFirst',
             options: {
-              cacheName: 'osm-tiles-cache',
-              expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 30 },
+              cacheName: 'map-tiles-cache',
+              expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 14 },
             },
           },
         ],

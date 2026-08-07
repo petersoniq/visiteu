@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
 
 export interface Badge {
@@ -19,38 +19,32 @@ export function useBadges(userId?: string) {
   const [earnedBadges, setEarnedBadges] = useState<UserBadge[]>([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
+  const fetchBadges = useCallback(async () => {
     if (!userId) {
       setLoading(false)
       return
     }
 
-    let active = true
+    setLoading(true)
+    const [allRes, earnedRes] = await Promise.all([
+      supabase.from('badges').select('*').order('id'),
+      supabase
+        .from('user_badges')
+        .select('earned_at, badge:badges(*)')
+        .eq('user_id', userId)
+        .order('earned_at', { ascending: false }),
+    ])
 
-    async function fetchBadges() {
-      const [allRes, earnedRes] = await Promise.all([
-        supabase.from('badges').select('*').order('id'),
-        supabase
-          .from('user_badges')
-          .select('earned_at, badge:badges(*)')
-          .eq('user_id', userId)
-          .order('earned_at', { ascending: false }),
-      ])
-
-      if (!active) return
-
-      if (allRes.data) setAllBadges(allRes.data as Badge[])
-      if (earnedRes.data) setEarnedBadges(earnedRes.data as unknown as UserBadge[])
-      setLoading(false)
-    }
-
-    fetchBadges()
-    return () => {
-      active = false
-    }
+    if (allRes.data) setAllBadges(allRes.data as Badge[])
+    if (earnedRes.data) setEarnedBadges(earnedRes.data as unknown as UserBadge[])
+    setLoading(false)
   }, [userId])
+
+  useEffect(() => {
+    fetchBadges()
+  }, [fetchBadges])
 
   const earnedCodes = new Set(earnedBadges.map((eb) => eb.badge.code))
 
-  return { allBadges, earnedBadges, earnedCodes, loading }
+  return { allBadges, earnedBadges, earnedCodes, loading, refetch: fetchBadges }
 }

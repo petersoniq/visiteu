@@ -14,6 +14,8 @@ interface Props {
   existingVisits: Visit[]
   onClose: () => void
   onSaved: () => void
+  /** Zavolá sa hneď po úspešnom uložení/vytvorení návštevy – aj keď modal ešte zostáva otvorený (napr. kvôli fotkám) */
+  onDataChanged?: () => void
 }
 
 const TRANSPORT_OPTIONS: { value: string; label: string }[] = [
@@ -27,7 +29,7 @@ const TRANSPORT_OPTIONS: { value: string; label: string }[] = [
   { value: 'iné', label: '❓ Iné' },
 ]
 
-export function VisitDetailModal({ capital, existingVisits, onClose, onSaved }: Props) {
+export function VisitDetailModal({ capital, existingVisits, onClose, onSaved, onDataChanged }: Props) {
   const { user } = useAuth()
   const [mode, setMode] = useState<'list' | 'form'>(existingVisits.length > 0 ? 'list' : 'form')
   const [editingVisit, setEditingVisit] = useState<Visit | null>(null)
@@ -134,6 +136,9 @@ export function VisitDetailModal({ capital, existingVisits, onClose, onSaved }: 
 
       setSavedVisitId(data.id)
       setEditingVisit(data as Visit)
+      // Návšteva je uložená (aj odznaky sú DB triggerom pridelené) – obnov štatistiky
+      // hneď, aj keď modal necháme otvorený kvôli pridávaniu fotiek.
+      onDataChanged?.()
     }
   }
 

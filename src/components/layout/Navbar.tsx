@@ -16,6 +16,7 @@ export function Navbar() {
       <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
         <Link to="/dashboard" className="flex items-center gap-2 font-bold text-slate-900">
           <Map className="w-5 h-5 text-emerald-600" /> visitEU
+          <span className="text-xs font-normal text-slate-400">v{__APP_VERSION__}</span>
         </Link>
 
         <div className="flex items-center gap-4">

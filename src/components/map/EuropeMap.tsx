@@ -1,21 +1,25 @@
 import { MapContainer, TileLayer } from 'react-leaflet'
 import { useMemo, useState } from 'react'
-import { useCapitals } from '../../hooks/useCapitals'
-import { useVisits } from '../../hooks/useVisits'
 import { CapitalMarker } from './CapitalMarker'
-import type { EuCapital } from '../../types'
+import type { EuCapital, Visit } from '../../types'
 import { VisitDetailModal } from '../visits/VisitDetailModal'
 
 const EUROPE_CENTER: [number, number] = [50.5, 14.5]
 const DEFAULT_ZOOM = 4
 
-export function EuropeMap() {
-  const { capitals, loading: capitalsLoading } = useCapitals()
-  const { visits, loading: visitsLoading, refetch } = useVisits()
+interface Props {
+  capitals: EuCapital[]
+  visits: Visit[]
+  loading: boolean
+  /** Zavolá sa po uložení/zmazaní návštevy – rodič si obnoví svoje dáta (návštevy, odznaky...) */
+  onDataChanged: () => void
+}
+
+export function EuropeMap({ capitals, visits, loading, onDataChanged }: Props) {
   const [selectedCapital, setSelectedCapital] = useState<EuCapital | null>(null)
 
   const visitsByCapital = useMemo(() => {
-    const map = new Map<number, typeof visits>()
+    const map = new Map<number, Visit[]>()
     for (const visit of visits) {
       const existing = map.get(visit.capital_id) ?? []
       existing.push(visit)
@@ -27,7 +31,7 @@ export function EuropeMap() {
     return map
   }, [visits])
 
-  if (capitalsLoading || visitsLoading) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center h-[600px] bg-slate-50 rounded-xl">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600" />
@@ -77,9 +81,10 @@ export function EuropeMap() {
           existingVisits={visitsByCapital.get(selectedCapital.id) ?? []}
           onClose={() => setSelectedCapital(null)}
           onSaved={() => {
-            refetch()
+            onDataChanged()
             setSelectedCapital(null)
           }}
+          onDataChanged={onDataChanged}
         />
       )}
     </div>

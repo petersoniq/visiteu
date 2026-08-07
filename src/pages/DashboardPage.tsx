@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { EuropeMap } from '../components/map/EuropeMap'
 import { ProgressBar } from '../components/stats/ProgressBar'
 import { RegionBreakdown } from '../components/stats/RegionBreakdown'
@@ -12,10 +13,17 @@ import { useStats } from '../hooks/useStats'
 
 export function DashboardPage() {
   const { profile, user } = useAuth()
-  const { capitals } = useCapitals()
-  const { visits } = useVisits()
-  const { allBadges, earnedCodes } = useBadges(user?.id)
+  const { capitals, loading: capitalsLoading } = useCapitals()
+  const { visits, loading: visitsLoading, refetch: refetchVisits } = useVisits()
+  const { allBadges, earnedCodes, refetch: refetchBadges } = useBadges(user?.id)
   const stats = useStats(capitals, visits)
+
+  // Jediné miesto, ktoré sa volá po uložení/zmazaní návštevy kdekoľvek v appke.
+  // Obnoví návštevy AJ odznaky (tie sa prideľujú DB triggerom hneď pri uložení návštevy).
+  const handleDataChanged = useCallback(() => {
+    refetchVisits()
+    refetchBadges()
+  }, [refetchVisits, refetchBadges])
 
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-6">
@@ -35,7 +43,12 @@ export function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
           <ProgressBar visited={stats.visitedCount} total={stats.totalCapitals} percentage={stats.percentage} />
-          <EuropeMap />
+          <EuropeMap
+            capitals={capitals}
+            visits={visits}
+            loading={capitalsLoading || visitsLoading}
+            onDataChanged={handleDataChanged}
+          />
         </div>
 
         <div className="space-y-6">

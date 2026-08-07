@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/petersoniq/visiteu/compare/v1.1.0...v1.2.0) (2026-08-07)
+
+
+### Features
+
+* sekcia Cestovný denník - Timeline View a Infografika štatistík ([d18f054](https://github.com/petersoniq/visiteu/commit/d18f05462b169eac3855d655fe1fd9647e0bd074))
+
 ## [1.1.0](https://github.com/petersoniq/visiteu/compare/v1.0.0...v1.1.0) (2026-08-07)
 
 

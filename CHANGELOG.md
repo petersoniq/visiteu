@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/petersoniq/visiteu/compare/v1.4.1...v1.5.0) (2026-08-08)
+
+
+### Features
+
+* nová záložka Mestá - abecedný zoznam všetkých 27 hlavných miest ([cf78a7d](https://github.com/petersoniq/visiteu/commit/cf78a7d914f960e1296d4f04bcf3a4d8daf779ab))
+
 ## [1.4.1](https://github.com/petersoniq/visiteu/compare/v1.4.0...v1.4.1) (2026-08-08)
 
 

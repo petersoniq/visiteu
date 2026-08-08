@@ -11,6 +11,15 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="visitEU" />
     <meta name="description" content="Sledovanie a zaznamenávanie návštev hlavných miest Európskej únie – cestovateľský denník s mapou, fotogalériou a gamifikáciou." />
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('visiteu-theme');
+          var isDark = stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (isDark) document.documentElement.classList.add('dark');
+        } catch (e) {}
+      })();
+    </script>
     <title>visitEU – Cestovateľský denník</title>
   </head>
   <body>

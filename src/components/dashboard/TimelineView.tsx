@@ -48,7 +48,7 @@ export function TimelineView({ visits, loading }: Props) {
 
   if (loading) {
     return (
-      <div className="bg-paper rounded-3xl border border-hairline p-8 sm:p-12 animate-pulse space-y-8">
+      <div className="p-6 sm:p-12 animate-pulse space-y-8">
         {[0, 1, 2].map((i) => (
           <div key={i} className="h-24 rounded-xl bg-paper-dim" />
         ))}
@@ -57,7 +57,7 @@ export function TimelineView({ visits, loading }: Props) {
   }
 
   return (
-    <div className="bg-paper rounded-3xl border border-hairline p-6 sm:p-12">
+    <div className="p-6 sm:p-12">
       <div className="flex items-center justify-between mb-10">
         <h3 className="text-base font-semibold text-ink">Cestovný denník</h3>
 
@@ -115,9 +115,9 @@ export function TimelineView({ visits, loading }: Props) {
 
                 {/* Kartička - na mobile vždy vpravo od osi, na desktope strieda strany */}
                 <div className={`pl-16 md:pl-0 md:w-1/2 ${onRight ? 'md:ml-auto md:pl-12' : 'md:pr-12'}`}>
-                  <article className="group bg-white rounded-lg border border-hairline p-5 shadow-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-md">
+                  <article className="group bg-paper-dim rounded-lg border border-hairline p-5 shadow-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-md">
                     {visit.coverPhotoUrl && (
-                      <div className="rounded-lg overflow-hidden mb-4 aspect-[4/3] bg-paper-dim">
+                      <div className="rounded-lg overflow-hidden mb-4 aspect-[4/3] bg-hairline">
                         <img
                           src={visit.coverPhotoUrl}
                           alt={visit.capital.city}

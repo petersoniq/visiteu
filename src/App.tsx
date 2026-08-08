@@ -1,5 +1,6 @@
 import { HashRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
+import { ThemeProvider } from './contexts/ThemeContext'
 import { ProtectedRoute, AdminRoute } from './components/auth/ProtectedRoute'
 import { LoginForm } from './components/auth/LoginForm'
 import { RegisterForm } from './components/auth/RegisterForm'
@@ -9,12 +10,16 @@ import { AdminPage } from './pages/AdminPage'
 import { ProfilePage } from './pages/ProfilePage'
 
 function AuthLayout({ children }: { children: React.ReactNode }) {
-  return <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">{children}</div>
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 px-4">
+      {children}
+    </div>
+  )
 }
 
 function AppLayout() {
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
       <Navbar />
       <Outlet />
     </div>
@@ -23,27 +28,29 @@ function AppLayout() {
 
 function App() {
   return (
-    <AuthProvider>
-      <HashRouter>
-        <Routes>
-          <Route path="/login" element={<AuthLayout><LoginForm /></AuthLayout>} />
-          <Route path="/register" element={<AuthLayout><RegisterForm /></AuthLayout>} />
+    <ThemeProvider>
+      <AuthProvider>
+        <HashRouter>
+          <Routes>
+            <Route path="/login" element={<AuthLayout><LoginForm /></AuthLayout>} />
+            <Route path="/register" element={<AuthLayout><RegisterForm /></AuthLayout>} />
 
-          <Route element={<ProtectedRoute />}>
-            <Route element={<AppLayout />}>
-              <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route element={<AdminRoute />}>
-                <Route path="/admin" element={<AdminPage />} />
+            <Route element={<ProtectedRoute />}>
+              <Route element={<AppLayout />}>
+                <Route path="/dashboard" element={<DashboardPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
+                <Route element={<AdminRoute />}>
+                  <Route path="/admin" element={<AdminPage />} />
+                </Route>
               </Route>
             </Route>
-          </Route>
 
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
-        </Routes>
-      </HashRouter>
-    </AuthProvider>
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
+        </HashRouter>
+      </AuthProvider>
+    </ThemeProvider>
   )
 }
 

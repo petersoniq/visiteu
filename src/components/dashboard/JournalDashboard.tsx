@@ -12,17 +12,18 @@ interface Props {
 /**
  * "Cestovný denník" – osobná, nesúťaživá kronika ciest.
  * Spája StatsInfographic (kompaktné vizuálne štatistiky) a TimelineView
- * (chronologický feed spomienok) do jednej pokojnej sekcie s vlastným
- * jazykom (papierový podklad, tlmené farby), ale rovnakým písmom ako
- * zvyšok appky.
+ * (chronologický feed spomienok) do JEDNÉHO spoločného panela (jednotné
+ * pozadie, jeden rám) namiesto dvoch samostatných boxov - oddelené sú len
+ * tenkým hairline deličom. Farby sú CSS premenné (--color-paper, --color-ink...)
+ * definované v index.css a automaticky sa prefarbia v tmavom režime.
  *
  * Dáta dostáva ako props z DashboardPage (jediný zdroj pravdy pre
  * visits/capitals v celej appke) – nefetchuje si nič vlastné.
  */
 export function JournalDashboard({ visits, stats, loading }: Props) {
   return (
-    <div className="space-y-6">
-      <div className="text-center px-4">
+    <div className="bg-paper rounded-3xl border border-hairline overflow-hidden">
+      <div className="text-center px-4 pt-8 pb-1">
         <p className="text-xl font-semibold text-ink">Tvoja cesta po Európe</p>
         <p className="text-sm text-ink-muted mt-1">
           Osobná kronika miest, ktoré si spoznal – bez rebríčkov, len tvoje spomienky.
@@ -31,8 +32,10 @@ export function JournalDashboard({ visits, stats, loading }: Props) {
 
       <StatsInfographic stats={stats} loading={loading} />
 
-      <div className="max-w-3xl mx-auto">
-        <TimelineView visits={visits} loading={loading} />
+      <div className="border-t border-hairline">
+        <div className="max-w-3xl mx-auto">
+          <TimelineView visits={visits} loading={loading} />
+        </div>
       </div>
     </div>
   )

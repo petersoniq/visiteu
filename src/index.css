@@ -1,11 +1,22 @@
 @import "tailwindcss";
 
 /*
+ * Class-based tmavý režim: trieda `.dark` na <html> (spravuje ThemeContext).
+ * Tailwind v4 defaultne používa prefers-color-scheme; toto ho prepína na
+ * manuálne riadenie, takže `dark:` varianty fungujú s prepínačom v appke.
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
  * Dizajnový systém pre sekciu "Cestovný denník" (Timeline + Infografika).
  * Tlmená, pastelová paleta inšpirovaná starým cestovným pasom a jeho
  * atramentovými pečiatkami – zámerne odlišná od sýtej emerald farby
  * použitej v interaktívnej mape, aby denníková sekcia pôsobila ako
  * osobná kronika, nie ako "dashboard".
+ *
+ * Farby sú definované ako CSS premenné, takže tmavý režim (nižšie, v .dark)
+ * ich len prepíše - komponenty používajúce bg-paper/text-ink/... sa
+ * prefarbia automaticky, bez potreby dark: variantov všade v kóde.
  */
 @theme {
   --color-paper: #f7f5f0;      /* teplý papierový podklad */
@@ -23,4 +34,22 @@
 
   --color-dusk: #7c93a0;       /* tlmená modrošedá - sekundárny akcent */
   --color-dusk-light: #e6ebed;
+}
+
+.dark {
+  --color-paper: #211f1b;
+  --color-paper-dim: #2a2822;
+  --color-ink: #ece9e2;
+  --color-ink-muted: #b6b2a8;
+  --color-ink-faint: #9a968b;
+  --color-hairline: #3a3730;
+
+  --color-sage: #9caf8d;
+  --color-sage-light: #333b2c;
+
+  --color-ochre: #d1a468;
+  --color-ochre-light: #3c3122;
+
+  --color-dusk: #a9c0cd;
+  --color-dusk-light: #2b3439;
 }

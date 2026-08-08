@@ -106,7 +106,7 @@ function ColumnLabel({ children }: { children: string }) {
 export function StatsInfographic({ stats, loading }: Props) {
   if (loading) {
     return (
-      <div className="bg-paper rounded-2xl border border-hairline p-5 animate-pulse">
+      <div className="p-5 sm:p-6 animate-pulse">
         <div className="flex items-center gap-4">
           <div className="w-24 h-24 rounded-full bg-paper-dim shrink-0" />
           <div className="flex-1 space-y-2">
@@ -119,7 +119,7 @@ export function StatsInfographic({ stats, loading }: Props) {
   }
 
   return (
-    <div className="bg-paper rounded-2xl border border-hairline p-5 sm:p-6">
+    <div className="p-5 sm:p-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-5 lg:divide-x lg:divide-hairline">
         {/* Hlavné počítadlo */}
         <div className="flex items-center gap-4 lg:pr-5">
@@ -178,15 +178,15 @@ export function StatsInfographic({ stats, loading }: Props) {
           </div>
         </div>
 
-        {/* Geografický prehľad */}
+        {/* Geografický prehľad - pevná mriežka 2×3, rovnomerné bunky */}
         <div className="lg:pl-5">
           <ColumnLabel>Regióny</ColumnLabel>
           {stats.regionStats.length > 0 ? (
-            <div className="flex flex-wrap gap-x-4 gap-y-2">
+            <div className="grid grid-cols-2 gap-x-3 gap-y-3">
               {stats.regionStats.map((r) => (
-                <div key={r.region} className="flex items-center gap-2">
+                <div key={r.region} className="flex items-center gap-2 min-w-0">
                   <MiniDonut visited={r.visited} total={r.total} />
-                  <span className="text-[11px] leading-tight text-ink-muted max-w-[64px]">{r.region}</span>
+                  <span className="text-[11px] leading-tight text-ink-muted truncate">{r.region}</span>
                 </div>
               ))}
             </div>

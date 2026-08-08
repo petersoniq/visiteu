@@ -33,15 +33,17 @@ export function DashboardPage() {
     <div className="max-w-6xl mx-auto p-6 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 mb-1">Ahoj, {profile?.username} 👋</h1>
-          <p className="text-slate-500">Tu je tvoj prehľad cestovania po EÚ.</p>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-1">Ahoj, {profile?.username} 👋</h1>
+          <p className="text-slate-500 dark:text-slate-400">Tu je tvoj prehľad cestovania po EÚ.</p>
         </div>
 
-        <div className="flex gap-1 border border-slate-200 rounded-lg p-1 bg-white self-start">
+        <div className="flex gap-1 border border-slate-200 dark:border-slate-800 rounded-lg p-1 bg-white dark:bg-slate-900 self-start">
           <button
             onClick={() => setTab('journal')}
             className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition ${
-              tab === 'journal' ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-50'
+              tab === 'journal'
+                ? 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900'
+                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'
             }`}
           >
             <BookOpen className="w-4 h-4" /> Denník
@@ -49,7 +51,9 @@ export function DashboardPage() {
           <button
             onClick={() => setTab('map')}
             className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition ${
-              tab === 'map' ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-50'
+              tab === 'map'
+                ? 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900'
+                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'
             }`}
           >
             <MapIcon className="w-4 h-4" /> Mapa

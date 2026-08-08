@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/petersoniq/visiteu/compare/v1.4.0...v1.4.1) (2026-08-08)
+
+
+### Bug Fixes
+
+* moderná Material-štýl paleta denníka namiesto sépiového papiera ([a1541c0](https://github.com/petersoniq/visiteu/commit/a1541c02d6dd3119a4a105834ff051d6f87f0180))
+
 ## [1.4.0](https://github.com/petersoniq/visiteu/compare/v1.3.0...v1.4.0) (2026-08-08)
 
 

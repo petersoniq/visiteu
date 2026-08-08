@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/petersoniq/visiteu/compare/v1.2.1...v1.3.0) (2026-08-08)
+
+
+### Features
+
+* tmavý režim (infraštruktúra) + zjednotenie pozadia denníka + oprava mriežky regiónov ([2aabca8](https://github.com/petersoniq/visiteu/commit/2aabca83109d195d5f519f05a104b538f8f8ce26))
+
 ## [1.2.1](https://github.com/petersoniq/visiteu/compare/v1.2.0...v1.2.1) (2026-08-07)
 
 

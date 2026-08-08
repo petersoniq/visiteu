@@ -1,7 +1,7 @@
 import { MapContainer, TileLayer } from 'react-leaflet'
 import { useMemo, useState } from 'react'
 import { CapitalMarker } from './CapitalMarker'
-import type { EuCapital, Visit } from '../../types'
+import type { EuCapital, Trip, Visit } from '../../types'
 import { VisitDetailModal } from '../visits/VisitDetailModal'
 import { useTheme } from '../../contexts/ThemeContext'
 
@@ -21,12 +21,13 @@ const DARK_TILES = {
 interface Props {
   capitals: EuCapital[]
   visits: Visit[]
+  trips: Trip[]
   loading: boolean
-  /** Zavolá sa po uložení/zmazaní návštevy – rodič si obnoví svoje dáta (návštevy, odznaky...) */
+  /** Zavolá sa po uložení/zmazaní návštevy alebo výletu – rodič si obnoví svoje dáta */
   onDataChanged: () => void
 }
 
-export function EuropeMap({ capitals, visits, loading, onDataChanged }: Props) {
+export function EuropeMap({ capitals, visits, trips, loading, onDataChanged }: Props) {
   const [selectedCapital, setSelectedCapital] = useState<EuCapital | null>(null)
   const { theme } = useTheme()
   const tiles = theme === 'dark' ? DARK_TILES : LIGHT_TILES
@@ -90,6 +91,7 @@ export function EuropeMap({ capitals, visits, loading, onDataChanged }: Props) {
         <VisitDetailModal
           capital={selectedCapital}
           existingVisits={visitsByCapital.get(selectedCapital.id) ?? []}
+          trips={trips}
           onClose={() => setSelectedCapital(null)}
           onSaved={() => {
             onDataChanged()

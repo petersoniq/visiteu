@@ -296,3 +296,35 @@ with check (bucket_id = 'visit-photos' and (storage.foldername(name))[1] = auth.
 create policy "Používateľ maže vlastné fotky, admin hocijaké"
 on storage.objects for delete
 using (bucket_id = 'visit-photos' and ((storage.foldername(name))[1] = auth.uid()::text or public.is_admin()));
+
+-- =========================================================
+-- TRIPS – zoskupenie viacerých návštev miest do jedného výletu
+-- (pridané v neskoršej migrácii, dokumentované tu pre kompletnosť schémy)
+-- =========================================================
+create table public.trips (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references public.profiles(id) on delete cascade,
+  name text not null,
+  description text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index idx_trips_user_id on public.trips(user_id);
+
+alter table public.visits add column trip_id uuid references public.trips(id) on delete set null;
+create index idx_visits_trip_id on public.visits(trip_id);
+
+alter table public.trips enable row level security;
+
+create policy "Výlety sú verejne viditeľné"
+  on public.trips for select using (true);
+
+create policy "Používateľ vytvára len svoje výlety"
+  on public.trips for insert with check (auth.uid() = user_id);
+
+create policy "Používateľ upravuje len svoje výlety"
+  on public.trips for update using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+create policy "Používateľ maže len svoje výlety"
+  on public.trips for delete using (auth.uid() = user_id);

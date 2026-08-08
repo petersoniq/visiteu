@@ -1,20 +1,21 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { X, Loader2, Trash2, Plus } from 'lucide-react'
+import { X, Loader2, Trash2, Plus, Luggage } from 'lucide-react'
 import { format } from 'date-fns'
 import { supabase } from '../../lib/supabaseClient'
 import { useAuth } from '../../contexts/AuthContext'
 import { visitSchema, type VisitFormData } from '../../lib/validation'
 import { PhotoUpload } from './PhotoUpload'
-import type { EuCapital, Visit, VisitPhoto } from '../../types'
+import type { EuCapital, Trip, Visit, VisitPhoto } from '../../types'
 
 interface Props {
   capital: EuCapital
   existingVisits: Visit[]
+  trips: Trip[]
   onClose: () => void
   onSaved: () => void
-  /** Zavolá sa hneď po úspešnom uložení/vytvorení návštevy – aj keď modal ešte zostáva otvorený (napr. kvôli fotkám) */
+  /** Zavolá sa hneď po úspešnom uložení/vytvorení návštevy (aj výletu) – aj keď modal ešte zostáva otvorený (napr. kvôli fotkám) */
   onDataChanged?: () => void
 }
 
@@ -29,7 +30,9 @@ const TRANSPORT_OPTIONS: { value: string; label: string }[] = [
   { value: 'iné', label: '❓ Iné' },
 ]
 
-export function VisitDetailModal({ capital, existingVisits, onClose, onSaved, onDataChanged }: Props) {
+const NEW_TRIP_VALUE = '__new__'
+
+export function VisitDetailModal({ capital, existingVisits, trips, onClose, onSaved, onDataChanged }: Props) {
   const { user } = useAuth()
   const [mode, setMode] = useState<'list' | 'form'>(existingVisits.length > 0 ? 'list' : 'form')
   const [editingVisit, setEditingVisit] = useState<Visit | null>(null)
@@ -37,6 +40,8 @@ export function VisitDetailModal({ capital, existingVisits, onClose, onSaved, on
   const [savedVisitId, setSavedVisitId] = useState<string | null>(null)
   const [serverError, setServerError] = useState<string | null>(null)
   const [deleting, setDeleting] = useState<string | null>(null)
+  const [tripSelection, setTripSelection] = useState<string>('')
+  const [newTripName, setNewTripName] = useState('')
 
   const {
     register,
@@ -45,10 +50,17 @@ export function VisitDetailModal({ capital, existingVisits, onClose, onSaved, on
     formState: { errors, isSubmitting },
   } = useForm<VisitFormData>({ resolver: zodResolver(visitSchema) })
 
+  function findTripName(tripId: string | null) {
+    if (!tripId) return null
+    return trips.find((t) => t.id === tripId)?.name ?? null
+  }
+
   function startNewVisit() {
     setEditingVisit(null)
     setSavedVisitId(null)
     setPhotos([])
+    setTripSelection('')
+    setNewTripName('')
     reset({
       visit_date: format(new Date(), 'yyyy-MM-dd'),
       transport_mode: undefined,
@@ -62,6 +74,8 @@ export function VisitDetailModal({ capital, existingVisits, onClose, onSaved, on
   async function startEditVisit(visit: Visit) {
     setEditingVisit(visit)
     setSavedVisitId(visit.id)
+    setTripSelection(visit.trip_id ?? '')
+    setNewTripName('')
     reset({
       visit_date: visit.visit_date,
       transport_mode: visit.transport_mode,
@@ -92,9 +106,31 @@ export function VisitDetailModal({ capital, existingVisits, onClose, onSaved, on
     onSaved()
   }
 
+  /** Vyrieši trip_id pre uloženie: buď existujúci výlet, nový (vytvorí ho), alebo žiadny. */
+  async function resolveTripId(): Promise<{ tripId: string | null; error: string | null }> {
+    if (tripSelection === NEW_TRIP_VALUE) {
+      if (!newTripName.trim() || !user) return { tripId: null, error: 'Zadaj názov nového výletu.' }
+      const { data, error } = await supabase
+        .from('trips')
+        .insert({ user_id: user.id, name: newTripName.trim() })
+        .select()
+        .single()
+      if (error) return { tripId: null, error: error.message }
+      onDataChanged?.()
+      return { tripId: data.id as string, error: null }
+    }
+    return { tripId: tripSelection || null, error: null }
+  }
+
   async function onSubmit(formData: VisitFormData) {
     if (!user) return
     setServerError(null)
+
+    const { tripId, error: tripError } = await resolveTripId()
+    if (tripError) {
+      setServerError(tripError)
+      return
+    }
 
     if (editingVisit) {
       const { error } = await supabase
@@ -105,6 +141,7 @@ export function VisitDetailModal({ capital, existingVisits, onClose, onSaved, on
           duration_nights: formData.duration_nights,
           notes: formData.notes || null,
           rating: formData.rating || null,
+          trip_id: tripId,
           updated_at: new Date().toISOString(),
         })
         .eq('id', editingVisit.id)
@@ -125,6 +162,7 @@ export function VisitDetailModal({ capital, existingVisits, onClose, onSaved, on
           duration_nights: formData.duration_nights,
           notes: formData.notes || null,
           rating: formData.rating || null,
+          trip_id: tripId,
         })
         .select()
         .single()
@@ -157,44 +195,52 @@ export function VisitDetailModal({ capital, existingVisits, onClose, onSaved, on
 
         {mode === 'list' && (
           <div className="space-y-3">
-            {existingVisits.map((visit) => (
-              <div
-                key={visit.id}
-                className="border border-slate-200 dark:border-slate-800 rounded-lg p-3 flex items-start justify-between"
-              >
-                <div>
-                  <p className="font-medium text-slate-900 dark:text-slate-100">
-                    {format(new Date(visit.visit_date), 'd. MMMM yyyy')}
-                  </p>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">
-                    {TRANSPORT_OPTIONS.find((t) => t.value === visit.transport_mode)?.label} ·{' '}
-                    {visit.duration_nights} nocí
-                  </p>
-                  {visit.notes && (
-                    <p className="text-sm text-slate-600 dark:text-slate-400 mt-1 line-clamp-2">{visit.notes}</p>
-                  )}
-                </div>
-                <div className="flex gap-1 shrink-0 ml-2">
-                  <button
-                    onClick={() => startEditVisit(visit)}
-                    className="text-xs px-2 py-1 rounded-md text-emerald-700 dark:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-950/40"
-                  >
-                    Upraviť
-                  </button>
-                  <button
-                    onClick={() => handleDeleteVisit(visit.id)}
-                    disabled={deleting === visit.id}
-                    className="text-xs px-2 py-1 rounded-md text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40"
-                  >
-                    {deleting === visit.id ? (
-                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                    ) : (
-                      <Trash2 className="w-3.5 h-3.5" />
+            {existingVisits.map((visit) => {
+              const tripName = findTripName(visit.trip_id)
+              return (
+                <div
+                  key={visit.id}
+                  className="border border-slate-200 dark:border-slate-800 rounded-lg p-3 flex items-start justify-between"
+                >
+                  <div>
+                    <p className="font-medium text-slate-900 dark:text-slate-100">
+                      {format(new Date(visit.visit_date), 'd. MMMM yyyy')}
+                    </p>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">
+                      {TRANSPORT_OPTIONS.find((t) => t.value === visit.transport_mode)?.label} ·{' '}
+                      {visit.duration_nights} nocí
+                    </p>
+                    {tripName && (
+                      <p className="text-xs text-emerald-700 dark:text-emerald-500 mt-1 flex items-center gap-1">
+                        <Luggage className="w-3 h-3" /> {tripName}
+                      </p>
                     )}
-                  </button>
+                    {visit.notes && (
+                      <p className="text-sm text-slate-600 dark:text-slate-400 mt-1 line-clamp-2">{visit.notes}</p>
+                    )}
+                  </div>
+                  <div className="flex gap-1 shrink-0 ml-2">
+                    <button
+                      onClick={() => startEditVisit(visit)}
+                      className="text-xs px-2 py-1 rounded-md text-emerald-700 dark:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-950/40"
+                    >
+                      Upraviť
+                    </button>
+                    <button
+                      onClick={() => handleDeleteVisit(visit.id)}
+                      disabled={deleting === visit.id}
+                      className="text-xs px-2 py-1 rounded-md text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40"
+                    >
+                      {deleting === visit.id ? (
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      ) : (
+                        <Trash2 className="w-3.5 h-3.5" />
+                      )}
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
 
             <button
               onClick={startNewVisit}
@@ -249,6 +295,35 @@ export function VisitDetailModal({ capital, existingVisits, onClose, onSaved, on
               {errors.transport_mode && (
                 <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.transport_mode.message}</p>
               )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 flex items-center gap-1.5">
+                <Luggage className="w-3.5 h-3.5" /> Výlet (voliteľné)
+              </label>
+              <select
+                value={tripSelection}
+                onChange={(e) => setTripSelection(e.target.value)}
+                className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              >
+                <option value="">Bez výletu</option>
+                {trips.map((t) => (
+                  <option key={t.id} value={t.id}>{t.name}</option>
+                ))}
+                <option value={NEW_TRIP_VALUE}>+ Nový výlet...</option>
+              </select>
+              {tripSelection === NEW_TRIP_VALUE && (
+                <input
+                  type="text"
+                  value={newTripName}
+                  onChange={(e) => setNewTripName(e.target.value)}
+                  placeholder="Napr. Interrail leto 2026"
+                  className="w-full mt-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+              )}
+              <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
+                Zoskup túto návštevu s ďalšími mestami z tej istej cesty.
+              </p>
             </div>
 
             <div>

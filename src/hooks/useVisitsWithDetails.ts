@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { getPhotoPublicUrl } from '../lib/storage'
-import type { EuCapital, VisitWithDetails } from '../types'
+import type { EuCapital, Trip, VisitWithDetails } from '../types'
 
 interface RawRow {
   id: string
   user_id: string
   capital_id: number
+  trip_id: string | null
   visit_date: string
   transport_mode: VisitWithDetails['transport_mode']
   duration_nights: number
@@ -16,12 +17,13 @@ interface RawRow {
   updated_at: string
   eu_capitals: EuCapital
   visit_photos: { storage_path: string; created_at: string }[]
+  trips: Trip | null
 }
 
 /**
- * Návštevy prihláseného používateľa obohatené o detail mesta (join na eu_capitals)
- * a titulnú fotku (najstaršia nahratá fotka danej návštevy) – dátový zdroj pre
- * TimelineView a StatsInfographic.
+ * Návštevy prihláseného používateľa obohatené o detail mesta (join na eu_capitals),
+ * titulnú fotku (najstaršia nahratá fotka danej návštevy) a prípadný výlet, do
+ * ktorého návšteva patrí – dátový zdroj pre TimelineView, StatsInfographic aj TripsOverview.
  */
 export function useVisitsWithDetails(userId?: string) {
   const [visits, setVisits] = useState<VisitWithDetails[]>([])
@@ -40,7 +42,7 @@ export function useVisitsWithDetails(userId?: string) {
 
     const { data, error } = await supabase
       .from('visits')
-      .select('*, eu_capitals(*), visit_photos(storage_path, created_at)')
+      .select('*, eu_capitals(*), visit_photos(storage_path, created_at), trips(*)')
       .eq('user_id', userId)
       .order('visit_date', { ascending: false })
 
@@ -60,6 +62,7 @@ export function useVisitsWithDetails(userId?: string) {
         id: row.id,
         user_id: row.user_id,
         capital_id: row.capital_id,
+        trip_id: row.trip_id,
         visit_date: row.visit_date,
         transport_mode: row.transport_mode,
         duration_nights: row.duration_nights,
@@ -70,6 +73,7 @@ export function useVisitsWithDetails(userId?: string) {
         capital: row.eu_capitals,
         photoCount: sortedPhotos.length,
         coverPhotoUrl: sortedPhotos.length > 0 ? getPhotoPublicUrl(sortedPhotos[0].storage_path) : null,
+        trip: row.trips ?? null,
       }
     })
 

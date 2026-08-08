@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { format, addDays, parseISO } from 'date-fns'
 import { sk } from 'date-fns/locale'
-import { Plane, TrainFront, Car, Bus, Bike, Footprints, Sailboat, CircleHelp } from 'lucide-react'
+import { Plane, TrainFront, Car, Bus, Bike, Footprints, Sailboat, CircleHelp, Luggage } from 'lucide-react'
 import type { TransportMode, VisitWithDetails } from '../../types'
 
 interface Props {
@@ -129,6 +129,12 @@ export function TimelineView({ visits, loading }: Props) {
                     <h4 className="text-lg font-semibold text-ink leading-tight">{visit.capital.city}</h4>
                     <p className="text-xs uppercase tracking-wide text-ink-faint mt-1">{visit.capital.country}</p>
                     <p className="text-sm text-ink-muted mt-3">{formatVisitDate(visit)}</p>
+
+                    {visit.trip && (
+                      <p className="text-xs text-sage mt-1.5 flex items-center gap-1">
+                        <Luggage className="w-3 h-3" /> {visit.trip.name}
+                      </p>
+                    )}
 
                     {visit.notes && (
                       <p className="text-sm text-ink-muted mt-3 leading-relaxed line-clamp-3">{visit.notes}</p>

@@ -6,6 +6,9 @@ import { useAuth } from '../../contexts/AuthContext'
 import { loginSchema, type LoginFormData } from '../../lib/validation'
 import { Loader2 } from 'lucide-react'
 
+const inputClass =
+  'w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500'
+
 export function LoginForm() {
   const { signIn } = useAuth()
   const navigate = useNavigate()
@@ -29,34 +32,26 @@ export function LoginForm() {
 
   return (
     <div className="w-full max-w-sm mx-auto">
-      <h1 className="text-2xl font-bold text-slate-900 mb-1">Prihlásenie</h1>
-      <p className="text-slate-500 mb-6">Vitaj späť vo visitEU</p>
+      <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-1">Prihlásenie</h1>
+      <p className="text-slate-500 dark:text-slate-400 mb-6">Vitaj späť vo visitEU</p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
-          <input
-            type="email"
-            {...register('email')}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            placeholder="tvoj@email.sk"
-          />
-          {errors.email && <p className="text-sm text-red-600 mt-1">{errors.email.message}</p>}
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email</label>
+          <input type="email" {...register('email')} className={inputClass} placeholder="tvoj@email.sk" />
+          {errors.email && <p className="text-sm text-red-600 dark:text-red-400 mt-1">{errors.email.message}</p>}
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Heslo</label>
-          <input
-            type="password"
-            {...register('password')}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            placeholder="••••••••"
-          />
-          {errors.password && <p className="text-sm text-red-600 mt-1">{errors.password.message}</p>}
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Heslo</label>
+          <input type="password" {...register('password')} className={inputClass} placeholder="••••••••" />
+          {errors.password && (
+            <p className="text-sm text-red-600 dark:text-red-400 mt-1">{errors.password.message}</p>
+          )}
         </div>
 
         {serverError && (
-          <div className="rounded-lg bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-700">
+          <div className="rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 px-3 py-2 text-sm text-red-700 dark:text-red-400">
             {serverError}
           </div>
         )}
@@ -71,9 +66,9 @@ export function LoginForm() {
         </button>
       </form>
 
-      <p className="text-sm text-slate-500 mt-6 text-center">
+      <p className="text-sm text-slate-500 dark:text-slate-400 mt-6 text-center">
         Nemáš účet?{' '}
-        <Link to="/register" className="text-emerald-600 font-medium hover:underline">
+        <Link to="/register" className="text-emerald-600 dark:text-emerald-500 font-medium hover:underline">
           Zaregistruj sa
         </Link>
       </p>

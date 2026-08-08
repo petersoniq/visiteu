@@ -74,7 +74,7 @@ export function PhotoUpload({ userId, visitId, photos, onPhotosChange }: Props) 
 
   return (
     <div>
-      <label className="block text-sm font-medium text-slate-700 mb-2">
+      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
         Fotografie ({photos.length}/10)
       </label>
 
@@ -84,7 +84,7 @@ export function PhotoUpload({ userId, visitId, photos, onPhotosChange }: Props) 
             <img
               src={getPhotoPublicUrl(photo.storage_path)}
               alt={photo.caption ?? 'Fotka z cesty'}
-              className="w-full h-full object-cover rounded-lg border border-slate-200"
+              className="w-full h-full object-cover rounded-lg border border-slate-200 dark:border-slate-700"
             />
             <button
               type="button"
@@ -101,7 +101,7 @@ export function PhotoUpload({ userId, visitId, photos, onPhotosChange }: Props) 
             type="button"
             onClick={() => inputRef.current?.click()}
             disabled={uploading}
-            className="aspect-square flex flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed border-slate-300 text-slate-400 hover:border-emerald-400 hover:text-emerald-500 transition disabled:opacity-50"
+            className="aspect-square flex flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-700 text-slate-400 dark:text-slate-500 hover:border-emerald-400 hover:text-emerald-500 transition disabled:opacity-50"
           >
             {uploading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
@@ -124,8 +124,8 @@ export function PhotoUpload({ userId, visitId, photos, onPhotosChange }: Props) 
         onChange={(e) => handleFiles(e.target.files)}
       />
 
-      {error && <p className="text-sm text-red-600 mt-1">{error}</p>}
-      <p className="text-xs text-slate-400 mt-1">JPG, PNG alebo WebP, max. 5 MB na fotku.</p>
+      {error && <p className="text-sm text-red-600 dark:text-red-400 mt-1">{error}</p>}
+      <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">JPG, PNG alebo WebP, max. 5 MB na fotku.</p>
     </div>
   )
 }

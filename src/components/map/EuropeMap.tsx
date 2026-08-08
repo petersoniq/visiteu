@@ -3,9 +3,20 @@ import { useMemo, useState } from 'react'
 import { CapitalMarker } from './CapitalMarker'
 import type { EuCapital, Visit } from '../../types'
 import { VisitDetailModal } from '../visits/VisitDetailModal'
+import { useTheme } from '../../contexts/ThemeContext'
 
 const EUROPE_CENTER: [number, number] = [50.5, 14.5]
 const DEFAULT_ZOOM = 4
+
+const LIGHT_TILES = {
+  url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> prispievatelia',
+}
+const DARK_TILES = {
+  url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+  attribution:
+    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> prispievatelia &copy; <a href="https://carto.com/attributions">CARTO</a>',
+}
 
 interface Props {
   capitals: EuCapital[]
@@ -17,6 +28,8 @@ interface Props {
 
 export function EuropeMap({ capitals, visits, loading, onDataChanged }: Props) {
   const [selectedCapital, setSelectedCapital] = useState<EuCapital | null>(null)
+  const { theme } = useTheme()
+  const tiles = theme === 'dark' ? DARK_TILES : LIGHT_TILES
 
   const visitsByCapital = useMemo(() => {
     const map = new Map<number, Visit[]>()
@@ -33,7 +46,7 @@ export function EuropeMap({ capitals, visits, loading, onDataChanged }: Props) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-[600px] bg-slate-50 rounded-xl">
+      <div className="flex items-center justify-center h-[600px] bg-slate-50 dark:bg-slate-900 rounded-xl">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600" />
       </div>
     )
@@ -41,7 +54,7 @@ export function EuropeMap({ capitals, visits, loading, onDataChanged }: Props) {
 
   return (
     <div className="relative">
-      <div className="rounded-xl overflow-hidden border border-slate-200 shadow-sm">
+      <div className="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm">
         <MapContainer
           center={EUROPE_CENTER}
           zoom={DEFAULT_ZOOM}
@@ -49,10 +62,8 @@ export function EuropeMap({ capitals, visits, loading, onDataChanged }: Props) {
           maxZoom={10}
           style={{ height: '600px', width: '100%' }}
         >
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> prispievatelia'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
+          {/* key vynúti remount pri zmene témy, aby sa dlaždice korektne prekreslili */}
+          <TileLayer key={theme} attribution={tiles.attribution} url={tiles.url} />
           {capitals.map((capital) => (
             <CapitalMarker
               key={capital.id}
@@ -64,14 +75,14 @@ export function EuropeMap({ capitals, visits, loading, onDataChanged }: Props) {
         </MapContainer>
       </div>
 
-      <div className="absolute bottom-4 left-4 z-[1000] bg-white/95 backdrop-blur rounded-lg shadow-md px-3 py-2 text-sm space-y-1">
+      <div className="absolute bottom-4 left-4 z-[1000] bg-white/95 dark:bg-slate-900/95 backdrop-blur rounded-lg shadow-md px-3 py-2 text-sm space-y-1">
         <div className="flex items-center gap-2">
           <span className="w-3 h-3 rounded-full bg-emerald-600 inline-block" />
-          <span className="text-slate-700">Navštívené</span>
+          <span className="text-slate-700 dark:text-slate-300">Navštívené</span>
         </div>
         <div className="flex items-center gap-2">
           <span className="w-3 h-3 rounded-full bg-slate-400 inline-block" />
-          <span className="text-slate-700">Nenavštívené</span>
+          <span className="text-slate-700 dark:text-slate-300">Nenavštívené</span>
         </div>
       </div>
 

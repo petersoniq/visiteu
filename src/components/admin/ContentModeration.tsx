@@ -25,26 +25,26 @@ export function ContentModeration() {
   )
 
   if (loading) {
-    return <div className="text-slate-400 text-sm py-8 text-center">Načítavam...</div>
+    return <div className="text-slate-400 dark:text-slate-500 text-sm py-8 text-center">Načítavam...</div>
   }
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-      <div className="p-4 border-b border-slate-100">
+    <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+      <div className="p-4 border-b border-slate-100 dark:border-slate-800">
         <input
           type="text"
           placeholder="Hľadať podľa používateľa, mesta alebo textu poznámky..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
         />
       </div>
 
-      {error && <div className="px-4 py-2 text-sm text-red-600">{error}</div>}
+      {error && <div className="px-4 py-2 text-sm text-red-600 dark:text-red-400">{error}</div>}
 
       <div className="overflow-x-auto max-h-[500px] overflow-y-auto">
         <table className="w-full text-sm">
-          <thead className="bg-slate-50 text-slate-500 text-left sticky top-0">
+          <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-left sticky top-0">
             <tr>
               <th className="px-4 py-3 font-medium">Používateľ</th>
               <th className="px-4 py-3 font-medium">Mesto</th>
@@ -54,19 +54,19 @@ export function ContentModeration() {
               <th className="px-4 py-3 font-medium text-right">Akcia</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
             {filtered.map((v) => (
-              <tr key={v.id} className="hover:bg-slate-50">
-                <td className="px-4 py-3 font-medium text-slate-900">{v.username}</td>
-                <td className="px-4 py-3 text-slate-700">{v.city}, {v.country}</td>
-                <td className="px-4 py-3 text-slate-500">{format(new Date(v.visit_date), 'd.M.yyyy')}</td>
-                <td className="px-4 py-3 text-slate-600 max-w-xs truncate">{v.notes || '—'}</td>
-                <td className="px-4 py-3 text-center text-slate-500">{v.photo_count}</td>
+              <tr key={v.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                <td className="px-4 py-3 font-medium text-slate-900 dark:text-slate-100">{v.username}</td>
+                <td className="px-4 py-3 text-slate-700 dark:text-slate-300">{v.city}, {v.country}</td>
+                <td className="px-4 py-3 text-slate-500 dark:text-slate-400">{format(new Date(v.visit_date), 'd.M.yyyy')}</td>
+                <td className="px-4 py-3 text-slate-600 dark:text-slate-400 max-w-xs truncate">{v.notes || '—'}</td>
+                <td className="px-4 py-3 text-center text-slate-500 dark:text-slate-400">{v.photo_count}</td>
                 <td className="px-4 py-3 text-right">
                   <button
                     onClick={() => handleDelete(v.id)}
                     disabled={deletingId === v.id}
-                    className="inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-md text-red-600 hover:bg-red-50 disabled:opacity-40 transition"
+                    className="inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-md text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 disabled:opacity-40 transition"
                   >
                     {deletingId === v.id ? (
                       <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -81,7 +81,7 @@ export function ContentModeration() {
             ))}
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-slate-400">
+                <td colSpan={6} className="px-4 py-8 text-center text-slate-400 dark:text-slate-500">
                   Žiadne záznamy nezodpovedajú hľadaniu.
                 </td>
               </tr>

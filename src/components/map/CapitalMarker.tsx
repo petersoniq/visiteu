@@ -31,23 +31,23 @@ export function CapitalMarker({ capital, visits, onOpenDetail }: Props) {
     >
       <Popup>
         <div className="min-w-[180px]">
-          <h3 className="font-bold text-slate-900">{capital.city}</h3>
-          <p className="text-xs text-slate-500 mb-2">{capital.country}</p>
+          <h3 className="font-bold text-slate-900 dark:text-slate-100">{capital.city}</h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mb-2">{capital.country}</p>
 
           {isVisited ? (
             <>
-              <p className="text-sm text-emerald-700 font-medium mb-1">
+              <p className="text-sm text-emerald-700 dark:text-emerald-500 font-medium mb-1">
                 ✓ Navštívené {visits.length > 1 ? `(${visits.length}×)` : ''}
               </p>
-              <p className="text-xs text-slate-600">
+              <p className="text-xs text-slate-600 dark:text-slate-400">
                 Posledná návšteva: {format(new Date(latestVisit.visit_date), 'd. MMMM yyyy')}
               </p>
-              <p className="text-xs text-slate-600">
+              <p className="text-xs text-slate-600 dark:text-slate-400">
                 {TRANSPORT_LABELS[latestVisit.transport_mode]} · {latestVisit.duration_nights} nocí
               </p>
             </>
           ) : (
-            <p className="text-sm text-slate-500">Zatiaľ nenavštívené</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400">Zatiaľ nenavštívené</p>
           )}
 
           <button

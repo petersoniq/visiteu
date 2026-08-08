@@ -130,20 +130,20 @@ export function ProfilePage() {
   return (
     <div className="max-w-2xl mx-auto p-6 space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900 mb-1">Môj profil</h1>
-        <p className="text-slate-500">Uprav si osobné údaje, profilovú fotku a heslo.</p>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-1">Môj profil</h1>
+        <p className="text-slate-500 dark:text-slate-400">Uprav si osobné údaje, profilovú fotku a heslo.</p>
       </div>
 
       {/* Avatar */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
-        <h3 className="font-semibold text-slate-900 mb-4">Profilová fotka</h3>
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-5">
+        <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-4">Profilová fotka</h3>
         <div className="flex items-center gap-4">
           <div className="relative">
-            <div className="w-20 h-20 rounded-full bg-slate-100 border border-slate-200 overflow-hidden flex items-center justify-center">
+            <div className="w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 overflow-hidden flex items-center justify-center">
               {avatarPreview ? (
                 <img src={avatarPreview} alt="Avatar" className="w-full h-full object-cover" />
               ) : (
-                <UserIcon className="w-8 h-8 text-slate-400" />
+                <UserIcon className="w-8 h-8 text-slate-400 dark:text-slate-500" />
               )}
             </div>
             <button
@@ -165,12 +165,12 @@ export function ProfilePage() {
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={avatarUploading}
-              className="text-sm font-medium text-emerald-700 hover:underline disabled:opacity-60"
+              className="text-sm font-medium text-emerald-700 dark:text-emerald-500 hover:underline disabled:opacity-60"
             >
               Nahrať novú fotku
             </button>
-            <p className="text-xs text-slate-400 mt-1">JPG, PNG alebo WebP, max. 3 MB.</p>
-            {avatarError && <p className="text-sm text-red-600 mt-1">{avatarError}</p>}
+            <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">JPG, PNG alebo WebP, max. 3 MB.</p>
+            {avatarError && <p className="text-sm text-red-600 dark:text-red-400 mt-1">{avatarError}</p>}
           </div>
         </div>
         <input
@@ -183,52 +183,52 @@ export function ProfilePage() {
       </div>
 
       {/* Základné údaje */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
-        <h3 className="font-semibold text-slate-900 mb-4">Základné údaje</h3>
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-5">
+        <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-4">Základné údaje</h3>
         <form onSubmit={handleProfileSubmit(onProfileSubmit)} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Prezývka</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Prezývka</label>
             <input
               type="text"
               {...registerProfile('username')}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
             />
             {profileErrors.username && (
-              <p className="text-xs text-red-600 mt-1">{profileErrors.username.message}</p>
+              <p className="text-xs text-red-600 dark:text-red-400 mt-1">{profileErrors.username.message}</p>
             )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Celé meno (voliteľné)</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Celé meno (voliteľné)</label>
             <input
               type="text"
               {...registerProfile('full_name')}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
               placeholder="Ako ťa majú vidieť ostatní"
             />
             {profileErrors.full_name && (
-              <p className="text-xs text-red-600 mt-1">{profileErrors.full_name.message}</p>
+              <p className="text-xs text-red-600 dark:text-red-400 mt-1">{profileErrors.full_name.message}</p>
             )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email</label>
             <input
               type="email"
               value={user?.email ?? ''}
               disabled
-              className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-400 cursor-not-allowed"
+              className="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 px-3 py-2 text-sm text-slate-400 dark:text-slate-500 cursor-not-allowed"
             />
-            <p className="text-xs text-slate-400 mt-1">Email nie je možné zmeniť.</p>
+            <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">Email nie je možné zmeniť.</p>
           </div>
 
           {profileServerError && (
-            <div className="rounded-lg bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-700">
+            <div className="rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 px-3 py-2 text-sm text-red-700 dark:text-red-400">
               {profileServerError}
             </div>
           )}
           {profileSuccess && (
-            <div className="rounded-lg bg-emerald-50 border border-emerald-200 px-3 py-2 text-sm text-emerald-700">
+            <div className="rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900 px-3 py-2 text-sm text-emerald-700 dark:text-emerald-400">
               Uložené ✓
             </div>
           )}
@@ -245,44 +245,44 @@ export function ProfilePage() {
       </div>
 
       {/* Zmena hesla */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
-        <h3 className="font-semibold text-slate-900 mb-4 flex items-center gap-2">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-5">
+        <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-4 flex items-center gap-2">
           <KeyRound className="w-4 h-4" /> Zmena hesla
         </h3>
         <form onSubmit={handlePasswordSubmit(onPasswordSubmit)} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Nové heslo</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nové heslo</label>
             <input
               type="password"
               {...registerPassword('newPassword')}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
               placeholder="••••••••"
             />
             {passwordErrors.newPassword && (
-              <p className="text-xs text-red-600 mt-1">{passwordErrors.newPassword.message}</p>
+              <p className="text-xs text-red-600 dark:text-red-400 mt-1">{passwordErrors.newPassword.message}</p>
             )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Potvrď nové heslo</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Potvrď nové heslo</label>
             <input
               type="password"
               {...registerPassword('confirmPassword')}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
               placeholder="••••••••"
             />
             {passwordErrors.confirmPassword && (
-              <p className="text-xs text-red-600 mt-1">{passwordErrors.confirmPassword.message}</p>
+              <p className="text-xs text-red-600 dark:text-red-400 mt-1">{passwordErrors.confirmPassword.message}</p>
             )}
           </div>
 
           {passwordServerError && (
-            <div className="rounded-lg bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-700">
+            <div className="rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 px-3 py-2 text-sm text-red-700 dark:text-red-400">
               {passwordServerError}
             </div>
           )}
           {passwordSuccess && (
-            <div className="rounded-lg bg-emerald-50 border border-emerald-200 px-3 py-2 text-sm text-emerald-700">
+            <div className="rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900 px-3 py-2 text-sm text-emerald-700 dark:text-emerald-400">
               Heslo bolo zmenené ✓
             </div>
           )}
@@ -290,7 +290,7 @@ export function ProfilePage() {
           <button
             type="submit"
             disabled={passwordSubmitting}
-            className="flex items-center gap-2 rounded-lg bg-slate-800 px-4 py-2 text-sm font-medium text-white hover:bg-slate-900 transition disabled:opacity-60"
+            className="flex items-center gap-2 rounded-lg bg-slate-800 dark:bg-slate-700 px-4 py-2 text-sm font-medium text-white hover:bg-slate-900 dark:hover:bg-slate-600 transition disabled:opacity-60"
           >
             {passwordSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
             Zmeniť heslo

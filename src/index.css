@@ -53,3 +53,19 @@
   --color-dusk: #a9c0cd;
   --color-dusk-light: #2b3439;
 }
+
+/*
+ * Leaflet vykresľuje popup wrapper cez vlastné DOM mimo Reactu (biele pozadie
+ * je natvrdo v leaflet.css), takže tmavý režim preň treba dotiahnuť globálne.
+ */
+.dark .leaflet-popup-content-wrapper,
+.dark .leaflet-popup-tip {
+  background-color: #1e293b; /* slate-800 */
+  color: #e2e8f0;
+}
+.dark .leaflet-container a.leaflet-popup-close-button {
+  color: #94a3b8;
+}
+.dark .leaflet-container a.leaflet-popup-close-button:hover {
+  color: #e2e8f0;
+}

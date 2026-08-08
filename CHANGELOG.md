@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/petersoniq/visiteu/compare/v1.5.0...v1.6.0) (2026-08-08)
+
+
+### Features
+
+* Výlety - zoskupenie viacerých návštev miest do jedného príbehu ([453d798](https://github.com/petersoniq/visiteu/commit/453d7983abc761f5145560a09f12950ebade4006))
+
 ## [1.5.0](https://github.com/petersoniq/visiteu/compare/v1.4.1...v1.5.0) (2026-08-08)
 
 

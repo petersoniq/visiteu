@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.0](https://github.com/petersoniq/visiteu/compare/v1.3.0...v1.4.0) (2026-08-08)
+
+
+### Features
+
+* tmavý režim v celej aplikácii + oprava opustenia admin panelu ([bf6017e](https://github.com/petersoniq/visiteu/commit/bf6017e5b82f718b05999260d60c8f53e64a59a8))
+
+
+### Bug Fixes
+
+* admin panel sa dal opustiť len tlačidlom späť v prehliadači alebo ([bf6017e](https://github.com/petersoniq/visiteu/commit/bf6017e5b82f718b05999260d60c8f53e64a59a8))
+
 ## [1.3.0](https://github.com/petersoniq/visiteu/compare/v1.2.1...v1.3.0) (2026-08-08)
 
 

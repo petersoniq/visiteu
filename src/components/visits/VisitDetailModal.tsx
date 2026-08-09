@@ -211,7 +211,7 @@ export function VisitDetailModal({ capital, existingVisits, trips, onClose, onSa
                       {visit.duration_nights} nocí
                     </p>
                     {tripName && (
-                      <p className="text-xs text-emerald-700 dark:text-emerald-500 mt-1 flex items-center gap-1">
+                      <p className="text-xs text-accent-text mt-1 flex items-center gap-1">
                         <Luggage className="w-3 h-3" /> {tripName}
                       </p>
                     )}
@@ -222,7 +222,7 @@ export function VisitDetailModal({ capital, existingVisits, trips, onClose, onSa
                   <div className="flex gap-1 shrink-0 ml-2">
                     <button
                       onClick={() => startEditVisit(visit)}
-                      className="text-xs px-2 py-1 rounded-md text-emerald-700 dark:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-950/40"
+                      className="text-xs px-2 py-1 rounded-md text-accent-text hover:bg-accent/10"
                     >
                       Upraviť
                     </button>
@@ -244,7 +244,7 @@ export function VisitDetailModal({ capital, existingVisits, trips, onClose, onSa
 
             <button
               onClick={startNewVisit}
-              className="w-full flex items-center justify-center gap-2 rounded-lg border border-dashed border-slate-300 dark:border-slate-700 px-4 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-400 hover:border-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-500 transition"
+              className="w-full flex items-center justify-center gap-2 rounded-lg border border-dashed border-slate-300 dark:border-slate-700 px-4 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-400 hover:border-accent hover:text-accent transition"
             >
               <Plus className="w-4 h-4" /> Pridať ďalšiu návštevu
             </button>
@@ -259,7 +259,7 @@ export function VisitDetailModal({ capital, existingVisits, trips, onClose, onSa
                 <input
                   type="date"
                   {...register('visit_date')}
-                  className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                 />
                 {errors.visit_date && (
                   <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.visit_date.message}</p>
@@ -272,7 +272,7 @@ export function VisitDetailModal({ capital, existingVisits, trips, onClose, onSa
                   type="number"
                   min={0}
                   {...register('duration_nights')}
-                  className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                 />
                 {errors.duration_nights && (
                   <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.duration_nights.message}</p>
@@ -284,7 +284,7 @@ export function VisitDetailModal({ capital, existingVisits, trips, onClose, onSa
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Spôsob dopravy</label>
               <select
                 {...register('transport_mode')}
-                className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                 defaultValue=""
               >
                 <option value="" disabled>Vyber...</option>
@@ -304,7 +304,7 @@ export function VisitDetailModal({ capital, existingVisits, trips, onClose, onSa
               <select
                 value={tripSelection}
                 onChange={(e) => setTripSelection(e.target.value)}
-                className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
               >
                 <option value="">Bez výletu</option>
                 {trips.map((t) => (
@@ -318,7 +318,7 @@ export function VisitDetailModal({ capital, existingVisits, trips, onClose, onSa
                   value={newTripName}
                   onChange={(e) => setNewTripName(e.target.value)}
                   placeholder="Napr. Interrail leto 2026"
-                  className="w-full mt-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="w-full mt-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                 />
               )}
               <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
@@ -330,7 +330,7 @@ export function VisitDetailModal({ capital, existingVisits, trips, onClose, onSa
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Hodnotenie (voliteľné)</label>
               <select
                 {...register('rating')}
-                className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                 defaultValue=""
               >
                 <option value="">Bez hodnotenia</option>
@@ -345,7 +345,7 @@ export function VisitDetailModal({ capital, existingVisits, trips, onClose, onSa
               <textarea
                 {...register('notes')}
                 rows={3}
-                className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                 placeholder="Ako sa ti tam páčilo? Čo odporúčaš vidieť?"
               />
               {errors.notes && <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.notes.message}</p>}
@@ -383,7 +383,7 @@ export function VisitDetailModal({ capital, existingVisits, trips, onClose, onSa
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="flex-1 flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700 transition disabled:opacity-60"
+                className="flex-1 flex items-center justify-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white hover:bg-accent-hover transition disabled:opacity-60"
               >
                 {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
                 {savedVisitId ? 'Uložiť zmeny' : 'Uložiť návštevu'}
@@ -394,7 +394,7 @@ export function VisitDetailModal({ capital, existingVisits, trips, onClose, onSa
               <button
                 type="button"
                 onClick={() => onSaved()}
-                className="w-full text-sm text-emerald-700 dark:text-emerald-500 hover:underline pt-1"
+                className="w-full text-sm text-accent-text hover:underline pt-1"
               >
                 Hotovo, zavrieť ✓
               </button>

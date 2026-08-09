@@ -24,7 +24,7 @@ export function AdminPage() {
       <div>
         <Link
           to="/dashboard"
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-emerald-700 dark:hover:text-emerald-500 transition mb-3"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-accent transition mb-3"
         >
           <ArrowLeft className="w-4 h-4" /> Späť do appky
         </Link>
@@ -39,7 +39,7 @@ export function AdminPage() {
             onClick={() => setTab(t.key)}
             className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition ${
               tab === t.key
-                ? 'border-emerald-600 text-emerald-700 dark:text-emerald-500'
+                ? 'border-accent text-accent-text'
                 : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
             }`}
           >

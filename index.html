@@ -17,6 +17,26 @@
           var stored = localStorage.getItem('visiteu-theme');
           var isDark = stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches);
           if (isDark) document.documentElement.classList.add('dark');
+
+          // Rovnaké hodnoty ako src/lib/accentPalettes.ts - udržané v synchrone,
+          // aby pri načítaní nebliklo defaultné emerald pred beh om AccentContext.
+          var PALETTES = {
+            emerald: { solid: '#059669', hover: '#047857', text: { light: '#059669', dark: '#34d399' } },
+            sky: { solid: '#0284c7', hover: '#0369a1', text: { light: '#0284c7', dark: '#38bdf8' } },
+            violet: { solid: '#7c3aed', hover: '#6d28d9', text: { light: '#7c3aed', dark: '#a78bfa' } },
+            rose: { solid: '#e11d48', hover: '#be123c', text: { light: '#e11d48', dark: '#fb7185' } },
+            amber: { solid: '#d97706', hover: '#b45309', text: { light: '#b45309', dark: '#fbbf24' } },
+            slate: { solid: '#334155', hover: '#1e293b', text: { light: '#334155', dark: '#cbd5e1' } },
+          };
+          var accentId = localStorage.getItem('visiteu-accent') || 'emerald';
+          var palette = PALETTES[accentId] || PALETTES.emerald;
+          var root = document.documentElement;
+          root.style.setProperty('--color-accent', palette.solid);
+          root.style.setProperty('--color-accent-hover', palette.hover);
+          root.style.setProperty('--color-accent-text', isDark ? palette.text.dark : palette.text.light);
+
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute('content', palette.solid);
         } catch (e) {}
       })();
     </script>

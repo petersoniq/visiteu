@@ -65,7 +65,7 @@ export function UserManagementTable({ users, onChanged }: Props) {
                 <td className="px-4 py-3 text-center text-slate-700 dark:text-slate-300">{u.total_visits}</td>
                 <td className="px-4 py-3 text-center">
                   {u.is_admin ? (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 px-2 py-0.5 text-xs font-medium">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-accent/15 text-accent-text px-2 py-0.5 text-xs font-medium">
                       <Shield className="w-3 h-3" /> Admin
                     </span>
                   ) : (

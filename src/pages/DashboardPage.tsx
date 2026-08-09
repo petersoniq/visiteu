@@ -59,7 +59,7 @@ export function DashboardPage() {
               onClick={() => setTab(t.key)}
               className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition whitespace-nowrap ${
                 tab === t.key
-                  ? 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900'
+                  ? 'bg-accent text-white'
                   : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'
               }`}
             >

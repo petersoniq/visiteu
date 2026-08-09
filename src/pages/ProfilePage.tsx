@@ -1,9 +1,12 @@
 import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Camera, Loader2, KeyRound, User as UserIcon } from 'lucide-react'
+import { Camera, Loader2, KeyRound, User as UserIcon, Palette, Check } from 'lucide-react'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../contexts/AuthContext'
+import { useTheme } from '../contexts/ThemeContext'
+import { useAccent } from '../contexts/AccentContext'
+import { ACCENT_PALETTES } from '../lib/accentPalettes'
 import {
   profileSchema,
   type ProfileFormData,
@@ -14,6 +17,8 @@ import { validateAvatarFile, uploadAvatar, getAvatarPublicUrl } from '../lib/sto
 
 export function ProfilePage() {
   const { user, profile, refreshProfile } = useAuth()
+  const { theme, toggleTheme } = useTheme()
+  const { accent, setAccent } = useAccent()
   const [avatarUploading, setAvatarUploading] = useState(false)
   const [avatarError, setAvatarError] = useState<string | null>(null)
   const [avatarPreview, setAvatarPreview] = useState<string | null>(
@@ -134,6 +139,60 @@ export function ProfilePage() {
         <p className="text-slate-500 dark:text-slate-400">Uprav si osobné údaje, profilovú fotku a heslo.</p>
       </div>
 
+      {/* Vzhľad */}
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-5">
+        <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-4 flex items-center gap-2">
+          <Palette className="w-4 h-4" /> Vzhľad
+        </h3>
+
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Tmavý režim</p>
+            <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Prepni medzi svetlým a tmavým vzhľadom appky.</p>
+          </div>
+          <button
+            type="button"
+            onClick={toggleTheme}
+            role="switch"
+            aria-checked={theme === 'dark'}
+            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors shrink-0 ${
+              theme === 'dark' ? 'bg-accent' : 'bg-slate-300 dark:bg-slate-700'
+            }`}
+          >
+            <span
+              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                theme === 'dark' ? 'translate-x-6' : 'translate-x-1'
+              }`}
+            />
+          </button>
+        </div>
+
+        <div className="mt-5 pt-5 border-t border-slate-100 dark:border-slate-800">
+          <p className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Farba zvýraznenia</p>
+          <div className="flex flex-wrap gap-4">
+            {Object.values(ACCENT_PALETTES).map((palette) => (
+              <button
+                key={palette.id}
+                type="button"
+                onClick={() => setAccent(palette.id)}
+                className="flex flex-col items-center gap-1.5"
+                title={palette.label}
+              >
+                <span
+                  className={`w-8 h-8 rounded-full flex items-center justify-center transition ring-offset-2 ring-offset-white dark:ring-offset-slate-900 ${
+                    accent === palette.id ? 'ring-2 ring-slate-400 dark:ring-slate-500' : ''
+                  }`}
+                  style={{ backgroundColor: palette.swatch }}
+                >
+                  {accent === palette.id && <Check className="w-4 h-4 text-white" strokeWidth={3} />}
+                </span>
+                <span className="text-[11px] text-slate-500 dark:text-slate-400">{palette.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* Avatar */}
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-5">
         <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-4">Profilová fotka</h3>
@@ -150,7 +209,7 @@ export function ProfilePage() {
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={avatarUploading}
-              className="absolute -bottom-1 -right-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full p-1.5 shadow-sm transition disabled:opacity-60"
+              className="absolute -bottom-1 -right-1 bg-accent hover:bg-accent-hover text-white rounded-full p-1.5 shadow-sm transition disabled:opacity-60"
               title="Zmeniť profilovú fotku"
             >
               {avatarUploading ? (
@@ -165,7 +224,7 @@ export function ProfilePage() {
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={avatarUploading}
-              className="text-sm font-medium text-emerald-700 dark:text-emerald-500 hover:underline disabled:opacity-60"
+              className="text-sm font-medium text-accent-text hover:underline disabled:opacity-60"
             >
               Nahrať novú fotku
             </button>
@@ -191,7 +250,7 @@ export function ProfilePage() {
             <input
               type="text"
               {...registerProfile('username')}
-              className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
             />
             {profileErrors.username && (
               <p className="text-xs text-red-600 dark:text-red-400 mt-1">{profileErrors.username.message}</p>
@@ -203,7 +262,7 @@ export function ProfilePage() {
             <input
               type="text"
               {...registerProfile('full_name')}
-              className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
               placeholder="Ako ťa majú vidieť ostatní"
             />
             {profileErrors.full_name && (
@@ -228,7 +287,7 @@ export function ProfilePage() {
             </div>
           )}
           {profileSuccess && (
-            <div className="rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900 px-3 py-2 text-sm text-emerald-700 dark:text-emerald-400">
+            <div className="rounded-lg bg-accent/10 border border-accent/30 px-3 py-2 text-sm text-accent-text">
               Uložené ✓
             </div>
           )}
@@ -236,7 +295,7 @@ export function ProfilePage() {
           <button
             type="submit"
             disabled={profileSubmitting}
-            className="flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700 transition disabled:opacity-60"
+            className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white hover:bg-accent-hover transition disabled:opacity-60"
           >
             {profileSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
             Uložiť zmeny
@@ -255,7 +314,7 @@ export function ProfilePage() {
             <input
               type="password"
               {...registerPassword('newPassword')}
-              className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
               placeholder="••••••••"
             />
             {passwordErrors.newPassword && (
@@ -268,7 +327,7 @@ export function ProfilePage() {
             <input
               type="password"
               {...registerPassword('confirmPassword')}
-              className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
               placeholder="••••••••"
             />
             {passwordErrors.confirmPassword && (
@@ -282,7 +341,7 @@ export function ProfilePage() {
             </div>
           )}
           {passwordSuccess && (
-            <div className="rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900 px-3 py-2 text-sm text-emerald-700 dark:text-emerald-400">
+            <div className="rounded-lg bg-accent/10 border border-accent/30 px-3 py-2 text-sm text-accent-text">
               Heslo bolo zmenené ✓
             </div>
           )}

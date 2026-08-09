@@ -101,7 +101,7 @@ export function PhotoUpload({ userId, visitId, photos, onPhotosChange }: Props) 
             type="button"
             onClick={() => inputRef.current?.click()}
             disabled={uploading}
-            className="aspect-square flex flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-700 text-slate-400 dark:text-slate-500 hover:border-emerald-400 hover:text-emerald-500 transition disabled:opacity-50"
+            className="aspect-square flex flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-700 text-slate-400 dark:text-slate-500 hover:border-accent hover:text-accent-text transition disabled:opacity-50"
           >
             {uploading ? (
               <Loader2 className="w-5 h-5 animate-spin" />

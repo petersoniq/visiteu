@@ -21,7 +21,7 @@ export function BadgeGrid({ allBadges, earnedCodes }: Props) {
               title={badge.description ?? undefined}
               className={`flex flex-col items-center text-center p-3 rounded-lg border transition ${
                 earned
-                  ? 'border-emerald-200 dark:border-emerald-900 bg-emerald-50 dark:bg-emerald-950/40'
+                  ? 'border-accent/30 bg-accent/10'
                   : 'border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 opacity-50'
               }`}
             >
@@ -30,7 +30,7 @@ export function BadgeGrid({ allBadges, earnedCodes }: Props) {
               </div>
               <span
                 className={`text-xs font-medium ${
-                  earned ? 'text-emerald-800 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500'
+                  earned ? 'text-accent-text' : 'text-slate-400 dark:text-slate-500'
                 }`}
               >
                 {badge.name}

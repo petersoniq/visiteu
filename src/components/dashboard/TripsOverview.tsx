@@ -108,12 +108,12 @@ export function TripsOverview({ trips, visits, loading, onCreateTrip, onUpdateTr
           value={newName}
           onChange={(e) => setNewName(e.target.value)}
           placeholder="Názov nového výletu, napr. Interrail leto 2026"
-          className="flex-1 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          className="flex-1 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
         />
         <button
           type="submit"
           disabled={creating || !newName.trim()}
-          className="flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700 transition disabled:opacity-50 shrink-0"
+          className="flex items-center justify-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white hover:bg-accent-hover transition disabled:opacity-50 shrink-0"
         >
           {creating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
           Nový výlet
@@ -153,9 +153,9 @@ export function TripsOverview({ trips, visits, loading, onCreateTrip, onUpdateTr
                           value={editName}
                           onChange={(e) => setEditName(e.target.value)}
                           autoFocus
-                          className="flex-1 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                          className="flex-1 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                         />
-                        <button onClick={() => saveEdit(trip.id)} className="text-emerald-600 dark:text-emerald-500">
+                        <button onClick={() => saveEdit(trip.id)} className="text-accent-text">
                           <Check className="w-4 h-4" />
                         </button>
                         <button onClick={() => setEditingId(null)} className="text-slate-400 dark:text-slate-500">
@@ -164,7 +164,7 @@ export function TripsOverview({ trips, visits, loading, onCreateTrip, onUpdateTr
                       </div>
                     ) : (
                       <h3 className="font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-2 min-w-0">
-                        <Luggage className="w-4 h-4 text-emerald-600 dark:text-emerald-500 shrink-0" />
+                        <Luggage className="w-4 h-4 text-accent-text shrink-0" />
                         <span className="truncate">{trip.name}</span>
                       </h3>
                     )}

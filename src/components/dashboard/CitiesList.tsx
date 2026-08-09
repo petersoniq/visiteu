@@ -77,7 +77,7 @@ export function CitiesList({ capitals, visits, loading }: Props) {
             <div key={capital.id} className="flex items-center gap-4 px-4 py-3">
               <span
                 className={`w-2.5 h-2.5 rounded-full shrink-0 ${
-                  lastVisit ? 'bg-emerald-600' : 'bg-slate-300 dark:bg-slate-700'
+                  lastVisit ? 'bg-accent' : 'bg-slate-300 dark:bg-slate-700'
                 }`}
                 aria-hidden
               />

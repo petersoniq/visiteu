@@ -48,7 +48,7 @@ export function EuropeMap({ capitals, visits, trips, loading, onDataChanged }: P
   if (loading) {
     return (
       <div className="flex items-center justify-center h-[600px] bg-slate-50 dark:bg-slate-900 rounded-xl">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600" />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent" />
       </div>
     )
   }
@@ -78,7 +78,7 @@ export function EuropeMap({ capitals, visits, trips, loading, onDataChanged }: P
 
       <div className="absolute bottom-4 left-4 z-[1000] bg-white/95 dark:bg-slate-900/95 backdrop-blur rounded-lg shadow-md px-3 py-2 text-sm space-y-1">
         <div className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-full bg-emerald-600 inline-block" />
+          <span className="w-3 h-3 rounded-full bg-accent inline-block" />
           <span className="text-slate-700 dark:text-slate-300">Navštívené</span>
         </div>
         <div className="flex items-center gap-2">

@@ -7,7 +7,7 @@ import { loginSchema, type LoginFormData } from '../../lib/validation'
 import { Loader2 } from 'lucide-react'
 
 const inputClass =
-  'w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500'
+  'w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent'
 
 export function LoginForm() {
   const { signIn } = useAuth()
@@ -59,7 +59,7 @@ export function LoginForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-2.5 font-medium text-white hover:bg-emerald-700 transition disabled:opacity-60"
+          className="w-full flex items-center justify-center gap-2 rounded-lg bg-accent px-4 py-2.5 font-medium text-white hover:bg-accent-hover transition disabled:opacity-60"
         >
           {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
           Prihlásiť sa
@@ -68,7 +68,7 @@ export function LoginForm() {
 
       <p className="text-sm text-slate-500 dark:text-slate-400 mt-6 text-center">
         Nemáš účet?{' '}
-        <Link to="/register" className="text-emerald-600 dark:text-emerald-500 font-medium hover:underline">
+        <Link to="/register" className="text-accent-text font-medium hover:underline">
           Zaregistruj sa
         </Link>
       </p>

@@ -48,7 +48,7 @@ function HeroRing({ visited, total, percentage }: { visited: number; total: numb
           cy={size / 2}
           r={radius}
           fill="none"
-          className="stroke-ochre"
+          className="stroke-accent"
           strokeWidth={strokeWidth}
           strokeDasharray={circumference}
           strokeDashoffset={offset}
@@ -84,7 +84,7 @@ function MiniDonut({ visited, total }: { visited: number; total: number }) {
           cy={size / 2}
           r={radius}
           fill="none"
-          className="stroke-sage"
+          className="stroke-accent"
           strokeWidth={strokeWidth}
           strokeDasharray={circumference}
           strokeDashoffset={offset}
@@ -140,7 +140,7 @@ export function StatsInfographic({ stats, loading }: Props) {
                     <span className="text-xs text-ink-muted w-16 shrink-0 truncate">{TRANSPORT_LABELS[entry.mode]}</span>
                     <div className="flex-1 h-[2px] rounded-full bg-hairline relative overflow-hidden">
                       <div
-                        className="absolute inset-y-0 left-0 rounded-full bg-sage transition-all duration-700 ease-out"
+                        className="absolute inset-y-0 left-0 rounded-full bg-accent transition-all duration-700 ease-out"
                         style={{ width: `${entry.percentage}%` }}
                       />
                     </div>
@@ -159,13 +159,13 @@ export function StatsInfographic({ stats, loading }: Props) {
           <ColumnLabel>Cestovateľské tempo</ColumnLabel>
           <div className="space-y-3">
             <div className="flex items-center gap-2.5">
-              <Moon className="w-3.5 h-3.5 text-dusk shrink-0" strokeWidth={1.5} />
+              <Moon className="w-3.5 h-3.5 text-ink-faint shrink-0" strokeWidth={1.5} />
               <p className="text-xs text-ink-muted">
                 <span className="text-ink font-semibold tabular-nums">{stats.totalNights}</span> dní na cestách
               </p>
             </div>
             <div className="flex items-center gap-2.5">
-              <Award className="w-3.5 h-3.5 text-ochre shrink-0" strokeWidth={1.5} />
+              <Award className="w-3.5 h-3.5 text-accent-text shrink-0" strokeWidth={1.5} />
               {stats.longestStay ? (
                 <p className="text-xs text-ink-muted">
                   Najdlhšie: <span className="text-ink font-semibold tabular-nums">{stats.longestStay.nights}</span>{' '}

@@ -1,6 +1,7 @@
 import { HashRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
 import { ThemeProvider } from './contexts/ThemeContext'
+import { AccentProvider } from './contexts/AccentContext'
 import { ProtectedRoute, AdminRoute } from './components/auth/ProtectedRoute'
 import { LoginForm } from './components/auth/LoginForm'
 import { RegisterForm } from './components/auth/RegisterForm'
@@ -29,27 +30,29 @@ function AppLayout() {
 function App() {
   return (
     <ThemeProvider>
-      <AuthProvider>
-        <HashRouter>
-          <Routes>
-            <Route path="/login" element={<AuthLayout><LoginForm /></AuthLayout>} />
-            <Route path="/register" element={<AuthLayout><RegisterForm /></AuthLayout>} />
+      <AccentProvider>
+        <AuthProvider>
+          <HashRouter>
+            <Routes>
+              <Route path="/login" element={<AuthLayout><LoginForm /></AuthLayout>} />
+              <Route path="/register" element={<AuthLayout><RegisterForm /></AuthLayout>} />
 
-            <Route element={<ProtectedRoute />}>
-              <Route element={<AppLayout />}>
-                <Route path="/dashboard" element={<DashboardPage />} />
-                <Route path="/profile" element={<ProfilePage />} />
-                <Route element={<AdminRoute />}>
-                  <Route path="/admin" element={<AdminPage />} />
+              <Route element={<ProtectedRoute />}>
+                <Route element={<AppLayout />}>
+                  <Route path="/dashboard" element={<DashboardPage />} />
+                  <Route path="/profile" element={<ProfilePage />} />
+                  <Route element={<AdminRoute />}>
+                    <Route path="/admin" element={<AdminPage />} />
+                  </Route>
                 </Route>
               </Route>
-            </Route>
 
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
-          </Routes>
-        </HashRouter>
-      </AuthProvider>
+              <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            </Routes>
+          </HashRouter>
+        </AuthProvider>
+      </AccentProvider>
     </ThemeProvider>
   )
 }

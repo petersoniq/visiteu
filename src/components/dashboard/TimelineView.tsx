@@ -67,7 +67,7 @@ export function TimelineView({ visits, loading }: Props) {
               onClick={() => setSelectedYear('all')}
               className={`text-sm pb-1 border-b whitespace-nowrap transition-colors ${
                 selectedYear === 'all'
-                  ? 'text-ink border-ochre font-medium'
+                  ? 'text-ink border-accent font-medium'
                   : 'text-ink-faint border-transparent hover:text-ink-muted'
               }`}
             >
@@ -79,7 +79,7 @@ export function TimelineView({ visits, loading }: Props) {
                 onClick={() => setSelectedYear(year)}
                 className={`text-sm pb-1 border-b whitespace-nowrap transition-colors ${
                   selectedYear === year
-                    ? 'text-ink border-ochre font-medium'
+                    ? 'text-ink border-accent font-medium'
                     : 'text-ink-faint border-transparent hover:text-ink-muted'
                 }`}
               >
@@ -109,8 +109,8 @@ export function TimelineView({ visits, loading }: Props) {
             return (
               <li key={visit.id} className="relative mb-10 last:mb-0">
                 {/* Bod na osi s ikonkou dopravy */}
-                <div className="absolute left-4 md:left-1/2 top-0 -translate-x-1/2 z-10 w-8 h-8 rounded-full bg-paper-dim border-2 border-ochre flex items-center justify-center">
-                  <Icon className="w-3.5 h-3.5 text-ochre" strokeWidth={1.5} />
+                <div className="absolute left-4 md:left-1/2 top-0 -translate-x-1/2 z-10 w-8 h-8 rounded-full bg-paper-dim border-2 border-accent flex items-center justify-center">
+                  <Icon className="w-3.5 h-3.5 text-accent-text" strokeWidth={1.5} />
                 </div>
 
                 {/* Kartička - na mobile vždy vpravo od osi, na desktope strieda strany */}
@@ -131,7 +131,7 @@ export function TimelineView({ visits, loading }: Props) {
                     <p className="text-sm text-ink-muted mt-3">{formatVisitDate(visit)}</p>
 
                     {visit.trip && (
-                      <p className="text-xs text-sage mt-1.5 flex items-center gap-1">
+                      <p className="text-xs text-accent-text mt-1.5 flex items-center gap-1">
                         <Luggage className="w-3 h-3" /> {visit.trip.name}
                       </p>
                     )}

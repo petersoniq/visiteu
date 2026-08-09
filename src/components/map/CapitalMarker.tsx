@@ -36,7 +36,7 @@ export function CapitalMarker({ capital, visits, onOpenDetail }: Props) {
 
           {isVisited ? (
             <>
-              <p className="text-sm text-emerald-700 dark:text-emerald-500 font-medium mb-1">
+              <p className="text-sm text-accent-text font-medium mb-1">
                 ✓ Navštívené {visits.length > 1 ? `(${visits.length}×)` : ''}
               </p>
               <p className="text-xs text-slate-600 dark:text-slate-400">
@@ -52,7 +52,7 @@ export function CapitalMarker({ capital, visits, onOpenDetail }: Props) {
 
           <button
             onClick={() => onOpenDetail(capital)}
-            className="mt-2 w-full text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-md px-2 py-1.5 transition"
+            className="mt-2 w-full text-xs font-medium text-white bg-accent hover:bg-accent-hover rounded-md px-2 py-1.5 transition"
           >
             {isVisited ? 'Zobraziť detail / pridať ďalšiu' : 'Zaznamenať návštevu'}
           </button>

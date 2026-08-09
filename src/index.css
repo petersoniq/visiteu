@@ -10,10 +10,7 @@
 /*
  * Dizajnový systém pre sekciu "Cestovný denník" (Timeline + Infografika).
  * Moderná, "vzdušná" svetlá téma inšpirovaná aktuálnym Material Design
- * (Android) - biele povrchy s jemnou eleváciou (tieň, nie ťažké orámovanie),
- * farby zladené so zvyškom appky (slate + emerald/amber/sky akcenty),
- * namiesto predchádzajúceho sépiového "papierového" vzhľadu, ktorý
- * nesedel so zvyškom appky.
+ * (Android) - biele povrchy s jemnou eleváciou (tieň, nie ťažké orámovanie).
  *
  * Farby sú CSS premenné, takže tmavý režim (nižšie, v .dark) ich len
  * prepíše - komponenty používajúce bg-paper/text-ink/... sa prefarbia
@@ -28,14 +25,21 @@
   --color-ink-faint: #6b7280;  /* terciárny text / captions (min. 4.5:1 na bielej) */
   --color-hairline: #e2e8f0;   /* tenké deliace linky (slate-200) */
 
-  --color-sage: #047857;       /* primárny akcent - emerald-700, ladí s brandom appky */
-  --color-sage-light: #d1fae5;
-
-  --color-ochre: #b45309;      /* teplý akcent (amber-700) - "vyznamenania", najdlhší pobyt */
-  --color-ochre-light: #fef3c7;
-
-  --color-dusk: #0369a1;       /* chladný akcent (sky-700) */
-  --color-dusk-light: #e0f2fe;
+  /*
+   * Jednotná akcentová farba appky (tlačidlá, aktívne stavy, progress ring,
+   * odznaky...). Hodnoty nižšie sú len default (smaragdová) - za behu ich
+   * prepisuje AccentContext podľa výberu v Profile, takže bg-accent/
+   * text-accent/border-accent atď. fungujú v CELEJ appke bez potreby
+   * meniť triedy v komponentoch.
+   *
+   * --color-accent / --color-accent-hover: plné pozadia (tlačidlá, bodky) -
+   *   rovnaké v oboch témach, biely text má na nich vždy dosť kontrastu.
+   * --color-accent-text: text/ikony/odkazy na povrchu - v tmavom režime
+   *   svetlejší odtieň kvôli kontrastu (prepisuje AccentContext).
+   */
+  --color-accent: #059669;
+  --color-accent-hover: #047857;
+  --color-accent-text: #059669;
 }
 
 .dark {
@@ -46,14 +50,7 @@
   --color-ink-faint: #94a3b8;  /* slate-400 */
   --color-hairline: #3f4f68;   /* viditeľná deliaca linka, nie takmer neviditeľná */
 
-  --color-sage: #34d399;       /* emerald-400 - jasnejšie pre dobrú čitateľnosť na tmavom */
-  --color-sage-light: #064e3b;
-
-  --color-ochre: #fbbf24;      /* amber-400 */
-  --color-ochre-light: #451a03;
-
-  --color-dusk: #38bdf8;       /* sky-400 */
-  --color-dusk-light: #0c4a6e;
+  --color-accent-text: #34d399; /* prepíše AccentContext, toto je len fallback pred JS */
 }
 
 /*

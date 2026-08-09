@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/petersoniq/visiteu/compare/v1.7.0...v1.7.1) (2026-08-09)
+
+
+### Bug Fixes
+
+* dve miesta neboli prepojené na akcentovú farbu ([38a6136](https://github.com/petersoniq/visiteu/commit/38a61369c971a672f254aec9085eb73f93410f74))
+
 ## [1.7.0](https://github.com/petersoniq/visiteu/compare/v1.6.0...v1.7.0) (2026-08-09)
 
 

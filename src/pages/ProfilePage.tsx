@@ -168,25 +168,27 @@ export function ProfilePage() {
         </div>
 
         <div className="mt-5 pt-5 border-t border-slate-100 dark:border-slate-800">
-          <p className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Farba zvýraznenia</p>
-          <div className="flex flex-wrap gap-4">
+          <p className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-4">Farba zvýraznenia</p>
+          <div className="grid grid-cols-3 sm:grid-cols-6 gap-y-5">
             {Object.values(ACCENT_PALETTES).map((palette) => (
               <button
                 key={palette.id}
                 type="button"
                 onClick={() => setAccent(palette.id)}
-                className="flex flex-col items-center gap-1.5"
+                className="flex flex-col items-center gap-2"
                 title={palette.label}
               >
                 <span
-                  className={`w-8 h-8 rounded-full flex items-center justify-center transition ring-offset-2 ring-offset-white dark:ring-offset-slate-900 ${
+                  className={`w-9 h-9 rounded-full flex items-center justify-center transition ring-offset-2 ring-offset-white dark:ring-offset-slate-900 ${
                     accent === palette.id ? 'ring-2 ring-slate-400 dark:ring-slate-500' : ''
                   }`}
                   style={{ backgroundColor: palette.swatch }}
                 >
                   {accent === palette.id && <Check className="w-4 h-4 text-white" strokeWidth={3} />}
                 </span>
-                <span className="text-[11px] text-slate-500 dark:text-slate-400">{palette.label}</span>
+                <span className="text-[11px] text-slate-500 dark:text-slate-400 text-center leading-tight px-0.5">
+                  {palette.label}
+                </span>
               </button>
             ))}
           </div>

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.2](https://github.com/petersoniq/visiteu/compare/v1.7.1...v1.7.2) (2026-08-09)
+
+
+### Bug Fixes
+
+* výber farby zvýraznenia v Profile zarovnaný do pevnej mriežky ([282ce97](https://github.com/petersoniq/visiteu/commit/282ce97a5d964ddc34a385f65f4d062d3888e03a))
+
 ## [1.7.1](https://github.com/petersoniq/visiteu/compare/v1.7.0...v1.7.1) (2026-08-09)
 
 

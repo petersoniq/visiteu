@@ -1,12 +1,13 @@
 import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Camera, Loader2, KeyRound, User as UserIcon, Palette, Check } from 'lucide-react'
+import { Camera, Loader2, KeyRound, User as UserIcon, Palette, Check, DatabaseBackup, FileJson, FileSpreadsheet } from 'lucide-react'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../contexts/AuthContext'
 import { useTheme } from '../contexts/ThemeContext'
 import { useAccent } from '../contexts/AccentContext'
 import { ACCENT_PALETTES } from '../lib/accentPalettes'
+import { fetchExportPayload, downloadJSON, downloadCSV } from '../lib/export'
 import {
   profileSchema,
   type ProfileFormData,
@@ -130,6 +131,33 @@ export function ProfilePage() {
     resetPasswordForm()
     setPasswordSuccess(true)
     setTimeout(() => setPasswordSuccess(false), 3000)
+  }
+
+  // --- Export dát (záloha denníka) ---
+  const [exporting, setExporting] = useState<'json' | 'csv' | null>(null)
+  const [exportError, setExportError] = useState<string | null>(null)
+
+  async function handleExport(format: 'json' | 'csv') {
+    if (!user || !profile) return
+    setExporting(format)
+    setExportError(null)
+
+    try {
+      const payload = await fetchExportPayload(user.id, profile.username, profile.full_name)
+      if (payload.totalVisits === 0) {
+        setExportError('Zatiaľ nemáš žiadne návštevy na export.')
+        return
+      }
+      if (format === 'json') {
+        downloadJSON(payload)
+      } else {
+        downloadCSV(payload)
+      }
+    } catch (err) {
+      setExportError(err instanceof Error ? err.message : 'Export zlyhal.')
+    } finally {
+      setExporting(null)
+    }
   }
 
   return (
@@ -357,6 +385,47 @@ export function ProfilePage() {
             Zmeniť heslo
           </button>
         </form>
+      </div>
+
+      {/* Moje dáta - záloha/export denníka */}
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-5">
+        <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-1 flex items-center gap-2">
+          <DatabaseBackup className="w-4 h-4" /> Moje dáta
+        </h3>
+        <p className="text-xs text-slate-400 dark:text-slate-500 mb-4">
+          Stiahni si zálohu celého cestovateľského denníka - všetky návštevy, výlety, poznámky
+          a odkazy na fotky. Odporúčame si dáta občas zálohovať, nech tvoje spomienky nezávisia
+          len od tejto appky.
+        </p>
+
+        <div className="flex flex-col sm:flex-row gap-3">
+          <button
+            type="button"
+            onClick={() => handleExport('json')}
+            disabled={exporting !== null}
+            className="flex-1 flex items-center justify-center gap-2 rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition disabled:opacity-60"
+          >
+            {exporting === 'json' ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileJson className="w-4 h-4" />}
+            Stiahnuť JSON zálohu
+          </button>
+          <button
+            type="button"
+            onClick={() => handleExport('csv')}
+            disabled={exporting !== null}
+            className="flex-1 flex items-center justify-center gap-2 rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition disabled:opacity-60"
+          >
+            {exporting === 'csv' ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileSpreadsheet className="w-4 h-4" />}
+            Stiahnuť CSV (Excel/Sheets)
+          </button>
+        </div>
+
+        {exportError && <p className="text-sm text-red-600 dark:text-red-400 mt-3">{exportError}</p>}
+
+        <p className="text-xs text-slate-400 dark:text-slate-500 mt-3">
+          JSON obsahuje kompletnú štruktúru dát (odporúčané pre archiváciu). CSV je vhodné na
+          otvorenie v tabuľkovom editore. Fotky samotné zostávajú v Supabase Storage - export
+          obsahuje len ich verejné odkazy.
+        </p>
       </div>
     </div>
   )

@@ -18,5 +18,5 @@ function createDivIcon(color: string, isVisited: boolean) {
   })
 }
 
-export const visitedIcon = createDivIcon('#059669', true)
+export const visitedIcon = createDivIcon('var(--color-accent)', true)
 export const unvisitedIcon = createDivIcon('#94a3b8', false)

@@ -349,7 +349,7 @@ export function ProfilePage() {
           <button
             type="submit"
             disabled={passwordSubmitting}
-            className="flex items-center gap-2 rounded-lg bg-slate-800 dark:bg-slate-700 px-4 py-2 text-sm font-medium text-white hover:bg-slate-900 dark:hover:bg-slate-600 transition disabled:opacity-60"
+            className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white hover:bg-accent-hover transition disabled:opacity-60"
           >
             {passwordSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
             Zmeniť heslo

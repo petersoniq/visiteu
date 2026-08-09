@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/petersoniq/visiteu/compare/v1.7.2...v1.8.0) (2026-08-09)
+
+
+### Features
+
+* export/záloha celého denníka (JSON a CSV) v Profile ([311e2d8](https://github.com/petersoniq/visiteu/commit/311e2d8da1c1c09f51f84efa64dbd5017e9225fa))
+
 ## [1.7.2](https://github.com/petersoniq/visiteu/compare/v1.7.1...v1.7.2) (2026-08-09)
 
 

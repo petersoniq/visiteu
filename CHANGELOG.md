@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.0](https://github.com/petersoniq/visiteu/compare/v1.6.0...v1.7.0) (2026-08-09)
+
+
+### Features
+
+* jednotná akcentová farba naprieč appkou + výber farby a tmavý režim v Profile ([4d29109](https://github.com/petersoniq/visiteu/commit/4d291091f0e2cfe0ec15326bdd3c4acdf1043e37))
+
 ## [1.6.0](https://github.com/petersoniq/visiteu/compare/v1.5.0...v1.6.0) (2026-08-08)
 
 

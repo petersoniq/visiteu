@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import { BookOpen, Map as MapIcon, Landmark, Luggage } from 'lucide-react'
 import { EuropeMap } from '../components/map/EuropeMap'
@@ -16,6 +16,9 @@ import { useStats } from '../hooks/useStats'
 
 type Tab = 'journal' | 'map' | 'cities' | 'trips'
 
+/** Ako dávno musela byť návšteva pridaná k výletu, aby sme ho ešte ponúkli ako "rozostavaný" (v dňoch). */
+const RECENT_TRIP_WINDOW_DAYS = 30
+
 export function DashboardPage() {
   const { profile, user } = useAuth()
   const [tab, setTab] = useState<Tab>('journal')
@@ -30,6 +33,21 @@ export function DashboardPage() {
   )
   const stats = useStats(capitals, visits)
   const loading = capitalsLoading || visitsLoading
+
+  // Výlet, do ktorého bola naposledy pridaná návšteva (ak to nebolo príliš dávno) -
+  // ponúkne sa ako rýchla skratka "Pridať do X?" pri zaznamenávaní ďalšieho mesta.
+  const suggestedTripId = useMemo(() => {
+    const withTrip = visits
+      .filter((v) => v.trip_id)
+      .sort((a, b) => b.created_at.localeCompare(a.created_at))
+    const mostRecent = withTrip[0]
+    if (!mostRecent) return null
+
+    const ageDays = (Date.now() - new Date(mostRecent.created_at).getTime()) / (1000 * 60 * 60 * 24)
+    if (ageDays > RECENT_TRIP_WINDOW_DAYS) return null
+
+    return mostRecent.trip_id
+  }, [visits])
 
   const handleDataChanged = useCallback(() => {
     refetchVisits()
@@ -80,6 +98,7 @@ export function DashboardPage() {
               capitals={capitals}
               visits={visits}
               trips={trips}
+              suggestedTripId={suggestedTripId}
               loading={loading}
               onDataChanged={handleDataChanged}
             />

@@ -22,12 +22,14 @@ interface Props {
   capitals: EuCapital[]
   visits: Visit[]
   trips: Trip[]
+  /** ID výletu, do ktorého bola naposledy pridaná návšteva - ponúkne sa ako skratka v modáli */
+  suggestedTripId?: string | null
   loading: boolean
   /** Zavolá sa po uložení/zmazaní návštevy alebo výletu – rodič si obnoví svoje dáta */
   onDataChanged: () => void
 }
 
-export function EuropeMap({ capitals, visits, trips, loading, onDataChanged }: Props) {
+export function EuropeMap({ capitals, visits, trips, suggestedTripId, loading, onDataChanged }: Props) {
   const [selectedCapital, setSelectedCapital] = useState<EuCapital | null>(null)
   const { theme } = useTheme()
   const tiles = theme === 'dark' ? DARK_TILES : LIGHT_TILES
@@ -92,6 +94,7 @@ export function EuropeMap({ capitals, visits, trips, loading, onDataChanged }: P
           capital={selectedCapital}
           existingVisits={visitsByCapital.get(selectedCapital.id) ?? []}
           trips={trips}
+          suggestedTripId={suggestedTripId}
           onClose={() => setSelectedCapital(null)}
           onSaved={() => {
             onDataChanged()

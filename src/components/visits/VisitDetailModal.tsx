@@ -13,6 +13,8 @@ interface Props {
   capital: EuCapital
   existingVisits: Visit[]
   trips: Trip[]
+  /** ID výletu, do ktorého bola naposledy pridaná návšteva - ponúkne sa ako rýchla skratka pri novej návšteve */
+  suggestedTripId?: string | null
   onClose: () => void
   onSaved: () => void
   /** Zavolá sa hneď po úspešnom uložení/vytvorení návštevy (aj výletu) – aj keď modal ešte zostáva otvorený (napr. kvôli fotkám) */
@@ -32,7 +34,7 @@ const TRANSPORT_OPTIONS: { value: string; label: string }[] = [
 
 const NEW_TRIP_VALUE = '__new__'
 
-export function VisitDetailModal({ capital, existingVisits, trips, onClose, onSaved, onDataChanged }: Props) {
+export function VisitDetailModal({ capital, existingVisits, trips, suggestedTripId, onClose, onSaved, onDataChanged }: Props) {
   const { user } = useAuth()
   const [mode, setMode] = useState<'list' | 'form'>(existingVisits.length > 0 ? 'list' : 'form')
   const [editingVisit, setEditingVisit] = useState<Visit | null>(null)
@@ -42,6 +44,11 @@ export function VisitDetailModal({ capital, existingVisits, trips, onClose, onSa
   const [deleting, setDeleting] = useState<string | null>(null)
   const [tripSelection, setTripSelection] = useState<string>('')
   const [newTripName, setNewTripName] = useState('')
+  const [tripSuggestionDismissed, setTripSuggestionDismissed] = useState(false)
+
+  const suggestedTrip = suggestedTripId ? trips.find((t) => t.id === suggestedTripId) ?? null : null
+  const showTripSuggestion =
+    mode === 'form' && !editingVisit && !!suggestedTrip && tripSelection === '' && !tripSuggestionDismissed
 
   const {
     register,
@@ -61,6 +68,7 @@ export function VisitDetailModal({ capital, existingVisits, trips, onClose, onSa
     setPhotos([])
     setTripSelection('')
     setNewTripName('')
+    setTripSuggestionDismissed(false)
     reset({
       visit_date: format(new Date(), 'yyyy-MM-dd'),
       transport_mode: undefined,
@@ -301,6 +309,35 @@ export function VisitDetailModal({ capital, existingVisits, trips, onClose, onSa
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 flex items-center gap-1.5">
                 <Luggage className="w-3.5 h-3.5" /> Výlet (voliteľné)
               </label>
+
+              {showTripSuggestion && suggestedTrip && (
+                <div className="flex items-center justify-between gap-2 rounded-lg bg-accent/10 border border-accent/30 px-3 py-2 text-sm mb-2">
+                  <p className="text-slate-700 dark:text-slate-300 min-w-0">
+                    Pridať do výletu <span className="font-medium">{suggestedTrip.name}</span>?
+                  </p>
+                  <div className="flex items-center gap-3 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setTripSelection(suggestedTrip.id)
+                        setTripSuggestionDismissed(true)
+                      }}
+                      className="text-accent-text font-medium hover:underline"
+                    >
+                      Áno
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setTripSuggestionDismissed(true)}
+                      className="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300"
+                      aria-label="Zavrieť ponuku"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              )}
+
               <select
                 value={tripSelection}
                 onChange={(e) => setTripSelection(e.target.value)}

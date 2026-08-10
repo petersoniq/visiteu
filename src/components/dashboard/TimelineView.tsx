@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react'
 import { format, addDays, parseISO } from 'date-fns'
 import { sk } from 'date-fns/locale'
-import { Plane, TrainFront, Car, Bus, Bike, Footprints, Sailboat, CircleHelp, Luggage } from 'lucide-react'
+import { Plane, TrainFront, Car, Bus, Bike, Footprints, Sailboat, CircleHelp, Luggage, Images } from 'lucide-react'
+import { PhotoLightbox } from '../visits/PhotoLightbox'
 import type { TransportMode, VisitWithDetails } from '../../types'
 
 interface Props {
@@ -40,6 +41,7 @@ export function TimelineView({ visits, loading }: Props) {
   }, [visits])
 
   const [selectedYear, setSelectedYear] = useState<number | 'all'>('all')
+  const [galleryVisit, setGalleryVisit] = useState<VisitWithDetails | null>(null)
 
   const filteredVisits = useMemo(() => {
     if (selectedYear === 'all') return visits
@@ -117,13 +119,22 @@ export function TimelineView({ visits, loading }: Props) {
                 <div className={`pl-16 md:pl-0 md:w-1/2 ${onRight ? 'md:ml-auto md:pl-12' : 'md:pr-12'}`}>
                   <article className="group bg-paper rounded-2xl p-5 shadow-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg">
                     {visit.coverPhotoUrl && (
-                      <div className="rounded-lg overflow-hidden mb-4 aspect-[4/3] bg-hairline">
+                      <button
+                        type="button"
+                        onClick={() => setGalleryVisit(visit)}
+                        className="relative block w-full rounded-lg overflow-hidden mb-4 aspect-[4/3] bg-hairline"
+                      >
                         <img
                           src={visit.coverPhotoUrl}
                           alt={visit.capital.city}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                         />
-                      </div>
+                        {visit.photoCount > 1 && (
+                          <span className="absolute bottom-2 right-2 flex items-center gap-1 bg-black/60 text-white text-xs px-2 py-1 rounded-full">
+                            <Images className="w-3 h-3" /> {visit.photoCount}
+                          </span>
+                        )}
+                      </button>
                     )}
 
                     <h4 className="text-lg font-semibold text-ink leading-tight">{visit.capital.city}</h4>
@@ -145,6 +156,15 @@ export function TimelineView({ visits, loading }: Props) {
             )
           })}
         </ol>
+      )}
+
+      {galleryVisit && (
+        <PhotoLightbox
+          visitId={galleryVisit.id}
+          title={galleryVisit.capital.city}
+          subtitle={formatVisitDate(galleryVisit)}
+          onClose={() => setGalleryVisit(null)}
+        />
       )}
     </div>
   )

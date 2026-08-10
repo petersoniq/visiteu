@@ -1,12 +1,9 @@
-import { useCallback, useMemo, useState } from 'react'
+import { lazy, Suspense, useCallback, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import { BookOpen, Map as MapIcon, Landmark, Luggage } from 'lucide-react'
-import { EuropeMap } from '../components/map/EuropeMap'
 import { BadgeGrid } from '../components/stats/BadgeGrid'
 import { AnnouncementBanner } from '../components/layout/AnnouncementBanner'
 import { JournalDashboard } from '../components/dashboard/JournalDashboard'
-import { CitiesList } from '../components/dashboard/CitiesList'
-import { TripsOverview } from '../components/dashboard/TripsOverview'
 import { useAuth } from '../contexts/AuthContext'
 import { useCapitals } from '../hooks/useCapitals'
 import { useVisitsWithDetails } from '../hooks/useVisitsWithDetails'
@@ -14,10 +11,27 @@ import { useBadges } from '../hooks/useBadges'
 import { useTrips } from '../hooks/useTrips'
 import { useStats } from '../hooks/useStats'
 
+// Denník je predvolená záložka, preto ostáva eager. Mapa (ťahá za sebou celý
+// Leaflet), Mestá a Výlety sa načítajú (code-split) až pri prvom otvorení
+// danej záložky - zmenšuje to úvodný JS bundle appky.
+const EuropeMap = lazy(() => import('../components/map/EuropeMap').then((m) => ({ default: m.EuropeMap })))
+const CitiesList = lazy(() => import('../components/dashboard/CitiesList').then((m) => ({ default: m.CitiesList })))
+const TripsOverview = lazy(() =>
+  import('../components/dashboard/TripsOverview').then((m) => ({ default: m.TripsOverview }))
+)
+
 type Tab = 'journal' | 'map' | 'cities' | 'trips'
 
 /** Ako dávno musela byť návšteva pridaná k výletu, aby sme ho ešte ponúkli ako "rozostavaný" (v dňoch). */
 const RECENT_TRIP_WINDOW_DAYS = 30
+
+function TabFallback() {
+  return (
+    <div className="flex items-center justify-center py-24">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent" />
+    </div>
+  )
+}
 
 export function DashboardPage() {
   const { profile, user } = useAuth()
@@ -94,14 +108,16 @@ export function DashboardPage() {
       {tab === 'map' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
-            <EuropeMap
-              capitals={capitals}
-              visits={visits}
-              trips={trips}
-              suggestedTripId={suggestedTripId}
-              loading={loading}
-              onDataChanged={handleDataChanged}
-            />
+            <Suspense fallback={<TabFallback />}>
+              <EuropeMap
+                capitals={capitals}
+                visits={visits}
+                trips={trips}
+                suggestedTripId={suggestedTripId}
+                loading={loading}
+                onDataChanged={handleDataChanged}
+              />
+            </Suspense>
           </div>
           <div className="space-y-6">
             <BadgeGrid allBadges={allBadges} earnedCodes={earnedCodes} />
@@ -111,20 +127,24 @@ export function DashboardPage() {
 
       {tab === 'cities' && (
         <div className="max-w-2xl mx-auto">
-          <CitiesList capitals={capitals} visits={visits} loading={loading} />
+          <Suspense fallback={<TabFallback />}>
+            <CitiesList capitals={capitals} visits={visits} loading={loading} />
+          </Suspense>
         </div>
       )}
 
       {tab === 'trips' && (
         <div className="max-w-2xl mx-auto">
-          <TripsOverview
-            trips={trips}
-            visits={visits}
-            loading={tripsLoading}
-            onCreateTrip={createTrip}
-            onUpdateTrip={updateTrip}
-            onDeleteTrip={deleteTrip}
-          />
+          <Suspense fallback={<TabFallback />}>
+            <TripsOverview
+              trips={trips}
+              visits={visits}
+              loading={tripsLoading}
+              onCreateTrip={createTrip}
+              onUpdateTrip={updateTrip}
+              onDeleteTrip={deleteTrip}
+            />
+          </Suspense>
         </div>
       )}
     </div>

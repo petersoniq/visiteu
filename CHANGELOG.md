@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.1](https://github.com/petersoniq/visiteu/compare/v1.10.0...v1.10.1) (2026-08-10)
+
+
+### Performance Improvements
+
+* code-splitting - lazy loading záložiek a stránok (bod 6) ([6d94c6f](https://github.com/petersoniq/visiteu/commit/6d94c6f8ca9300dc7d7a4571b4f00022adf788f0))
+
 ## [1.10.0](https://github.com/petersoniq/visiteu/compare/v1.9.0...v1.10.0) (2026-08-10)
 
 

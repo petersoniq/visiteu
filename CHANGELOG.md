@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.0](https://github.com/petersoniq/visiteu/compare/v1.8.0...v1.9.0) (2026-08-10)
+
+
+### Features
+
+* plnohodnotná galéria fotiek s popiskami (bod 2) ([98fc1fa](https://github.com/petersoniq/visiteu/commit/98fc1fa635204a7077202937199af1806ffa84da))
+
 ## [1.8.0](https://github.com/petersoniq/visiteu/compare/v1.7.2...v1.8.0) (2026-08-09)
 
 

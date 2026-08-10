@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.0](https://github.com/petersoniq/visiteu/compare/v1.9.0...v1.10.0) (2026-08-10)
+
+
+### Features
+
+* skratka 'Pridať do posledného výletu?' + audit farieb (body 4 a 5) ([04cfa7b](https://github.com/petersoniq/visiteu/commit/04cfa7b8023fc273013f551c8a4e20a981f18568))
+
 ## [1.9.0](https://github.com/petersoniq/visiteu/compare/v1.8.0...v1.9.0) (2026-08-10)
 
 

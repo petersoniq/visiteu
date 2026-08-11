@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { ImagePlus, X, Loader2, Pencil, Check, ZoomIn } from 'lucide-react'
+import { ImagePlus, X, Loader2, Pencil, Check, ZoomIn, Star } from 'lucide-react'
 import { validatePhotoFile, uploadVisitPhoto, deleteVisitPhoto, getPhotoPublicUrl } from '../../lib/storage'
 import { supabase } from '../../lib/supabaseClient'
 import { PhotoLightbox } from './PhotoLightbox'
@@ -83,6 +83,31 @@ export function PhotoUpload({ userId, visitId, photos, onPhotosChange }: Props) 
     setCaptionDraft(photo.caption ?? '')
   }
 
+  async function setCover(photo: VisitPhoto) {
+    if (photo.is_cover) return
+    setError(null)
+
+    const { error: unsetError } = await supabase
+      .from('visit_photos')
+      .update({ is_cover: false })
+      .eq('visit_id', visitId)
+      .eq('is_cover', true)
+
+    if (unsetError) {
+      setError(unsetError.message)
+      return
+    }
+
+    const { error: coverError } = await supabase.from('visit_photos').update({ is_cover: true }).eq('id', photo.id)
+
+    if (coverError) {
+      setError(coverError.message)
+      return
+    }
+
+    onPhotosChange(photos.map((p) => ({ ...p, is_cover: p.id === photo.id })))
+  }
+
   async function saveCaption() {
     if (!editingCaptionId) return
     setSavingCaption(true)
@@ -113,42 +138,67 @@ export function PhotoUpload({ userId, visitId, photos, onPhotosChange }: Props) 
       </label>
 
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mb-3">
-        {photos.map((photo, i) => (
-          <div key={photo.id} className="relative group aspect-square">
-            <button
-              type="button"
-              onClick={() => setPreviewIndex(i)}
-              className="w-full h-full block"
-              title={photo.caption ?? 'Zväčšiť'}
-            >
-              <img
-                src={getPhotoPublicUrl(photo.storage_path)}
-                alt={photo.caption ?? 'Fotka z cesty'}
-                className="w-full h-full object-cover rounded-lg border border-slate-200 dark:border-slate-700"
-              />
-              <span className="absolute inset-0 rounded-lg bg-black/0 group-hover:bg-black/20 transition flex items-center justify-center">
-                <ZoomIn className="w-4 h-4 text-white opacity-0 group-hover:opacity-100 transition" />
-              </span>
-            </button>
+        {photos.map((photo, i) => {
+          const noCoverSetYet = !photos.some((p) => p.is_cover)
+          const isEffectiveCover = photo.is_cover || (noCoverSetYet && i === 0)
 
-            <button
-              type="button"
-              onClick={() => startEditCaption(photo)}
-              className="absolute bottom-1 left-1 bg-black/60 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition"
-              title="Upraviť popis"
-            >
-              <Pencil className="w-3 h-3" />
-            </button>
-            <button
-              type="button"
-              onClick={() => handleDelete(photo)}
-              className="absolute top-1 right-1 bg-black/60 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition"
-              title="Zmazať fotku"
-            >
-              <X className="w-3 h-3" />
-            </button>
-          </div>
-        ))}
+          return (
+            <div key={photo.id} className="relative group aspect-square">
+              <button
+                type="button"
+                onClick={() => setPreviewIndex(i)}
+                className="w-full h-full block"
+                title={photo.caption ?? 'Zväčšiť'}
+              >
+                <img
+                  src={getPhotoPublicUrl(photo.storage_path)}
+                  alt={photo.caption ?? 'Fotka z cesty'}
+                  className={`w-full h-full object-cover rounded-lg border ${
+                    isEffectiveCover ? 'border-accent' : 'border-slate-200 dark:border-slate-700'
+                  }`}
+                />
+                <span className="absolute inset-0 rounded-lg bg-black/0 group-hover:bg-black/20 transition flex items-center justify-center">
+                  <ZoomIn className="w-4 h-4 text-white opacity-0 group-hover:opacity-100 transition" />
+                </span>
+              </button>
+
+              {isEffectiveCover ? (
+                <span
+                  className="absolute top-1 left-1 bg-accent text-white rounded-full p-1"
+                  title="Titulná fotka tejto návštevy"
+                >
+                  <Star className="w-3 h-3" fill="currentColor" strokeWidth={0} />
+                </span>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setCover(photo)}
+                  className="absolute top-1 left-1 bg-black/60 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition"
+                  title="Nastaviť ako titulnú fotku"
+                >
+                  <Star className="w-3 h-3" />
+                </button>
+              )}
+
+              <button
+                type="button"
+                onClick={() => startEditCaption(photo)}
+                className="absolute bottom-1 left-1 bg-black/60 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition"
+                title="Upraviť popis"
+              >
+                <Pencil className="w-3 h-3" />
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDelete(photo)}
+                className="absolute top-1 right-1 bg-black/60 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition"
+                title="Zmazať fotku"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </div>
+          )
+        })}
 
         {photos.length < 10 && (
           <button
@@ -214,7 +264,9 @@ export function PhotoUpload({ userId, visitId, photos, onPhotosChange }: Props) 
       />
 
       {error && <p className="text-sm text-red-600 dark:text-red-400 mt-1">{error}</p>}
-      <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">JPG, PNG alebo WebP, max. 5 MB na fotku.</p>
+      <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
+        JPG, PNG alebo WebP, max. 5 MB na fotku. Hviezdičkou označíš titulnú fotku, ktorá sa zobrazí v Denníku.
+      </p>
 
       {previewIndex !== null && (
         <PhotoLightbox

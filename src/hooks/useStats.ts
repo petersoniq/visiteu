@@ -19,6 +19,11 @@ export interface LongestStay {
   nights: number
 }
 
+export interface MostActiveYear {
+  year: number
+  cityCount: number
+}
+
 export function useStats(capitals: EuCapital[], visits: Visit[]) {
   return useMemo(() => {
     const visitedIds = new Set(visits.map((v) => v.capital_id))
@@ -62,6 +67,21 @@ export function useStats(capitals: EuCapital[], visits: Visit[]) {
       }
     }
 
+    // Rok, v ktorom si spoznal najviac NOVÝCH miest (nie len počet zápisov v denníku)
+    const citiesByYear = new Map<number, Set<number>>()
+    for (const v of visits) {
+      const year = new Date(v.visit_date).getFullYear()
+      const set = citiesByYear.get(year) ?? new Set<number>()
+      set.add(v.capital_id)
+      citiesByYear.set(year, set)
+    }
+    let mostActiveYear: MostActiveYear | null = null
+    for (const [year, cities] of citiesByYear) {
+      if (!mostActiveYear || cities.size > mostActiveYear.cityCount) {
+        mostActiveYear = { year, cityCount: cities.size }
+      }
+    }
+
     return {
       totalCapitals,
       visitedCount,
@@ -72,6 +92,7 @@ export function useStats(capitals: EuCapital[], visits: Visit[]) {
       totalNights,
       totalVisits: visits.length,
       longestStay,
+      mostActiveYear,
     }
   }, [capitals, visits])
 }

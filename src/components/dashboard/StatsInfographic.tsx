@@ -1,4 +1,4 @@
-import { Plane, TrainFront, Car, Bus, Bike, Footprints, Sailboat, CircleHelp, Moon, Award } from 'lucide-react'
+import { Plane, TrainFront, Car, Bus, Bike, Footprints, Sailboat, CircleHelp, Moon, Award, TrendingUp } from 'lucide-react'
 import type { TransportMode } from '../../types'
 import type { useStats } from '../../hooks/useStats'
 
@@ -99,6 +99,12 @@ function MiniDonut({ visited, total }: { visited: number; total: number }) {
   )
 }
 
+function cityCountLabel(n: number): string {
+  if (n === 1) return 'mesto'
+  if (n >= 2 && n <= 4) return 'mestá'
+  return 'miest'
+}
+
 function ColumnLabel({ children }: { children: string }) {
   return <h3 className="text-[11px] font-medium uppercase tracking-wide text-ink-faint mb-3">{children}</h3>
 }
@@ -175,6 +181,15 @@ export function StatsInfographic({ stats, loading }: Props) {
                 <p className="text-xs text-ink-faint italic">Zatiaľ žiadne záznamy</p>
               )}
             </div>
+            {stats.mostActiveYear && (
+              <div className="flex items-center gap-2.5">
+                <TrendingUp className="w-3.5 h-3.5 text-ink-faint shrink-0" strokeWidth={1.5} />
+                <p className="text-xs text-ink-muted">
+                  Najaktívnejší: <span className="text-ink font-semibold tabular-nums">{stats.mostActiveYear.year}</span>{' '}
+                  ({stats.mostActiveYear.cityCount} {cityCountLabel(stats.mostActiveYear.cityCount)})
+                </p>
+              </div>
+            )}
           </div>
         </div>
 

@@ -16,14 +16,15 @@ interface RawRow {
   created_at: string
   updated_at: string
   eu_capitals: EuCapital
-  visit_photos: { storage_path: string; created_at: string }[]
+  visit_photos: { storage_path: string; created_at: string; is_cover: boolean }[]
   trips: Trip | null
 }
 
 /**
  * Návštevy prihláseného používateľa obohatené o detail mesta (join na eu_capitals),
- * titulnú fotku (najstaršia nahratá fotka danej návštevy) a prípadný výlet, do
- * ktorého návšteva patrí – dátový zdroj pre TimelineView, StatsInfographic aj TripsOverview.
+ * titulnú fotku (tú, ktorú si používateľ vybral ako titulnú - inak najstaršia
+ * nahratá fotka danej návštevy) a prípadný výlet, do ktorého návšteva patrí –
+ * dátový zdroj pre TimelineView, StatsInfographic aj TripsOverview.
  */
 export function useVisitsWithDetails(userId?: string) {
   const [visits, setVisits] = useState<VisitWithDetails[]>([])
@@ -42,7 +43,7 @@ export function useVisitsWithDetails(userId?: string) {
 
     const { data, error } = await supabase
       .from('visits')
-      .select('*, eu_capitals(*), visit_photos(storage_path, created_at), trips(*)')
+      .select('*, eu_capitals(*), visit_photos(storage_path, created_at, is_cover), trips(*)')
       .eq('user_id', userId)
       .order('visit_date', { ascending: false })
 
@@ -58,6 +59,7 @@ export function useVisitsWithDetails(userId?: string) {
       const sortedPhotos = [...(row.visit_photos ?? [])].sort((a, b) =>
         a.created_at.localeCompare(b.created_at)
       )
+      const coverPhoto = sortedPhotos.find((p) => p.is_cover) ?? sortedPhotos[0] ?? null
       return {
         id: row.id,
         user_id: row.user_id,
@@ -72,7 +74,7 @@ export function useVisitsWithDetails(userId?: string) {
         updated_at: row.updated_at,
         capital: row.eu_capitals,
         photoCount: sortedPhotos.length,
-        coverPhotoUrl: sortedPhotos.length > 0 ? getPhotoPublicUrl(sortedPhotos[0].storage_path) : null,
+        coverPhotoUrl: coverPhoto ? getPhotoPublicUrl(coverPhoto.storage_path) : null,
         trip: row.trips ?? null,
       }
     })

@@ -328,3 +328,10 @@ create policy "Používateľ upravuje len svoje výlety"
 
 create policy "Používateľ maže len svoje výlety"
   on public.trips for delete using (auth.uid() = user_id);
+
+-- =========================================================
+-- VISIT_PHOTOS.is_cover – editovateľná titulná fotka návštevy
+-- (pridané v neskoršej migrácii, dokumentované tu pre kompletnosť schémy)
+-- =========================================================
+alter table public.visit_photos add column is_cover boolean not null default false;
+create unique index idx_visit_photos_one_cover on public.visit_photos(visit_id) where is_cover;

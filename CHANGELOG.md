@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.0](https://github.com/petersoniq/visiteu/compare/v1.11.0...v1.12.0) (2026-08-11)
+
+
+### Features
+
+* kompresia fotiek pred nahratím + ZIP export všetkých fotiek ([2264148](https://github.com/petersoniq/visiteu/commit/22641481689bc15ecd85e07b135439fc5c0b1aa2))
+
 ## [1.11.0](https://github.com/petersoniq/visiteu/compare/v1.10.1...v1.11.0) (2026-08-11)
 
 

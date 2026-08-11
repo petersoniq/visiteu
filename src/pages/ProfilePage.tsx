@@ -1,13 +1,14 @@
 import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Camera, Loader2, KeyRound, User as UserIcon, Palette, Check, DatabaseBackup, FileJson, FileSpreadsheet } from 'lucide-react'
+import { Camera, Loader2, KeyRound, User as UserIcon, Palette, Check, DatabaseBackup, FileJson, FileSpreadsheet, FolderArchive } from 'lucide-react'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../contexts/AuthContext'
 import { useTheme } from '../contexts/ThemeContext'
 import { useAccent } from '../contexts/AccentContext'
 import { ACCENT_PALETTES } from '../lib/accentPalettes'
 import { fetchExportPayload, downloadJSON, downloadCSV } from '../lib/export'
+import { downloadAllPhotosAsZip } from '../lib/photoZipExport'
 import {
   profileSchema,
   type ProfileFormData,
@@ -134,8 +135,9 @@ export function ProfilePage() {
   }
 
   // --- Export dát (záloha denníka) ---
-  const [exporting, setExporting] = useState<'json' | 'csv' | null>(null)
+  const [exporting, setExporting] = useState<'json' | 'csv' | 'zip' | null>(null)
   const [exportError, setExportError] = useState<string | null>(null)
+  const [zipSuccessCount, setZipSuccessCount] = useState<number | null>(null)
 
   async function handleExport(format: 'json' | 'csv') {
     if (!user || !profile) return
@@ -155,6 +157,31 @@ export function ProfilePage() {
       }
     } catch (err) {
       setExportError(err instanceof Error ? err.message : 'Export zlyhal.')
+    } finally {
+      setExporting(null)
+    }
+  }
+
+  async function handleZipExport() {
+    if (!user) return
+    setExporting('zip')
+    setExportError(null)
+    setZipSuccessCount(null)
+
+    try {
+      const { error, photoCount } = await downloadAllPhotosAsZip(user.id)
+      if (error) {
+        setExportError(error)
+        return
+      }
+      if (photoCount === 0) {
+        setExportError('Zatiaľ nemáš žiadne nahraté fotky na export.')
+        return
+      }
+      setZipSuccessCount(photoCount)
+      setTimeout(() => setZipSuccessCount(null), 4000)
+    } catch (err) {
+      setExportError(err instanceof Error ? err.message : 'Sťahovanie fotiek zlyhalo.')
     } finally {
       setExporting(null)
     }
@@ -419,12 +446,34 @@ export function ProfilePage() {
           </button>
         </div>
 
+        <div className="mt-3">
+          <button
+            type="button"
+            onClick={handleZipExport}
+            disabled={exporting !== null}
+            className="w-full flex items-center justify-center gap-2 rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition disabled:opacity-60"
+          >
+            {exporting === 'zip' ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <FolderArchive className="w-4 h-4" />
+            )}
+            {exporting === 'zip' ? 'Sťahujem a balím fotky...' : 'Stiahnuť všetky fotky (ZIP)'}
+          </button>
+        </div>
+
         {exportError && <p className="text-sm text-red-600 dark:text-red-400 mt-3">{exportError}</p>}
+        {zipSuccessCount !== null && (
+          <p className="text-sm text-accent-text mt-3">
+            Stiahnutých {zipSuccessCount} {zipSuccessCount === 1 ? 'fotka' : 'fotiek'} ✓
+          </p>
+        )}
 
         <p className="text-xs text-slate-400 dark:text-slate-500 mt-3">
           JSON obsahuje kompletnú štruktúru dát (odporúčané pre archiváciu). CSV je vhodné na
-          otvorenie v tabuľkovom editore. Fotky samotné zostávajú v Supabase Storage - export
-          obsahuje len ich verejné odkazy.
+          otvorenie v tabuľkovom editore. JSON a CSV obsahujú len odkazy na fotky v Supabase
+          Storage - ak chceš mať fotky skutočne stiahnuté a nezávislé od appky, použi ZIP export.
+          Pri veľkom počte fotiek môže sťahovanie chvíľu trvať.
         </p>
       </div>
     </div>

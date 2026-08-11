@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.0](https://github.com/petersoniq/visiteu/compare/v1.10.1...v1.11.0) (2026-08-11)
+
+
+### Features
+
+* editovateľná titulná fotka a ročný súhrn (body 8 a 9) ([35e7676](https://github.com/petersoniq/visiteu/commit/35e767650a54c7708ca165d867e747dbbb71d9ee))
+
 ## [1.10.1](https://github.com/petersoniq/visiteu/compare/v1.10.0...v1.10.1) (2026-08-10)
 
 

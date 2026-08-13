@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.0](https://github.com/petersoniq/visiteu/compare/v1.12.0...v1.13.0) (2026-08-13)
+
+
+### Features
+
+* pripomienka spomienok, trasa na mape, offline zobrazenie (body 2, 3, 4) ([83e6224](https://github.com/petersoniq/visiteu/commit/83e6224027f610dee3b4aef90e959d36ca7ccdde))
+
 ## [1.12.0](https://github.com/petersoniq/visiteu/compare/v1.11.0...v1.12.0) (2026-08-11)
 
 

@@ -33,18 +33,42 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,webmanifest}'],
-        // Supabase dáta majú byť vždy čerstvé - necachujeme API volania
         runtimeCaching: [
+          // Auth musí byť VŽDY čerstvé (prihlásenie/odhlásenie/token refresh) - nikdy necachovať.
           {
-            urlPattern: ({ url }: { url: URL }) => url.hostname.endsWith('.supabase.co'),
+            urlPattern: ({ url }: { url: URL }) => url.hostname.endsWith('.supabase.co') && url.pathname.startsWith('/auth/'),
             handler: 'NetworkOnly',
           },
+          // Dáta (návštevy, výlety, mestá...) - vždy skús najprv sieť (čerstvé dáta), ale
+          // ak si offline alebo sieť neodpovedá do 3s, zobraz posledné známe dáta z cache.
+          // Toto umožňuje prezerať si už raz načítaný denník aj bez pripojenia.
           {
-            urlPattern: ({ url }: { url: URL }) => url.hostname.includes('tile.openstreetmap.org'),
+            urlPattern: ({ url }: { url: URL }) => url.hostname.endsWith('.supabase.co') && url.pathname.startsWith('/rest/'),
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'supabase-data-cache',
+              networkTimeoutSeconds: 3,
+              expiration: { maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          // Fotky a avatary sa po nahratí nemenia - keď ich raz vidíš, zostanú dostupné aj offline.
+          {
+            urlPattern: ({ url }: { url: URL }) => url.hostname.endsWith('.supabase.co') && url.pathname.startsWith('/storage/'),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'supabase-storage-cache',
+              expiration: { maxEntries: 300, maxAgeSeconds: 60 * 60 * 24 * 30 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            urlPattern: ({ url }: { url: URL }) =>
+              url.hostname.includes('tile.openstreetmap.org') || url.hostname.includes('basemaps.cartocdn.com'),
             handler: 'CacheFirst',
             options: {
               cacheName: 'map-tiles-cache',
-              expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 14 },
+              expiration: { maxEntries: 400, maxAgeSeconds: 60 * 60 * 24 * 14 },
             },
           },
         ],

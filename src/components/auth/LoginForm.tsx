@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
 import { loginSchema, type LoginFormData } from '../../lib/validation'
 import { Loader2 } from 'lucide-react'
@@ -12,6 +12,7 @@ const inputClass =
 export function LoginForm() {
   const { signIn } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
   const [serverError, setServerError] = useState<string | null>(null)
 
   const {
@@ -27,7 +28,9 @@ export function LoginForm() {
       setServerError(error)
       return
     }
-    navigate('/dashboard')
+    // Ak sem používateľ prišiel napr. cez pozývací odkaz na výlet, vráť ho tam - inak na Dashboard
+    const from = (location.state as { from?: string } | null)?.from
+    navigate(from ?? '/dashboard', { replace: true })
   }
 
   return (

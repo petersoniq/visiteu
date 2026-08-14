@@ -1,47 +1,80 @@
 import { useMemo, useState } from 'react'
 import { format } from 'date-fns'
-import { Luggage, Pencil, Check, X, Trash2, Plus, Loader2, MapPin, Moon } from 'lucide-react'
-import type { Trip, VisitWithDetails } from '../../types'
+import {
+  Luggage,
+  Pencil,
+  Check,
+  X,
+  Trash2,
+  Plus,
+  Loader2,
+  MapPin,
+  Moon,
+  UserPlus,
+  Link2,
+  Copy,
+  LogOut,
+} from 'lucide-react'
+import type { Trip, TripWithMembers, TripVisitEntry } from '../../types'
 
 interface Props {
-  trips: Trip[]
-  visits: VisitWithDetails[]
+  trips: TripWithMembers[]
+  visitsByTrip: Map<string, TripVisitEntry[]>
   loading: boolean
+  currentUserId?: string
   onCreateTrip: (name: string, description?: string) => Promise<{ trip: Trip | null; error: string | null }>
   onUpdateTrip: (id: string, updates: { name?: string; description?: string | null }) => Promise<{ error: string | null }>
   onDeleteTrip: (id: string) => Promise<{ error: string | null }>
+  onLeaveTrip: (id: string) => Promise<{ error: string | null }>
+  onGetInviteLink: (tripId: string) => Promise<{ url: string | null; error: string | null }>
 }
 
 interface TripSummary {
-  trip: Trip
-  visits: VisitWithDetails[]
+  trip: TripWithMembers
+  visits: TripVisitEntry[]
   cityCount: number
   totalNights: number
   dateRangeLabel: string
   coverPhotoUrl: string | null
+  isOwner: boolean
 }
 
-export function TripsOverview({ trips, visits, loading, onCreateTrip, onUpdateTrip, onDeleteTrip }: Props) {
+function initials(username: string): string {
+  return username.slice(0, 2).toUpperCase()
+}
+
+export function TripsOverview({
+  trips,
+  visitsByTrip,
+  loading,
+  currentUserId,
+  onCreateTrip,
+  onUpdateTrip,
+  onDeleteTrip,
+  onLeaveTrip,
+  onGetInviteLink,
+}: Props) {
   const [newName, setNewName] = useState('')
   const [creating, setCreating] = useState(false)
   const [createError, setCreateError] = useState<string | null>(null)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editName, setEditName] = useState('')
-  const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [busyTripId, setBusyTripId] = useState<string | null>(null)
+  const [inviteLink, setInviteLink] = useState<{ tripId: string; url: string } | null>(null)
+  const [inviteError, setInviteError] = useState<string | null>(null)
+  const [copied, setCopied] = useState(false)
 
   const summaries = useMemo<TripSummary[]>(() => {
     return trips.map((trip) => {
-      const tripVisits = visits
-        .filter((v) => v.trip_id === trip.id)
-        .sort((a, b) => a.visit_date.localeCompare(b.visit_date))
+      const tripVisits = [...(visitsByTrip.get(trip.id) ?? [])].sort((a, b) => a.visitDate.localeCompare(b.visitDate))
 
-      const cityCount = new Set(tripVisits.map((v) => v.capital_id)).size
-      const totalNights = tripVisits.reduce((sum, v) => sum + v.duration_nights, 0)
+      const cityCount = new Set(tripVisits.map((v) => v.capital.id)).size
+      const totalNights = tripVisits.reduce((sum, v) => sum + v.durationNights, 0)
 
       let dateRangeLabel = 'Zatiaľ bez dátumov'
       if (tripVisits.length > 0) {
-        const first = tripVisits[0].visit_date
-        const last = tripVisits[tripVisits.length - 1].visit_date
+        const first = tripVisits[0].visitDate
+        const last = tripVisits[tripVisits.length - 1].visitDate
         dateRangeLabel =
           first === last
             ? format(new Date(first), 'd. M. yyyy')
@@ -49,10 +82,11 @@ export function TripsOverview({ trips, visits, loading, onCreateTrip, onUpdateTr
       }
 
       const coverPhotoUrl = tripVisits.find((v) => v.coverPhotoUrl)?.coverPhotoUrl ?? null
+      const isOwner = trip.members.some((m) => m.userId === currentUserId && m.role === 'owner')
 
-      return { trip, visits: tripVisits, cityCount, totalNights, dateRangeLabel, coverPhotoUrl }
+      return { trip, visits: tripVisits, cityCount, totalNights, dateRangeLabel, coverPhotoUrl, isOwner }
     })
-  }, [trips, visits])
+  }, [trips, visitsByTrip, currentUserId])
 
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault()
@@ -81,9 +115,36 @@ export function TripsOverview({ trips, visits, loading, onCreateTrip, onUpdateTr
 
   async function handleDelete(id: string) {
     if (!confirm('Zmazať tento výlet? Návštevy v ňom zostanú zachované, len sa odviažu.')) return
-    setDeletingId(id)
+    setBusyTripId(id)
     await onDeleteTrip(id)
-    setDeletingId(null)
+    setBusyTripId(null)
+  }
+
+  async function handleLeave(id: string) {
+    if (!confirm('Naozaj chceš opustiť tento výlet?')) return
+    setBusyTripId(id)
+    await onLeaveTrip(id)
+    setBusyTripId(null)
+  }
+
+  async function handleInvite(tripId: string) {
+    setBusyTripId(tripId)
+    setInviteError(null)
+    setCopied(false)
+    const { url, error } = await onGetInviteLink(tripId)
+    setBusyTripId(null)
+    if (error || !url) {
+      setInviteError(error ?? 'Vytvorenie pozvánky zlyhalo.')
+      return
+    }
+    setInviteLink({ tripId, url })
+  }
+
+  async function handleCopy() {
+    if (!inviteLink) return
+    await navigator.clipboard.writeText(inviteLink.url)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
   }
 
   if (loading) {
@@ -132,7 +193,7 @@ export function TripsOverview({ trips, visits, loading, onCreateTrip, onUpdateTr
         </div>
       ) : (
         <div className="space-y-4">
-          {summaries.map(({ trip, visits: tripVisits, cityCount, totalNights, dateRangeLabel, coverPhotoUrl }) => (
+          {summaries.map(({ trip, visits: tripVisits, cityCount, totalNights, dateRangeLabel, coverPhotoUrl, isOwner }) => (
             <div
               key={trip.id}
               className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden"
@@ -172,29 +233,91 @@ export function TripsOverview({ trips, visits, loading, onCreateTrip, onUpdateTr
                     {editingId !== trip.id && (
                       <div className="flex gap-1 shrink-0">
                         <button
+                          onClick={() => handleInvite(trip.id)}
+                          disabled={busyTripId === trip.id}
+                          className="p-1 text-slate-400 dark:text-slate-500 hover:text-accent-text"
+                          title="Pozvať spolucestovateľa"
+                        >
+                          {busyTripId === trip.id ? (
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          ) : (
+                            <UserPlus className="w-3.5 h-3.5" />
+                          )}
+                        </button>
+                        <button
                           onClick={() => startEdit(trip)}
                           className="p-1 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300"
                           title="Premenovať"
                         >
                           <Pencil className="w-3.5 h-3.5" />
                         </button>
-                        <button
-                          onClick={() => handleDelete(trip.id)}
-                          disabled={deletingId === trip.id}
-                          className="p-1 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400"
-                          title="Zmazať výlet"
-                        >
-                          {deletingId === trip.id ? (
-                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                          ) : (
+                        {isOwner ? (
+                          <button
+                            onClick={() => handleDelete(trip.id)}
+                            disabled={busyTripId === trip.id}
+                            className="p-1 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400"
+                            title="Zmazať výlet"
+                          >
                             <Trash2 className="w-3.5 h-3.5" />
-                          )}
-                        </button>
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => handleLeave(trip.id)}
+                            disabled={busyTripId === trip.id}
+                            className="p-1 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400"
+                            title="Opustiť výlet"
+                          >
+                            <LogOut className="w-3.5 h-3.5" />
+                          </button>
+                        )}
                       </div>
                     )}
                   </div>
 
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{dateRangeLabel}</p>
+
+                  {/* Členovia výletu */}
+                  {trip.members.length > 1 && (
+                    <div className="flex items-center -space-x-2 mt-2">
+                      {trip.members.map((m) => (
+                        <div
+                          key={m.userId}
+                          title={m.username}
+                          className="w-6 h-6 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200 dark:bg-slate-700 flex items-center justify-center overflow-hidden shrink-0"
+                        >
+                          {m.avatarUrl ? (
+                            <img src={m.avatarUrl} alt={m.username} className="w-full h-full object-cover" />
+                          ) : (
+                            <span className="text-[10px] font-medium text-slate-600 dark:text-slate-300">
+                              {initials(m.username)}
+                            </span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {inviteLink?.tripId === trip.id && (
+                    <div className="flex items-center gap-2 mt-3 p-2 rounded-lg bg-accent/10 border border-accent/30">
+                      <Link2 className="w-3.5 h-3.5 text-accent-text shrink-0" />
+                      <input
+                        readOnly
+                        value={inviteLink.url}
+                        className="flex-1 min-w-0 bg-transparent text-xs text-slate-700 dark:text-slate-300 focus:outline-none truncate"
+                        onFocus={(e) => e.target.select()}
+                      />
+                      <button
+                        onClick={handleCopy}
+                        className="text-xs font-medium text-accent-text hover:underline shrink-0 flex items-center gap-1"
+                      >
+                        {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                        {copied ? 'Skopírované' : 'Kopírovať'}
+                      </button>
+                    </div>
+                  )}
+                  {inviteError && inviteLink?.tripId !== trip.id && (
+                    <p className="text-xs text-red-600 dark:text-red-400 mt-2">{inviteError}</p>
+                  )}
 
                   {tripVisits.length > 0 && (
                     <div className="flex items-center gap-3 mt-2 text-xs text-slate-500 dark:text-slate-400">
@@ -212,9 +335,13 @@ export function TripsOverview({ trips, visits, loading, onCreateTrip, onUpdateTr
                       {tripVisits.map((v) => (
                         <span
                           key={v.id}
+                          title={`Pridal(a) ${v.addedBy.username}`}
                           className="text-xs bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-full px-2.5 py-1"
                         >
                           {v.capital.city}
+                          {trip.members.length > 1 && (
+                            <span className="text-slate-400 dark:text-slate-500"> · {v.addedBy.username}</span>
+                          )}
                         </span>
                       ))}
                     </div>

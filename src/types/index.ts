@@ -62,3 +62,34 @@ export interface VisitWithDetails extends Visit {
   coverPhotoUrl: string | null
   trip: Trip | null
 }
+
+export type TripRole = 'owner' | 'member'
+
+/** Člen výletu (vlastník alebo pozvaný spolucestovateľ) */
+export interface TripMember {
+  userId: string
+  role: TripRole
+  username: string
+  avatarUrl: string | null
+}
+
+/** Výlet obohatený o zoznam členov - dátový zdroj pre TripsOverview */
+export interface TripWithMembers extends Trip {
+  members: TripMember[]
+}
+
+/** Jedna návšteva v rámci zdieľaného výletu, vrátane toho, kto ju pridal */
+export interface TripVisitEntry {
+  id: string
+  capital: EuCapital
+  visitDate: string
+  transportMode: TransportMode
+  durationNights: number
+  notes: string | null
+  coverPhotoUrl: string | null
+  addedBy: {
+    userId: string
+    username: string
+    avatarUrl: string | null
+  }
+}

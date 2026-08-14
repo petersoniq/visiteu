@@ -335,3 +335,129 @@ create policy "Používateľ maže len svoje výlety"
 -- =========================================================
 alter table public.visit_photos add column is_cover boolean not null default false;
 create unique index idx_visit_photos_one_cover on public.visit_photos(visit_id) where is_cover;
+
+-- =========================================================
+-- ZDIEĽANIE VÝLETOV medzi viacerými používateľmi
+-- (pridané v neskoršej migrácii, dokumentované tu pre kompletnosť schémy)
+-- =========================================================
+create table public.trip_members (
+  trip_id uuid not null references public.trips(id) on delete cascade,
+  user_id uuid not null references public.profiles(id) on delete cascade,
+  role text not null default 'member' check (role in ('owner', 'member')),
+  joined_at timestamptz not null default now(),
+  primary key (trip_id, user_id)
+);
+
+create index idx_trip_members_user_id on public.trip_members(user_id);
+alter table public.trip_members enable row level security;
+
+create policy "Členstvo vo výletoch je viditeľné"
+  on public.trip_members for select using (true);
+create policy "Člen môže sám seba odobrať z výletu"
+  on public.trip_members for delete using (user_id = auth.uid() and role <> 'owner');
+
+create or replace function public.add_trip_owner_membership()
+returns trigger as $$
+begin
+  insert into public.trip_members (trip_id, user_id, role)
+  values (new.id, new.user_id, 'owner');
+  return new;
+end;
+$$ language plpgsql security definer;
+
+create trigger on_trip_created_add_owner
+  after insert on public.trips
+  for each row execute procedure public.add_trip_owner_membership();
+
+create table public.trip_invites (
+  id uuid primary key default gen_random_uuid(),
+  trip_id uuid not null references public.trips(id) on delete cascade,
+  created_by uuid not null references public.profiles(id),
+  token text not null unique default encode(gen_random_bytes(16), 'hex'),
+  expires_at timestamptz,
+  max_uses integer default 20,
+  use_count integer not null default 0,
+  created_at timestamptz not null default now()
+);
+
+create index idx_trip_invites_trip_id on public.trip_invites(trip_id);
+alter table public.trip_invites enable row level security;
+
+create policy "Členovia výletu vidia jeho pozvánky"
+  on public.trip_invites for select
+  using (exists (select 1 from public.trip_members tm where tm.trip_id = trip_invites.trip_id and tm.user_id = auth.uid()));
+create policy "Členovia výletu môžu vytvárať pozvánky"
+  on public.trip_invites for insert
+  with check (
+    created_by = auth.uid()
+    and exists (select 1 from public.trip_members tm where tm.trip_id = trip_invites.trip_id and tm.user_id = auth.uid())
+  );
+create policy "Tvorca môže zrušiť vlastnú pozvánku"
+  on public.trip_invites for delete using (created_by = auth.uid());
+
+create or replace function public.join_trip_via_invite(p_token text)
+returns table(trip_id uuid, trip_name text) as $$
+declare
+  v_invite record;
+begin
+  if auth.uid() is null then
+    raise exception 'Musíš byť prihlásený.';
+  end if;
+
+  select * into v_invite from public.trip_invites where token = p_token for update;
+
+  if v_invite is null then
+    raise exception 'Pozvánka neexistuje alebo bola zrušená.';
+  end if;
+
+  if v_invite.expires_at is not null and v_invite.expires_at < now() then
+    raise exception 'Platnosť pozvánky vypršala.';
+  end if;
+
+  if v_invite.max_uses is not null and v_invite.use_count >= v_invite.max_uses then
+    raise exception 'Pozvánka už dosiahla maximálny počet použití.';
+  end if;
+
+  insert into public.trip_members (trip_id, user_id, role)
+  values (v_invite.trip_id, auth.uid(), 'member')
+  on conflict (trip_id, user_id) do nothing;
+
+  update public.trip_invites set use_count = use_count + 1 where id = v_invite.id;
+
+  return query select t.id, t.name from public.trips t where t.id = v_invite.trip_id;
+end;
+$$ language plpgsql security definer;
+
+grant execute on function public.join_trip_via_invite(text) to authenticated;
+
+-- Upravovať výlet smie ktorýkoľvek člen, mazať len vlastník
+drop policy "Používateľ upravuje len svoje výlety" on public.trips;
+drop policy "Používateľ maže len svoje výlety" on public.trips;
+
+create policy "Členovia môžu upravovať výlet"
+  on public.trips for update
+  using (exists (select 1 from public.trip_members tm where tm.trip_id = trips.id and tm.user_id = auth.uid()))
+  with check (exists (select 1 from public.trip_members tm where tm.trip_id = trips.id and tm.user_id = auth.uid()));
+
+create policy "Len vlastník maže výlet"
+  on public.trips for delete
+  using (exists (select 1 from public.trip_members tm where tm.trip_id = trips.id and tm.user_id = auth.uid() and tm.role = 'owner'));
+
+-- trip_id na návšteve sa dá nastaviť len na výlet, ktorého je používateľ členom
+drop policy "Používateľ vytvára len svoje návštevy" on public.visits;
+drop policy "Používateľ upravuje len svoje návštevy" on public.visits;
+
+create policy "Používateľ vytvára len svoje návštevy"
+  on public.visits for insert
+  with check (
+    auth.uid() = user_id
+    and (trip_id is null or exists (select 1 from public.trip_members tm where tm.trip_id = visits.trip_id and tm.user_id = auth.uid()))
+  );
+
+create policy "Používateľ upravuje len svoje návštevy"
+  on public.visits for update
+  using (auth.uid() = user_id)
+  with check (
+    auth.uid() = user_id
+    and (trip_id is null or exists (select 1 from public.trip_members tm where tm.trip_id = visits.trip_id and tm.user_id = auth.uid()))
+  );

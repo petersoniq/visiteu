@@ -9,6 +9,7 @@ import { useCapitals } from '../hooks/useCapitals'
 import { useVisitsWithDetails } from '../hooks/useVisitsWithDetails'
 import { useBadges } from '../hooks/useBadges'
 import { useTrips } from '../hooks/useTrips'
+import { useTripVisits } from '../hooks/useTripVisits'
 import { useStats } from '../hooks/useStats'
 
 // Denník je predvolená záložka, preto ostáva eager. Mapa (ťahá za sebou celý
@@ -42,9 +43,18 @@ export function DashboardPage() {
   const { capitals, loading: capitalsLoading } = useCapitals()
   const { visits, loading: visitsLoading, refetch: refetchVisits } = useVisitsWithDetails(user?.id)
   const { allBadges, earnedCodes, refetch: refetchBadges } = useBadges(user?.id)
-  const { trips, loading: tripsLoading, createTrip, updateTrip, deleteTrip, refetch: refetchTrips } = useTrips(
-    user?.id
-  )
+  const {
+    trips,
+    loading: tripsLoading,
+    createTrip,
+    updateTrip,
+    deleteTrip,
+    leaveTrip,
+    getOrCreateInviteLink,
+    refetch: refetchTrips,
+  } = useTrips(user?.id)
+  const tripIds = useMemo(() => trips.map((t) => t.id), [trips])
+  const { visitsByTrip, loading: tripVisitsLoading, refetch: refetchTripVisits } = useTripVisits(tripIds)
   const stats = useStats(capitals, visits)
   const loading = capitalsLoading || visitsLoading
 
@@ -67,7 +77,8 @@ export function DashboardPage() {
     refetchVisits()
     refetchBadges()
     refetchTrips()
-  }, [refetchVisits, refetchBadges, refetchTrips])
+    refetchTripVisits()
+  }, [refetchVisits, refetchBadges, refetchTrips, refetchTripVisits])
 
   const tabs: { key: Tab; label: string; icon: ReactNode }[] = [
     { key: 'journal', label: 'Denník', icon: <BookOpen className="w-4 h-4" /> },
@@ -138,11 +149,14 @@ export function DashboardPage() {
           <Suspense fallback={<TabFallback />}>
             <TripsOverview
               trips={trips}
-              visits={visits}
-              loading={tripsLoading}
+              visitsByTrip={visitsByTrip}
+              loading={tripsLoading || tripVisitsLoading}
+              currentUserId={user?.id}
               onCreateTrip={createTrip}
               onUpdateTrip={updateTrip}
               onDeleteTrip={deleteTrip}
+              onLeaveTrip={leaveTrip}
+              onGetInviteLink={getOrCreateInviteLink}
             />
           </Suspense>
         </div>

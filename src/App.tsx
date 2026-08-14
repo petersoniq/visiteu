@@ -13,6 +13,7 @@ import { DashboardPage } from './pages/DashboardPage'
 // otvorí - drvivá väčšina návštev appky sa odohráva na /dashboard.
 const AdminPage = lazy(() => import('./pages/AdminPage').then((m) => ({ default: m.AdminPage })))
 const ProfilePage = lazy(() => import('./pages/ProfilePage').then((m) => ({ default: m.ProfilePage })))
+const JoinTripPage = lazy(() => import('./pages/JoinTripPage').then((m) => ({ default: m.JoinTripPage })))
 
 function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -48,6 +49,14 @@ function App() {
             <Routes>
               <Route path="/login" element={<AuthLayout><LoginForm /></AuthLayout>} />
               <Route path="/register" element={<AuthLayout><RegisterForm /></AuthLayout>} />
+              <Route
+                path="/join/:token"
+                element={
+                  <Suspense fallback={<RouteFallback />}>
+                    <JoinTripPage />
+                  </Suspense>
+                }
+              />
 
               <Route element={<ProtectedRoute />}>
                 <Route element={<AppLayout />}>

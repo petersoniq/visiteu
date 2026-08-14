@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.0](https://github.com/petersoniq/visiteu/compare/v1.13.0...v1.14.0) (2026-08-14)
+
+
+### Features
+
+* zdieľanie výletov s ďalšími používateľmi ([ae25185](https://github.com/petersoniq/visiteu/commit/ae251853a2062a541d740691841cf8f3d37375c9))
+
 ## [1.13.0](https://github.com/petersoniq/visiteu/compare/v1.12.0...v1.13.0) (2026-08-13)
 
 

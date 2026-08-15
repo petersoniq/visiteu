@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.0](https://github.com/petersoniq/visiteu/compare/v1.14.0...v1.15.0) (2026-08-15)
+
+
+### Features
+
+* spolucestujúci k návšteve mesta s automatickým prepojením účtov ([054cd34](https://github.com/petersoniq/visiteu/commit/054cd346cd62a5387750488225314e7990ebe043))
+
 ## [1.14.0](https://github.com/petersoniq/visiteu/compare/v1.13.0...v1.14.0) (2026-08-14)
 
 

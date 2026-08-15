@@ -18,13 +18,15 @@ interface RawRow {
   eu_capitals: EuCapital
   visit_photos: { storage_path: string; created_at: string; is_cover: boolean }[]
   trips: Trip | null
+  // Zámerne bez `email` - toto zobrazenie fotky/karty nemá dôvod k nej mať prístup.
+  visit_companions: { id: string; name: string; matched_user_id: string | null; created_at: string }[]
 }
 
 /**
  * Návštevy prihláseného používateľa obohatené o detail mesta (join na eu_capitals),
  * titulnú fotku (tú, ktorú si používateľ vybral ako titulnú - inak najstaršia
- * nahratá fotka danej návštevy) a prípadný výlet, do ktorého návšteva patrí –
- * dátový zdroj pre TimelineView, StatsInfographic aj TripsOverview.
+ * nahratá fotka danej návštevy), prípadný výlet a spolucestujúcich (len meno,
+ * bez e-mailu) – dátový zdroj pre TimelineView, StatsInfographic aj TripsOverview.
  */
 export function useVisitsWithDetails(userId?: string) {
   const [visits, setVisits] = useState<VisitWithDetails[]>([])
@@ -43,7 +45,9 @@ export function useVisitsWithDetails(userId?: string) {
 
     const { data, error } = await supabase
       .from('visits')
-      .select('*, eu_capitals(*), visit_photos(storage_path, created_at, is_cover), trips(*)')
+      .select(
+        '*, eu_capitals(*), visit_photos(storage_path, created_at, is_cover), trips(*), visit_companions(id, visit_id, name, matched_user_id, created_at)'
+      )
       .eq('user_id', userId)
       .order('visit_date', { ascending: false })
 
@@ -76,6 +80,13 @@ export function useVisitsWithDetails(userId?: string) {
         photoCount: sortedPhotos.length,
         coverPhotoUrl: coverPhoto ? getPhotoPublicUrl(coverPhoto.storage_path) : null,
         trip: row.trips ?? null,
+        companions: (row.visit_companions ?? []).map((c) => ({
+          id: c.id,
+          visit_id: row.id,
+          name: c.name,
+          matched_user_id: c.matched_user_id,
+          created_at: c.created_at,
+        })),
       }
     })
 

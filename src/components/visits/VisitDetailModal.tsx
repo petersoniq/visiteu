@@ -7,7 +7,8 @@ import { supabase } from '../../lib/supabaseClient'
 import { useAuth } from '../../contexts/AuthContext'
 import { visitSchema, type VisitFormData } from '../../lib/validation'
 import { PhotoUpload } from './PhotoUpload'
-import type { EuCapital, Trip, Visit, VisitPhoto } from '../../types'
+import { CompanionsEditor } from './CompanionsEditor'
+import type { EuCapital, Trip, Visit, VisitPhoto, VisitCompanion } from '../../types'
 
 interface Props {
   capital: EuCapital
@@ -39,6 +40,7 @@ export function VisitDetailModal({ capital, existingVisits, trips, suggestedTrip
   const [mode, setMode] = useState<'list' | 'form'>(existingVisits.length > 0 ? 'list' : 'form')
   const [editingVisit, setEditingVisit] = useState<Visit | null>(null)
   const [photos, setPhotos] = useState<VisitPhoto[]>([])
+  const [companions, setCompanions] = useState<VisitCompanion[]>([])
   const [savedVisitId, setSavedVisitId] = useState<string | null>(null)
   const [serverError, setServerError] = useState<string | null>(null)
   const [deleting, setDeleting] = useState<string | null>(null)
@@ -66,6 +68,7 @@ export function VisitDetailModal({ capital, existingVisits, trips, suggestedTrip
     setEditingVisit(null)
     setSavedVisitId(null)
     setPhotos([])
+    setCompanions([])
     setTripSelection('')
     setNewTripName('')
     setTripSuggestionDismissed(false)
@@ -98,6 +101,13 @@ export function VisitDetailModal({ capital, existingVisits, trips, suggestedTrip
       .eq('visit_id', visit.id)
       .order('created_at')
     setPhotos((data as VisitPhoto[]) ?? [])
+
+    const { data: companionData } = await supabase
+      .from('visit_companions')
+      .select('id, visit_id, name, matched_user_id, created_at')
+      .eq('visit_id', visit.id)
+      .order('created_at')
+    setCompanions((companionData as VisitCompanion[]) ?? [])
 
     setMode('form')
   }
@@ -399,6 +409,10 @@ export function VisitDetailModal({ capital, existingVisits, trips, suggestedTrip
               <p className="text-xs text-slate-400 dark:text-slate-500 italic">
                 Fotky budeš môcť pridať hneď po uložení návštevy.
               </p>
+            )}
+
+            {savedVisitId && (
+              <CompanionsEditor visitId={savedVisitId} companions={companions} onCompanionsChange={setCompanions} />
             )}
 
             {serverError && (

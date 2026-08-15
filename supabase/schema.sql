@@ -461,3 +461,153 @@ create policy "Používateľ upravuje len svoje návštevy"
     auth.uid() = user_id
     and (trip_id is null or exists (select 1 from public.trip_members tm where tm.trip_id = visits.trip_id and tm.user_id = auth.uid()))
   );
+
+-- =========================================================
+-- VISIT_COMPANIONS – spolucestujúci pridaní k návšteve mesta
+-- (pridané v neskoršej migrácii, dokumentované tu pre kompletnosť schémy)
+--
+-- Meno je verejné, e-mail sa nikde v appke nezobrazuje - slúži len na
+-- spárovanie s existujúcim účtom cez find_user_id_by_email() (SECURITY
+-- DEFINER, keďže auth.users nie je bežne čitateľná). Pri spárovaní sa
+-- spustí mirror_visit_for_companion(), ktorá spárovanému používateľovi
+-- vytvorí (alebo doplní) JEHO VLASTNÚ návštevu rovnakého mesta v rovnaký
+-- deň so zoznamom spolucestujúcich z oboch strán - presne to appka sľubuje:
+-- "uvidí rovnaké navštívené mesto vo svojom prehľade aj so spolucestujúcimi".
+-- =========================================================
+create table public.visit_companions (
+  id uuid primary key default gen_random_uuid(),
+  visit_id uuid not null references public.visits(id) on delete cascade,
+  name text not null,
+  email text,
+  matched_user_id uuid references public.profiles(id) on delete set null,
+  created_at timestamptz not null default now()
+);
+
+create index idx_visit_companions_visit_id on public.visit_companions(visit_id);
+create index idx_visit_companions_matched_user on public.visit_companions(matched_user_id);
+
+alter table public.visit_companions enable row level security;
+
+create policy "Spolucestujúci sú viditeľní"
+  on public.visit_companions for select using (true);
+create policy "Vlastník návštevy pridáva spolucestujúcich"
+  on public.visit_companions for insert
+  with check (exists (select 1 from public.visits v where v.id = visit_id and v.user_id = auth.uid()));
+create policy "Vlastník návštevy upravuje spolucestujúcich"
+  on public.visit_companions for update
+  using (exists (select 1 from public.visits v where v.id = visit_id and v.user_id = auth.uid()));
+create policy "Vlastník návštevy maže spolucestujúcich"
+  on public.visit_companions for delete
+  using (exists (select 1 from public.visits v where v.id = visit_id and v.user_id = auth.uid()));
+
+create or replace function public.find_user_id_by_email(p_email text)
+returns uuid as $$
+  select id from auth.users
+  where lower(email) = lower(p_email) and email_confirmed_at is not null
+  limit 1;
+$$ language sql security definer stable;
+
+create or replace function public.mirror_visit_for_companion(p_original_visit_id uuid, p_target_user_id uuid)
+returns void as $$
+declare
+  v_original public.visits%rowtype;
+  v_target_visit_id uuid;
+  v_owner_username text;
+  c record;
+begin
+  select * into v_original from public.visits where id = p_original_visit_id;
+  if v_original is null or v_original.user_id = p_target_user_id then
+    return;
+  end if;
+
+  select id into v_target_visit_id
+  from public.visits
+  where user_id = p_target_user_id
+    and capital_id = v_original.capital_id
+    and visit_date = v_original.visit_date
+  limit 1;
+
+  if v_target_visit_id is null then
+    insert into public.visits (user_id, capital_id, visit_date, transport_mode, duration_nights)
+    values (p_target_user_id, v_original.capital_id, v_original.visit_date, v_original.transport_mode, v_original.duration_nights)
+    returning id into v_target_visit_id;
+  end if;
+
+  select username into v_owner_username from public.profiles where id = v_original.user_id;
+
+  if v_owner_username is not null and not exists (
+    select 1 from public.visit_companions where visit_id = v_target_visit_id and matched_user_id = v_original.user_id
+  ) then
+    insert into public.visit_companions (visit_id, name, matched_user_id)
+    values (v_target_visit_id, v_owner_username, v_original.user_id);
+  end if;
+
+  for c in
+    select name, email, matched_user_id from public.visit_companions
+    where visit_id = p_original_visit_id and (matched_user_id is null or matched_user_id <> p_target_user_id)
+  loop
+    if not exists (
+      select 1 from public.visit_companions
+      where visit_id = v_target_visit_id
+        and coalesce(matched_user_id::text, lower(email), name) = coalesce(c.matched_user_id::text, lower(c.email), c.name)
+    ) then
+      insert into public.visit_companions (visit_id, name, email, matched_user_id)
+      values (v_target_visit_id, c.name, c.email, c.matched_user_id);
+    end if;
+  end loop;
+end;
+$$ language plpgsql security definer;
+
+create or replace function public.handle_companion_email_match()
+returns trigger as $$
+begin
+  if new.email is not null then
+    new.matched_user_id := public.find_user_id_by_email(new.email);
+  end if;
+  return new;
+end;
+$$ language plpgsql security definer;
+
+create trigger on_companion_email_match
+  before insert or update of email on public.visit_companions
+  for each row execute procedure public.handle_companion_email_match();
+
+create or replace function public.handle_companion_after_match()
+returns trigger as $$
+begin
+  if new.matched_user_id is not null then
+    perform public.mirror_visit_for_companion(new.visit_id, new.matched_user_id);
+  end if;
+  return new;
+end;
+$$ language plpgsql security definer;
+
+create trigger on_companion_matched_mirror
+  after insert or update of matched_user_id on public.visit_companions
+  for each row execute procedure public.handle_companion_after_match();
+
+-- handle_new_user() rozšírená o retroaktívne spárovanie (ak sa niekto
+-- zaregistruje s e-mailom, ktorý bol už predtým zadaný ako spolucestujúci)
+create or replace function public.handle_new_user()
+returns trigger as $$
+declare
+  c record;
+begin
+  insert into public.profiles (id, username, full_name)
+  values (
+    new.id,
+    coalesce(new.raw_user_meta_data->>'username', split_part(new.email, '@', 1)),
+    new.raw_user_meta_data->>'full_name'
+  );
+
+  for c in
+    select id, visit_id from public.visit_companions
+    where lower(email) = lower(new.email) and matched_user_id is null
+  loop
+    update public.visit_companions set matched_user_id = new.id where id = c.id;
+    perform public.mirror_visit_for_companion(c.visit_id, new.id);
+  end loop;
+
+  return new;
+end;
+$$ language plpgsql security definer;

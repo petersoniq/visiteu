@@ -55,12 +55,27 @@ export interface Trip {
   updated_at: string
 }
 
+/**
+ * Spolucestujúci pridaný k návšteve. `email` sa fetchuje LEN v editačnom
+ * formulári vlastníka návštevy (kvôli úprave) - v žiadnom inom zobrazení
+ * v appke sa nesmie natiahnuť ani zobraziť, aby zostala súkromná.
+ */
+export interface VisitCompanion {
+  id: string
+  visit_id: string
+  name: string
+  email?: string | null
+  matched_user_id: string | null
+  created_at: string
+}
+
 /** Návšteva obohatená o detail mesta, titulnú fotku a výlet – pre Timeline / Infografiku */
 export interface VisitWithDetails extends Visit {
   capital: EuCapital
   photoCount: number
   coverPhotoUrl: string | null
   trip: Trip | null
+  companions: VisitCompanion[]
 }
 
 export type TripRole = 'owner' | 'member'

@@ -16,8 +16,7 @@ export function CompanionsEditor({ visitId, companions, onCompanionsChange }: Pr
   const [removingId, setRemovingId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
-  async function handleAdd(e: React.FormEvent) {
-    e.preventDefault()
+  async function handleAdd() {
     if (!name.trim()) return
 
     setAdding(true)
@@ -85,11 +84,12 @@ export function CompanionsEditor({ visitId, companions, onCompanionsChange }: Pr
         </div>
       )}
 
-      <form onSubmit={handleAdd} className="flex flex-col sm:flex-row gap-2">
+      <div className="flex flex-col sm:flex-row gap-2">
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
           placeholder="Meno"
           className="flex-1 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
         />
@@ -97,18 +97,20 @@ export function CompanionsEditor({ visitId, companions, onCompanionsChange }: Pr
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
           placeholder="E-mail (voliteľné)"
           className="flex-1 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
         />
         <button
-          type="submit"
+          type="button"
+          onClick={handleAdd}
           disabled={adding || !name.trim()}
           className="flex items-center justify-center gap-1.5 rounded-lg border border-slate-300 dark:border-slate-700 px-3 py-1.5 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition disabled:opacity-50 shrink-0"
         >
           {adding ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <UserPlus className="w-3.5 h-3.5" />}
           Pridať
         </button>
-      </form>
+      </div>
 
       {error && <p className="text-xs text-red-600 dark:text-red-400 mt-1">{error}</p>}
       <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">

@@ -411,8 +411,13 @@ export function VisitDetailModal({ capital, existingVisits, trips, suggestedTrip
               </p>
             )}
 
-            {savedVisitId && (
-              <CompanionsEditor visitId={savedVisitId} companions={companions} onCompanionsChange={setCompanions} />
+            {savedVisitId && user && (
+              <CompanionsEditor
+                userId={user.id}
+                visitId={savedVisitId}
+                companions={companions}
+                onCompanionsChange={setCompanions}
+              />
             )}
 
             {serverError && (

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.16.0](https://github.com/petersoniq/visiteu/compare/v1.15.1...v1.16.0) (2026-08-17)
+
+
+### Features
+
+* rozbaľovacie menu s už raz zadanými spolucestujúcimi ([702b241](https://github.com/petersoniq/visiteu/commit/702b241444be7b1bd17c414f01008f1f6d96022f))
+
 ## [1.15.1](https://github.com/petersoniq/visiteu/compare/v1.15.0...v1.15.1) (2026-08-16)
 
 

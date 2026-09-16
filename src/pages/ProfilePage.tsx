@@ -1,7 +1,20 @@
 import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Camera, Loader2, KeyRound, User as UserIcon, Palette, Check, DatabaseBackup, FileJson, FileSpreadsheet, FolderArchive } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import {
+  Camera,
+  Loader2,
+  KeyRound,
+  User as UserIcon,
+  Palette,
+  Check,
+  DatabaseBackup,
+  FileJson,
+  FileSpreadsheet,
+  FolderArchive,
+  ArrowLeft,
+} from 'lucide-react'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../contexts/AuthContext'
 import { useTheme } from '../contexts/ThemeContext'
@@ -190,6 +203,12 @@ export function ProfilePage() {
   return (
     <div className="max-w-2xl mx-auto p-6 space-y-6">
       <div>
+        <Link
+          to="/dashboard"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-accent transition mb-3"
+        >
+          <ArrowLeft className="w-4 h-4" /> Späť do appky
+        </Link>
         <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-1">Môj profil</h1>
         <p className="text-slate-500 dark:text-slate-400">Uprav si osobné údaje, profilovú fotku a heslo.</p>
       </div>

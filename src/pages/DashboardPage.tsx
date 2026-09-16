@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import { BookOpen, Map as MapIcon, Landmark, Luggage } from 'lucide-react'
 import { BadgeGrid } from '../components/stats/BadgeGrid'
 import { AnnouncementBanner } from '../components/layout/AnnouncementBanner'
+import { PendingVisitsBanner } from '../components/dashboard/PendingVisitsBanner'
 import { JournalDashboard } from '../components/dashboard/JournalDashboard'
 import { useAuth } from '../contexts/AuthContext'
 import { useCapitals } from '../hooks/useCapitals'
@@ -41,7 +42,7 @@ export function DashboardPage() {
   // Jediný zdroj pravdy pre celú stránku (mapu, denník, mestá aj výlety) - rieši to,
   // že po uložení návštevy sa musia obnoviť štatistiky VŠADE, nie len tam, kde bola uložená.
   const { capitals, loading: capitalsLoading } = useCapitals()
-  const { visits, loading: visitsLoading, refetch: refetchVisits } = useVisitsWithDetails(user?.id)
+  const { visits, pendingVisits, loading: visitsLoading, refetch: refetchVisits } = useVisitsWithDetails(user?.id)
   const { allBadges, earnedCodes, refetch: refetchBadges } = useBadges(user?.id)
   const {
     trips,
@@ -113,6 +114,7 @@ export function DashboardPage() {
       </div>
 
       <AnnouncementBanner />
+      <PendingVisitsBanner pendingVisits={pendingVisits} onResolved={handleDataChanged} />
 
       {tab === 'journal' && <JournalDashboard visits={visits} stats={stats} loading={loading} />}
 

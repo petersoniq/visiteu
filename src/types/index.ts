@@ -22,6 +22,8 @@ export interface EuCapital {
 export type TransportMode =
   | 'lietadlo' | 'vlak' | 'auto' | 'autobus' | 'bicykel' | 'pešo' | 'loď' | 'iné'
 
+export type ParticipantStatus = 'pending' | 'confirmed' | 'declined'
+
 export interface Visit {
   id: string
   user_id: string
@@ -34,6 +36,12 @@ export interface Visit {
   rating: number | null
   created_at: string
   updated_at: string
+  /** Zoskupuje pôvodnú návštevu a jej "zrkadlá" u spolucestujúcich - spoločné pre celú skupinu. */
+  visit_group_id: string
+  /** pending = čaká na potvrdenie spolucestujúcim, confirmed = započítava sa do štatistík/mapy/odznakov. */
+  participant_status: ParticipantStatus
+  /** true len pri návšteve, ktorú si niekto sám zapísal (nie zrkadlenej cez spolucestujúceho). */
+  is_original: boolean
 }
 
 export interface VisitPhoto {

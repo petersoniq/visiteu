@@ -36,12 +36,12 @@ export function AdminPage() {
         <p className="text-slate-500 dark:text-slate-400">Správa používateľov a obsahu aplikácie visitEU.</p>
       </div>
 
-      <div className="flex gap-1 border-b border-slate-200 dark:border-slate-800">
+      <div className="flex gap-1 border-b border-slate-200 dark:border-slate-800 overflow-x-auto">
         {tabs.map((t) => (
           <button
             key={t.key}
             onClick={() => setTab(t.key)}
-            className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition ${
+            className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition whitespace-nowrap shrink-0 ${
               tab === t.key
                 ? 'border-accent text-accent-text'
                 : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'

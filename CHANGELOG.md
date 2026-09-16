@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.18.1](https://github.com/petersoniq/visiteu/compare/v1.18.0...v1.18.1) (2026-09-16)
+
+
+### Bug Fixes
+
+* admin panel sa neprispôsoboval na mobile ([7a2aa29](https://github.com/petersoniq/visiteu/commit/7a2aa29f66af0501b5b2afba363b83e6074a65c5))
+
 ## [1.18.0](https://github.com/petersoniq/visiteu/compare/v1.17.0...v1.18.0) (2026-09-16)
 
 

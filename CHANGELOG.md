@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.18.0](https://github.com/petersoniq/visiteu/compare/v1.17.0...v1.18.0) (2026-09-16)
+
+
+### Features
+
+* úprava prostredia pre administrátora ([09a827b](https://github.com/petersoniq/visiteu/commit/09a827b24e5eec8da9619aa143a5c44ab974d4a0))
+
 ## [1.17.0](https://github.com/petersoniq/visiteu/compare/v1.16.0...v1.17.0) (2026-09-16)
 
 

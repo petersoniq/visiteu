@@ -1,19 +1,23 @@
 import { useState } from 'react'
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { Users, ShieldAlert, Megaphone, ArrowLeft } from 'lucide-react'
+import { Users, ShieldAlert, Megaphone, ArrowLeft, LayoutDashboard } from 'lucide-react'
 import { useAdminUsers } from '../hooks/useAdminUsers'
+import { useAdminUserOverview } from '../hooks/useAdminUserOverview'
 import { UserManagementTable } from '../components/admin/UserManagementTable'
+import { UserOverviewTable } from '../components/admin/UserOverviewTable'
 import { ContentModeration } from '../components/admin/ContentModeration'
 import { AnnouncementManager } from '../components/admin/AnnouncementManager'
 
-type Tab = 'users' | 'moderation' | 'announcements'
+type Tab = 'overview' | 'users' | 'moderation' | 'announcements'
 
 export function AdminPage() {
-  const [tab, setTab] = useState<Tab>('users')
+  const [tab, setTab] = useState<Tab>('overview')
   const { users, loading, refetch } = useAdminUsers()
+  const { rows: overviewRows, loading: overviewLoading, error: overviewError } = useAdminUserOverview()
 
   const tabs: { key: Tab; label: string; icon: ReactNode }[] = [
+    { key: 'overview', label: 'Prehľad', icon: <LayoutDashboard className="w-4 h-4" /> },
     { key: 'users', label: 'Používatelia', icon: <Users className="w-4 h-4" /> },
     { key: 'moderation', label: 'Moderácia obsahu', icon: <ShieldAlert className="w-4 h-4" /> },
     { key: 'announcements', label: 'Oznámenia', icon: <Megaphone className="w-4 h-4" /> },
@@ -48,6 +52,16 @@ export function AdminPage() {
         ))}
       </div>
 
+      {tab === 'overview' &&
+        (overviewLoading ? (
+          <div className="text-slate-400 dark:text-slate-500 text-sm py-8 text-center">Načítavam...</div>
+        ) : overviewError ? (
+          <div className="rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 px-4 py-3 text-sm text-red-700 dark:text-red-400">
+            {overviewError}
+          </div>
+        ) : (
+          <UserOverviewTable rows={overviewRows} />
+        ))}
       {tab === 'users' &&
         (loading ? (
           <div className="text-slate-400 dark:text-slate-500 text-sm py-8 text-center">Načítavam...</div>

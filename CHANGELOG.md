@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.19.0](https://github.com/petersoniq/visiteu/compare/v1.18.1...v1.19.0) (2026-09-16)
+
+
+### Features
+
+* vyhľadávanie v denníku/mestách a skeleton loading v admine ([4de2558](https://github.com/petersoniq/visiteu/commit/4de2558f50d77ba7f1a03e59eb3ff2cbef07500a))
+
+
+### Bug Fixes
+
+* zjednotenie drobných nekonzistencií v štýle ([db449bd](https://github.com/petersoniq/visiteu/commit/db449bdb46bb886bb8470590e7467771304d3afe))
+
 ## [1.18.1](https://github.com/petersoniq/visiteu/compare/v1.18.0...v1.18.1) (2026-09-16)
 
 

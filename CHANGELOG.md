@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.17.0](https://github.com/petersoniq/visiteu/compare/v1.16.0...v1.17.0) (2026-09-16)
+
+
+### Features
+
+* systém potvrdenia/odmietnutia návštev pridaných spolucestujúcimi ([11a154c](https://github.com/petersoniq/visiteu/commit/11a154cd42a86266ccd15cdea6123e42d643918f))
+
 ## [1.16.0](https://github.com/petersoniq/visiteu/compare/v1.15.1...v1.16.0) (2026-08-17)
 
 

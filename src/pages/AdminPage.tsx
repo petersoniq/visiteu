@@ -8,6 +8,7 @@ import { UserManagementTable } from '../components/admin/UserManagementTable'
 import { UserOverviewTable } from '../components/admin/UserOverviewTable'
 import { ContentModeration } from '../components/admin/ContentModeration'
 import { AnnouncementManager } from '../components/admin/AnnouncementManager'
+import { SkeletonRows, SkeletonStatCards } from '../components/ui/Skeleton'
 
 type Tab = 'overview' | 'users' | 'moderation' | 'announcements'
 
@@ -54,7 +55,12 @@ export function AdminPage() {
 
       {tab === 'overview' &&
         (overviewLoading ? (
-          <div className="text-slate-400 dark:text-slate-500 text-sm py-8 text-center">Načítavam...</div>
+          <div className="space-y-4">
+            <SkeletonStatCards />
+            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+              <SkeletonRows rows={6} />
+            </div>
+          </div>
         ) : overviewError ? (
           <div className="rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 px-4 py-3 text-sm text-red-700 dark:text-red-400">
             {overviewError}
@@ -64,7 +70,9 @@ export function AdminPage() {
         ))}
       {tab === 'users' &&
         (loading ? (
-          <div className="text-slate-400 dark:text-slate-500 text-sm py-8 text-center">Načítavam...</div>
+          <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <SkeletonRows rows={6} />
+          </div>
         ) : (
           <UserManagementTable users={users} onChanged={refetch} />
         ))}

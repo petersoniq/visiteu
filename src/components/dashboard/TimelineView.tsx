@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { format, addDays, parseISO } from 'date-fns'
 import { sk } from 'date-fns/locale'
-import { Plane, TrainFront, Car, Bus, Bike, Footprints, Sailboat, CircleHelp, Luggage, Images, Users } from 'lucide-react'
+import { Plane, TrainFront, Car, Bus, Bike, Footprints, Sailboat, CircleHelp, Luggage, Images, Users, Search } from 'lucide-react'
 import { PhotoLightbox } from '../visits/PhotoLightbox'
 import type { TransportMode, VisitWithDetails } from '../../types'
 
@@ -41,12 +41,28 @@ export function TimelineView({ visits, loading }: Props) {
   }, [visits])
 
   const [selectedYear, setSelectedYear] = useState<number | 'all'>('all')
+  const [selectedTransport, setSelectedTransport] = useState<TransportMode | 'all'>('all')
+  const [search, setSearch] = useState('')
   const [galleryVisit, setGalleryVisit] = useState<VisitWithDetails | null>(null)
 
   const filteredVisits = useMemo(() => {
-    if (selectedYear === 'all') return visits
-    return visits.filter((v) => new Date(v.visit_date).getFullYear() === selectedYear)
-  }, [visits, selectedYear])
+    const query = search.trim().toLocaleLowerCase('sk')
+    return visits.filter((v) => {
+      if (selectedYear !== 'all' && new Date(v.visit_date).getFullYear() !== selectedYear) return false
+      if (selectedTransport !== 'all' && v.transport_mode !== selectedTransport) return false
+      if (!query) return true
+      return (
+        v.capital.city.toLocaleLowerCase('sk').includes(query) ||
+        v.capital.country.toLocaleLowerCase('sk').includes(query) ||
+        (v.notes ?? '').toLocaleLowerCase('sk').includes(query)
+      )
+    })
+  }, [visits, selectedYear, selectedTransport, search])
+
+  const usedTransportModes = useMemo(() => {
+    const set = new Set(visits.map((v) => v.transport_mode))
+    return (Object.keys(TRANSPORT_ICONS) as TransportMode[]).filter((mode) => set.has(mode))
+  }, [visits])
 
   if (loading) {
     return (
@@ -60,44 +76,81 @@ export function TimelineView({ visits, loading }: Props) {
 
   return (
     <div className="p-6 sm:p-12">
-      <div className="flex items-center justify-between mb-10">
-        <h3 className="text-base font-semibold text-ink">Cestovný denník</h3>
+      <div className="flex flex-col gap-4 mb-10">
+        <div className="flex items-center justify-between gap-4">
+          <h3 className="text-base font-semibold text-ink shrink-0">Cestovný denník</h3>
 
-        {years.length > 0 && (
-          <div className="flex items-center gap-5 overflow-x-auto">
-            <button
-              onClick={() => setSelectedYear('all')}
-              className={`text-sm pb-1 border-b whitespace-nowrap transition-colors ${
-                selectedYear === 'all'
-                  ? 'text-ink border-accent font-medium'
-                  : 'text-ink-faint border-transparent hover:text-ink-muted'
-              }`}
-            >
-              Všetky
-            </button>
-            {years.map((year) => (
+          {years.length > 0 && (
+            <div className="flex items-center gap-5 overflow-x-auto">
               <button
-                key={year}
-                onClick={() => setSelectedYear(year)}
+                onClick={() => setSelectedYear('all')}
                 className={`text-sm pb-1 border-b whitespace-nowrap transition-colors ${
-                  selectedYear === year
+                  selectedYear === 'all'
                     ? 'text-ink border-accent font-medium'
                     : 'text-ink-faint border-transparent hover:text-ink-muted'
                 }`}
               >
-                {year}
+                Všetky
               </button>
-            ))}
+              {years.map((year) => (
+                <button
+                  key={year}
+                  onClick={() => setSelectedYear(year)}
+                  className={`text-sm pb-1 border-b whitespace-nowrap transition-colors ${
+                    selectedYear === year
+                      ? 'text-ink border-accent font-medium'
+                      : 'text-ink-faint border-transparent hover:text-ink-muted'
+                  }`}
+                >
+                  {year}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {visits.length > 0 && (
+          <div className="flex flex-col sm:flex-row gap-2 sm:items-center">
+            <div className="relative flex-1">
+              <Search className="w-4 h-4 text-ink-faint absolute left-2.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                placeholder="Hľadať mesto, krajinu alebo poznámku..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full rounded-lg border border-hairline bg-paper text-ink pl-8 pr-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+              />
+            </div>
+            {usedTransportModes.length > 1 && (
+              <select
+                value={selectedTransport}
+                onChange={(e) => setSelectedTransport(e.target.value as TransportMode | 'all')}
+                className="rounded-lg border border-hairline bg-paper text-ink px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent shrink-0"
+              >
+                <option value="all">Všetka doprava</option>
+                {usedTransportModes.map((mode) => (
+                  <option key={mode} value={mode}>
+                    {mode.charAt(0).toUpperCase() + mode.slice(1)}
+                  </option>
+                ))}
+              </select>
+            )}
           </div>
         )}
       </div>
 
       {filteredVisits.length === 0 ? (
         <div className="text-center py-16">
-          <p className="text-lg font-medium text-ink-muted">Zatiaľ žiadne spomienky</p>
-          <p className="text-sm text-ink-faint mt-2">
-            Prvá zaznamenaná návšteva sa tu objaví ako prvá zastávka na tvojej ceste.
-          </p>
+          {visits.length === 0 ? (
+            <>
+              <p className="text-lg font-medium text-ink-muted">Zatiaľ žiadne spomienky</p>
+              <p className="text-sm text-ink-faint mt-2">
+                Prvá zaznamenaná návšteva sa tu objaví ako prvá zastávka na tvojej ceste.
+              </p>
+            </>
+          ) : (
+            <p className="text-lg font-medium text-ink-muted">Žiadna návšteva nezodpovedá hľadaniu.</p>
+          )}
         </div>
       ) : (
         <ol className="relative">

@@ -3,6 +3,7 @@ import { format } from 'date-fns'
 import { Trash2, Loader2 } from 'lucide-react'
 import { supabase } from '../../lib/supabaseClient'
 import { useAdminVisits } from '../../hooks/useAdminVisits'
+import { SkeletonRows } from '../ui/Skeleton'
 
 export function ContentModeration() {
   const { visits, loading, error, refetch } = useAdminVisits()
@@ -25,7 +26,11 @@ export function ContentModeration() {
   )
 
   if (loading) {
-    return <div className="text-slate-400 dark:text-slate-500 text-sm py-8 text-center">Načítavam...</div>
+    return (
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <SkeletonRows rows={6} />
+      </div>
+    )
   }
 
   return (

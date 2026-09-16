@@ -3,6 +3,7 @@ import { Loader2, Megaphone, Trash2, EyeOff, Eye } from 'lucide-react'
 import { supabase } from '../../lib/supabaseClient'
 import { useAuth } from '../../contexts/AuthContext'
 import { useAnnouncements } from '../../hooks/useAnnouncements'
+import { SkeletonRows } from '../ui/Skeleton'
 import { format } from 'date-fns'
 
 export function AnnouncementManager() {
@@ -80,7 +81,7 @@ export function AnnouncementManager() {
       </div>
 
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm divide-y divide-slate-100 dark:divide-slate-800">
-        {loading && <div className="p-4 text-sm text-slate-400 dark:text-slate-500">Načítavam...</div>}
+        {loading && <SkeletonRows rows={3} />}
         {!loading && announcements.length === 0 && (
           <div className="p-4 text-sm text-slate-400 dark:text-slate-500">Zatiaľ žiadne oznámenia.</div>
         )}

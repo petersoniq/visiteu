@@ -71,7 +71,7 @@ export function ContentModeration() {
                   <button
                     onClick={() => handleDelete(v.id)}
                     disabled={deletingId === v.id}
-                    className="inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-md text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 disabled:opacity-40 transition"
+                    className="inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-md text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 disabled:opacity-50 transition"
                   >
                     {deletingId === v.id ? (
                       <Loader2 className="w-3.5 h-3.5 animate-spin" />

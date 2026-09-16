@@ -285,7 +285,7 @@ export function ProfilePage() {
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={avatarUploading}
-              className="absolute -bottom-1 -right-1 bg-accent hover:bg-accent-hover text-white rounded-full p-1.5 shadow-sm transition disabled:opacity-60"
+              className="absolute -bottom-1 -right-1 bg-accent hover:bg-accent-hover text-white rounded-full p-1.5 shadow-sm transition disabled:opacity-50"
               title="Zmeniť profilovú fotku"
             >
               {avatarUploading ? (
@@ -300,7 +300,7 @@ export function ProfilePage() {
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={avatarUploading}
-              className="text-sm font-medium text-accent-text hover:underline disabled:opacity-60"
+              className="text-sm font-medium text-accent-text hover:underline disabled:opacity-50"
             >
               Nahrať novú fotku
             </button>
@@ -371,7 +371,7 @@ export function ProfilePage() {
           <button
             type="submit"
             disabled={profileSubmitting}
-            className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white hover:bg-accent-hover transition disabled:opacity-60"
+            className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white hover:bg-accent-hover transition disabled:opacity-50"
           >
             {profileSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
             Uložiť zmeny
@@ -425,7 +425,7 @@ export function ProfilePage() {
           <button
             type="submit"
             disabled={passwordSubmitting}
-            className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white hover:bg-accent-hover transition disabled:opacity-60"
+            className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white hover:bg-accent-hover transition disabled:opacity-50"
           >
             {passwordSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
             Zmeniť heslo
@@ -449,7 +449,7 @@ export function ProfilePage() {
             type="button"
             onClick={() => handleExport('json')}
             disabled={exporting !== null}
-            className="flex-1 flex items-center justify-center gap-2 rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition disabled:opacity-60"
+            className="flex-1 flex items-center justify-center gap-2 rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition disabled:opacity-50"
           >
             {exporting === 'json' ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileJson className="w-4 h-4" />}
             Stiahnuť JSON zálohu
@@ -458,7 +458,7 @@ export function ProfilePage() {
             type="button"
             onClick={() => handleExport('csv')}
             disabled={exporting !== null}
-            className="flex-1 flex items-center justify-center gap-2 rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition disabled:opacity-60"
+            className="flex-1 flex items-center justify-center gap-2 rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition disabled:opacity-50"
           >
             {exporting === 'csv' ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileSpreadsheet className="w-4 h-4" />}
             Stiahnuť CSV (Excel/Sheets)
@@ -470,7 +470,7 @@ export function ProfilePage() {
             type="button"
             onClick={handleZipExport}
             disabled={exporting !== null}
-            className="w-full flex items-center justify-center gap-2 rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition disabled:opacity-60"
+            className="w-full flex items-center justify-center gap-2 rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition disabled:opacity-50"
           >
             {exporting === 'zip' ? (
               <Loader2 className="w-4 h-4 animate-spin" />

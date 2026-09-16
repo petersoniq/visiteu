@@ -88,7 +88,7 @@ export function RegisterForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full flex items-center justify-center gap-2 rounded-lg bg-accent px-4 py-2.5 font-medium text-white hover:bg-accent-hover transition disabled:opacity-60"
+          className="w-full flex items-center justify-center gap-2 rounded-lg bg-accent px-4 py-2.5 font-medium text-white hover:bg-accent-hover transition disabled:opacity-50"
         >
           {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
           Zaregistrovať sa

@@ -133,7 +133,7 @@ export function PhotoUpload({ userId, visitId, photos, onPhotosChange }: Props) 
 
   return (
     <div>
-      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+      <label className="block text-sm font-medium text-ink-secondary mb-2">
         Fotografie ({photos.length}/10)
       </label>
 
@@ -154,7 +154,7 @@ export function PhotoUpload({ userId, visitId, photos, onPhotosChange }: Props) 
                   src={getPhotoPublicUrl(photo.storage_path)}
                   alt={photo.caption ?? 'Fotka z cesty'}
                   className={`w-full h-full object-cover rounded-lg border ${
-                    isEffectiveCover ? 'border-accent' : 'border-slate-200 dark:border-slate-700'
+                    isEffectiveCover ? 'border-accent' : 'border-hairline'
                   }`}
                 />
                 <span className="absolute inset-0 rounded-lg bg-black/0 group-hover:bg-black/20 transition flex items-center justify-center">
@@ -205,7 +205,7 @@ export function PhotoUpload({ userId, visitId, photos, onPhotosChange }: Props) 
             type="button"
             onClick={() => inputRef.current?.click()}
             disabled={uploading}
-            className="aspect-square flex flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-700 text-slate-400 dark:text-slate-500 hover:border-accent hover:text-accent-text transition disabled:opacity-50"
+            className="aspect-square flex flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed border-hairline text-ink-faint hover:border-accent hover:text-accent-text transition disabled:opacity-50"
           >
             {uploading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
@@ -220,8 +220,8 @@ export function PhotoUpload({ userId, visitId, photos, onPhotosChange }: Props) 
       </div>
 
       {editingPhoto && (
-        <div className="mb-3 p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
-          <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1.5">Popis fotky</label>
+        <div className="mb-3 p-3 rounded-lg border border-hairline bg-paper-dim">
+          <label className="block text-xs font-medium text-ink-muted mb-1.5">Popis fotky</label>
           <div className="flex gap-2">
             <input
               type="text"
@@ -230,7 +230,7 @@ export function PhotoUpload({ userId, visitId, photos, onPhotosChange }: Props) 
               maxLength={140}
               autoFocus
               placeholder="napr. Výhľad z hradu"
-              className="flex-1 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+              className="flex-1 rounded-md border border-hairline bg-paper text-ink px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
               onKeyDown={(e) => e.key === 'Enter' && saveCaption()}
             />
             <button
@@ -245,7 +245,7 @@ export function PhotoUpload({ userId, visitId, photos, onPhotosChange }: Props) 
             <button
               type="button"
               onClick={() => setEditingCaptionId(null)}
-              className="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 shrink-0"
+              className="text-ink-faint hover:text-slate-600 dark:hover:text-slate-300 shrink-0"
               title="Zrušiť"
             >
               <X className="w-4 h-4" />
@@ -264,7 +264,7 @@ export function PhotoUpload({ userId, visitId, photos, onPhotosChange }: Props) 
       />
 
       {error && <p className="text-sm text-red-600 dark:text-red-400 mt-1">{error}</p>}
-      <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
+      <p className="text-xs text-ink-faint mt-1">
         JPG, PNG alebo WebP, max. 5 MB na fotku. Hviezdičkou označíš titulnú fotku, ktorá sa zobrazí v Denníku.
       </p>
 

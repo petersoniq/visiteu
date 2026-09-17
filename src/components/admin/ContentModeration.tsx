@@ -27,21 +27,21 @@ export function ContentModeration() {
 
   if (loading) {
     return (
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <div className="bg-paper rounded-xl border border-hairline shadow-sm">
         <SkeletonRows rows={6} />
       </div>
     )
   }
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-      <div className="p-4 border-b border-slate-100 dark:border-slate-800">
+    <div className="bg-paper rounded-xl border border-hairline shadow-sm overflow-hidden">
+      <div className="p-4 border-b border-hairline">
         <input
           type="text"
           placeholder="Hľadať podľa používateľa, mesta alebo textu poznámky..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+          className="w-full rounded-lg border border-hairline bg-paper text-ink px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
         />
       </div>
 
@@ -49,7 +49,7 @@ export function ContentModeration() {
 
       <div className="overflow-x-auto max-h-[500px] overflow-y-auto">
         <table className="w-full text-sm">
-          <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-left sticky top-0">
+          <thead className="bg-paper-dim text-ink-muted text-left sticky top-0">
             <tr>
               <th className="px-4 py-3 font-medium">Používateľ</th>
               <th className="px-4 py-3 font-medium">Mesto</th>
@@ -59,14 +59,14 @@ export function ContentModeration() {
               <th className="px-4 py-3 font-medium text-right">Akcia</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+          <tbody className="divide-y divide-hairline">
             {filtered.map((v) => (
-              <tr key={v.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                <td className="px-4 py-3 font-medium text-slate-900 dark:text-slate-100">{v.username}</td>
-                <td className="px-4 py-3 text-slate-700 dark:text-slate-300">{v.city}, {v.country}</td>
-                <td className="px-4 py-3 text-slate-500 dark:text-slate-400">{format(new Date(v.visit_date), 'd.M.yyyy')}</td>
-                <td className="px-4 py-3 text-slate-600 dark:text-slate-400 max-w-xs truncate">{v.notes || '—'}</td>
-                <td className="px-4 py-3 text-center text-slate-500 dark:text-slate-400">{v.photo_count}</td>
+              <tr key={v.id} className="hover:bg-paper-dim/50">
+                <td className="px-4 py-3 font-medium text-ink">{v.username}</td>
+                <td className="px-4 py-3 text-ink-secondary">{v.city}, {v.country}</td>
+                <td className="px-4 py-3 text-ink-muted">{format(new Date(v.visit_date), 'd.M.yyyy')}</td>
+                <td className="px-4 py-3 text-ink-muted max-w-xs truncate">{v.notes || '—'}</td>
+                <td className="px-4 py-3 text-center text-ink-muted">{v.photo_count}</td>
                 <td className="px-4 py-3 text-right">
                   <button
                     onClick={() => handleDelete(v.id)}
@@ -86,7 +86,7 @@ export function ContentModeration() {
             ))}
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-slate-400 dark:text-slate-500">
+                <td colSpan={6} className="px-4 py-8 text-center text-ink-faint">
                   Žiadne záznamy nezodpovedajú hľadaniu.
                 </td>
               </tr>

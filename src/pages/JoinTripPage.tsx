@@ -56,7 +56,7 @@ export function JoinTripPage() {
   if (authLoading || status === 'joining') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
-        <div className="flex flex-col items-center gap-3 text-slate-500 dark:text-slate-400">
+        <div className="flex flex-col items-center gap-3 text-ink-muted">
           <Loader2 className="w-8 h-8 animate-spin" />
           <p className="text-sm">Pripájam ťa k výletu...</p>
         </div>
@@ -66,15 +66,15 @@ export function JoinTripPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 px-4">
-      <div className="max-w-sm w-full bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 text-center">
+      <div className="max-w-sm w-full bg-paper rounded-xl border border-hairline shadow-sm p-6 text-center">
         {status === 'success' ? (
           <>
             <PartyPopper className="w-10 h-10 text-accent-text mx-auto mb-3" />
-            <h1 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-1">Si v tíme!</h1>
-            <p className="text-sm text-slate-500 dark:text-slate-400 mb-5">
+            <h1 className="text-lg font-semibold text-ink mb-1">Si v tíme!</h1>
+            <p className="text-sm text-ink-muted mb-5">
               {tripName ? (
                 <>
-                  Pripojil(a) si sa k výletu <span className="font-medium text-slate-700 dark:text-slate-300">{tripName}</span>.
+                  Pripojil(a) si sa k výletu <span className="font-medium text-ink-secondary">{tripName}</span>.
                   Teraz doň môžeš pridávať vlastné mestá, dátumy a fotky.
                 </>
               ) : (
@@ -91,13 +91,13 @@ export function JoinTripPage() {
         ) : (
           <>
             <AlertTriangle className="w-10 h-10 text-red-500 mx-auto mb-3" />
-            <h1 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-1">Pripojenie zlyhalo</h1>
-            <p className="text-sm text-slate-500 dark:text-slate-400 mb-5">
+            <h1 className="text-lg font-semibold text-ink mb-1">Pripojenie zlyhalo</h1>
+            <p className="text-sm text-ink-muted mb-5">
               {error ?? 'Skús to znova, alebo si vyžiadaj nový odkaz.'}
             </p>
             <Link
               to="/dashboard"
-              className="inline-flex items-center gap-2 rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition"
+              className="inline-flex items-center gap-2 rounded-lg border border-hairline px-4 py-2 text-sm font-medium text-ink-secondary hover:bg-paper-dim transition"
             >
               Späť do appky
             </Link>

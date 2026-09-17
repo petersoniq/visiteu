@@ -49,8 +49,8 @@ export function AnnouncementManager() {
 
   return (
     <div className="space-y-4">
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-5">
-        <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-3 flex items-center gap-2">
+      <div className="bg-paper rounded-xl border border-hairline shadow-sm p-5">
+        <h3 className="font-semibold text-ink mb-3 flex items-center gap-2">
           <Megaphone className="w-4 h-4" /> Nové oznámenie
         </h3>
         <form onSubmit={handleCreate} className="space-y-3">
@@ -59,14 +59,14 @@ export function AnnouncementManager() {
             placeholder="Nadpis"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+            className="w-full rounded-lg border border-hairline bg-paper text-ink px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
           />
           <textarea
             placeholder="Text oznámenia..."
             value={content}
             onChange={(e) => setContent(e.target.value)}
             rows={3}
-            className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+            className="w-full rounded-lg border border-hairline bg-paper text-ink px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
           />
           {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
           <button
@@ -80,31 +80,31 @@ export function AnnouncementManager() {
         </form>
       </div>
 
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm divide-y divide-slate-100 dark:divide-slate-800">
+      <div className="bg-paper rounded-xl border border-hairline shadow-sm divide-y divide-hairline">
         {loading && <SkeletonRows rows={3} />}
         {!loading && announcements.length === 0 && (
-          <div className="p-4 text-sm text-slate-400 dark:text-slate-500">Zatiaľ žiadne oznámenia.</div>
+          <div className="p-4 text-sm text-ink-faint">Zatiaľ žiadne oznámenia.</div>
         )}
         {announcements.map((a) => (
           <div key={a.id} className="p-4 flex items-start justify-between gap-3">
             <div>
               <div className="flex items-center gap-2">
-                <h4 className="font-medium text-slate-900 dark:text-slate-100">{a.title}</h4>
+                <h4 className="font-medium text-ink">{a.title}</h4>
                 <span
                   className={`text-xs px-1.5 py-0.5 rounded-full ${
-                    a.is_active ? 'bg-accent/15 text-accent-text' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+                    a.is_active ? 'bg-accent/15 text-accent-text' : 'bg-paper-dim text-ink-muted'
                   }`}
                 >
                   {a.is_active ? 'Aktívne' : 'Skryté'}
                 </span>
               </div>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">{a.content}</p>
-              <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">{format(new Date(a.created_at), 'd.M.yyyy HH:mm')}</p>
+              <p className="text-sm text-ink-muted mt-1">{a.content}</p>
+              <p className="text-xs text-ink-faint mt-1">{format(new Date(a.created_at), 'd.M.yyyy HH:mm')}</p>
             </div>
             <div className="flex gap-1 shrink-0">
               <button
                 onClick={() => toggleActive(a.id, a.is_active)}
-                className="p-1.5 rounded-md text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
+                className="p-1.5 rounded-md text-ink-muted hover:bg-slate-100 dark:hover:bg-slate-800"
                 title={a.is_active ? 'Skryť' : 'Zverejniť'}
               >
                 {a.is_active ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}

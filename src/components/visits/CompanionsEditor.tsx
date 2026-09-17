@@ -117,7 +117,7 @@ export function CompanionsEditor({ userId, visitId, companions, onCompanionsChan
 
   return (
     <div>
-      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 flex items-center gap-1.5">
+      <label className="block text-sm font-medium text-ink-secondary mb-2 flex items-center gap-1.5">
         <Users className="w-3.5 h-3.5" /> Spolucestujúci (voliteľné)
       </label>
 
@@ -126,7 +126,7 @@ export function CompanionsEditor({ userId, visitId, companions, onCompanionsChan
           {companions.map((c) => (
             <span
               key={c.id}
-              className="inline-flex items-center gap-1.5 text-xs bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full pl-2.5 pr-1.5 py-1"
+              className="inline-flex items-center gap-1.5 text-xs bg-paper-dim text-ink-secondary rounded-full pl-2.5 pr-1.5 py-1"
             >
               {c.name}
               {c.matched_user_id && (
@@ -149,12 +149,12 @@ export function CompanionsEditor({ userId, visitId, companions, onCompanionsChan
 
       {availablePrevious.length > 0 && (
         <div className="mb-2 flex items-center gap-2">
-          <History className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 shrink-0" />
+          <History className="w-3.5 h-3.5 text-ink-faint shrink-0" />
           <select
             value={selectedPrevious}
             onChange={(e) => handleSelectPrevious(e.target.value)}
             disabled={adding}
-            className="flex-1 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent disabled:opacity-50"
+            className="flex-1 rounded-lg border border-hairline bg-paper text-ink px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent disabled:opacity-50"
           >
             <option value="">Vybrať niekoho, koho si už pridal(a) predtým...</option>
             {availablePrevious.map((p, i) => (
@@ -173,7 +173,7 @@ export function CompanionsEditor({ userId, visitId, companions, onCompanionsChan
           onChange={(e) => setName(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleAddNew()}
           placeholder="Meno novej osoby"
-          className="flex-1 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+          className="flex-1 rounded-lg border border-hairline bg-paper text-ink px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
         />
         <input
           type="email"
@@ -181,13 +181,13 @@ export function CompanionsEditor({ userId, visitId, companions, onCompanionsChan
           onChange={(e) => setEmail(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleAddNew()}
           placeholder="E-mail (voliteľné)"
-          className="flex-1 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+          className="flex-1 rounded-lg border border-hairline bg-paper text-ink px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
         />
         <button
           type="button"
           onClick={handleAddNew}
           disabled={adding || !name.trim()}
-          className="flex items-center justify-center gap-1.5 rounded-lg border border-slate-300 dark:border-slate-700 px-3 py-1.5 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition disabled:opacity-50 shrink-0"
+          className="flex items-center justify-center gap-1.5 rounded-lg border border-hairline px-3 py-1.5 text-sm font-medium text-ink-secondary hover:bg-paper-dim transition disabled:opacity-50 shrink-0"
         >
           {adding ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <UserPlus className="w-3.5 h-3.5" />}
           Pridať
@@ -195,7 +195,7 @@ export function CompanionsEditor({ userId, visitId, companions, onCompanionsChan
       </div>
 
       {error && <p className="text-xs text-red-600 dark:text-red-400 mt-1">{error}</p>}
-      <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
+      <p className="text-xs text-ink-faint mt-1">
         Meno je viditeľné len tebe a spolucestujúcemu. Ak zadáš e-mail registrovaného používateľa,
         táto návšteva sa mu automaticky objaví aj v jeho vlastnom prehľade.
       </p>

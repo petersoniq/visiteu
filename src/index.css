@@ -8,7 +8,9 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
- * Dizajnový systém pre sekciu "Cestovný denník" (Timeline + Infografika).
+ * Jednotný dizajnový systém celej appky (pôvodne vytvorený pre "Cestovný denník" -
+ * Timeline + Infografika - a teraz rozšírený na Mestá, Výlety, Profil, Admin aj
+ * prihlásenie, aby appka vyzerala všade rovnako).
  * Moderná, "vzdušná" svetlá téma inšpirovaná aktuálnym Material Design
  * (Android) - biele povrchy s jemnou eleváciou (tieň, nie ťažké orámovanie).
  *
@@ -18,12 +20,13 @@
  * nie takmer čierna, aby jemné texty/deliace linky nezanikali.
  */
 @theme {
-  --color-paper: #ffffff;      /* biely povrch - rovnaká rodina ako ostatné karty v appke */
-  --color-paper-dim: #f1f5f9;  /* jemný tonálny odtieň (slate-100) pre striedanie sekcií */
-  --color-ink: #0f172a;        /* primárny text (slate-900) */
-  --color-ink-muted: #64748b;  /* sekundárny text (slate-500) */
-  --color-ink-faint: #6b7280;  /* terciárny text / captions (min. 4.5:1 na bielej) */
-  --color-hairline: #e2e8f0;   /* tenké deliace linky (slate-200) */
+  --color-paper: #ffffff;         /* biely povrch kariet */
+  --color-paper-dim: #f1f5f9;     /* jemný tonálny odtieň (slate-100) pre striedanie sekcií/značky */
+  --color-ink: #0f172a;           /* primárny text/nadpisy (slate-900) */
+  --color-ink-secondary: #334155; /* bežný text v telách kariet/tabuliek (slate-700) */
+  --color-ink-muted: #64748b;     /* sekundárny text, popisky (slate-500) */
+  --color-ink-faint: #94a3b8;     /* terciárny text / dekoratívne ikonky (slate-400) */
+  --color-hairline: #e2e8f0;      /* tenké deliace linky aj okraje formulárov (slate-200) */
 
   /*
    * Jednotná akcentová farba appky (tlačidlá, aktívne stavy, progress ring,
@@ -43,12 +46,13 @@
 }
 
 .dark {
-  --color-paper: #1e293b;      /* slate-800 - viditeľne svetlejšia ako pozadie appky (elevácia) */
-  --color-paper-dim: #29374d;  /* tonálne svetlejšia vrstva pre striedanie sekcií */
-  --color-ink: #f1f5f9;        /* slate-100 */
-  --color-ink-muted: #cbd5e1;  /* slate-300 - dostatočne svetlé, aby nezanikalo */
-  --color-ink-faint: #94a3b8;  /* slate-400 */
-  --color-hairline: #3f4f68;   /* viditeľná deliaca linka, nie takmer neviditeľná */
+  --color-paper: #1e293b;          /* slate-800 - viditeľne svetlejšia ako pozadie appky (elevácia) */
+  --color-paper-dim: #29374d;      /* tonálne svetlejšia vrstva pre striedanie sekcií/značky */
+  --color-ink: #f1f5f9;            /* slate-100 */
+  --color-ink-secondary: #cbd5e1;  /* slate-300 */
+  --color-ink-muted: #94a3b8;      /* slate-400 - dostatočne svetlé, aby nezanikalo */
+  --color-ink-faint: #64748b;      /* slate-500 */
+  --color-hairline: #3f4f68;       /* viditeľná deliaca linka, nie takmer neviditeľná */
 
   --color-accent-text: #34d399; /* prepíše AccentContext, toto je len fallback pred JS */
 }

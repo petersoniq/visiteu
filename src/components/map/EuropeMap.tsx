@@ -90,7 +90,7 @@ export function EuropeMap({ capitals, visits, trips, suggestedTripId, loading, o
 
   return (
     <div className="relative">
-      <div className="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm">
+      <div className="rounded-xl overflow-hidden border border-hairline shadow-sm">
         <MapContainer
           center={EUROPE_CENTER}
           zoom={DEFAULT_ZOOM}
@@ -122,7 +122,7 @@ export function EuropeMap({ capitals, visits, trips, suggestedTripId, loading, o
           <select
             value={routeSelection}
             onChange={(e) => setRouteSelection(e.target.value)}
-            className="text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 px-2.5 py-1.5 shadow-md focus:outline-none focus:ring-2 focus:ring-accent"
+            className="text-sm rounded-lg border border-hairline bg-paper text-ink-secondary px-2.5 py-1.5 shadow-md focus:outline-none focus:ring-2 focus:ring-accent"
           >
             <option value={NO_ROUTE}>Bez trasy</option>
             <option value={ALL_ROUTE}>Trasa: všetky návštevy</option>
@@ -138,11 +138,11 @@ export function EuropeMap({ capitals, visits, trips, suggestedTripId, loading, o
       <div className="absolute bottom-4 left-4 z-[1000] bg-white/95 dark:bg-slate-900/95 backdrop-blur rounded-lg shadow-md px-3 py-2 text-sm space-y-1">
         <div className="flex items-center gap-2">
           <span className="w-3 h-3 rounded-full bg-accent inline-block" />
-          <span className="text-slate-700 dark:text-slate-300">Navštívené</span>
+          <span className="text-ink-secondary">Navštívené</span>
         </div>
         <div className="flex items-center gap-2">
           <span className="w-3 h-3 rounded-full bg-slate-400 inline-block" />
-          <span className="text-slate-700 dark:text-slate-300">Nenavštívené</span>
+          <span className="text-ink-secondary">Nenavštívené</span>
         </div>
       </div>
 

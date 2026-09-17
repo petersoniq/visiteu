@@ -38,10 +38,10 @@ export function UserDetailModal({ user, onClose }: Props) {
 
   return (
     <div className="fixed inset-0 z-[2000] bg-black/40 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
-        <div className="flex items-start justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-800 shrink-0">
+      <div className="bg-paper rounded-xl shadow-xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
+        <div className="flex items-start justify-between px-5 py-4 border-b border-hairline shrink-0">
           <div>
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-ink flex items-center gap-2">
               {user.username}
               {user.is_admin && (
                 <span className="inline-flex items-center gap-1 rounded-full bg-accent/15 text-accent-text px-2 py-0.5 text-xs font-medium">
@@ -49,11 +49,11 @@ export function UserDetailModal({ user, onClose }: Props) {
                 </span>
               )}
             </h2>
-            {user.full_name && <p className="text-sm text-slate-500 dark:text-slate-400">{user.full_name}</p>}
+            {user.full_name && <p className="text-sm text-ink-muted">{user.full_name}</p>}
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 shrink-0"
+            className="text-ink-faint hover:text-slate-600 dark:hover:text-slate-200 shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
@@ -61,7 +61,7 @@ export function UserDetailModal({ user, onClose }: Props) {
 
         <div className="overflow-y-auto px-5 py-4 space-y-5">
           {loading && (
-            <div className="flex items-center justify-center py-12 text-slate-400">
+            <div className="flex items-center justify-center py-12 text-ink-faint">
               <Loader2 className="w-5 h-5 animate-spin" />
             </div>
           )}
@@ -76,46 +76,46 @@ export function UserDetailModal({ user, onClose }: Props) {
             <>
               {/* Základné údaje */}
               <div className="grid grid-cols-2 gap-3 text-sm">
-                <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
+                <div className="flex items-center gap-2 text-ink-secondary">
                   {detail.profile.email_confirmed_at ? (
-                    <Mail className="w-4 h-4 text-slate-400 shrink-0" />
+                    <Mail className="w-4 h-4 text-ink-faint shrink-0" />
                   ) : (
                     <MailX className="w-4 h-4 text-amber-500 shrink-0" />
                   )}
                   <span className="truncate">{detail.profile.email ?? 'neznámy email'}</span>
                 </div>
-                <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
-                  <Calendar className="w-4 h-4 text-slate-400 shrink-0" />
+                <div className="flex items-center gap-2 text-ink-secondary">
+                  <Calendar className="w-4 h-4 text-ink-faint shrink-0" />
                   Registrovaný {format(new Date(detail.profile.created_at), 'd. M. yyyy')}
                 </div>
-                <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
-                  <Clock className="w-4 h-4 text-slate-400 shrink-0" />
+                <div className="flex items-center gap-2 text-ink-secondary">
+                  <Clock className="w-4 h-4 text-ink-faint shrink-0" />
                   {detail.profile.last_sign_in_at
                     ? `Naposledy prihlásený ${format(new Date(detail.profile.last_sign_in_at), 'd. M. yyyy HH:mm')}`
                     : 'Ešte sa neprihlásil(a)'}
                 </div>
-                <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
-                  <Camera className="w-4 h-4 text-slate-400 shrink-0" />
+                <div className="flex items-center gap-2 text-ink-secondary">
+                  <Camera className="w-4 h-4 text-ink-faint shrink-0" />
                   {formatBytes(detail.storage_bytes)} fotiek v úložisku
                 </div>
               </div>
 
               {/* Návštevy */}
               <div>
-                <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">
+                <h3 className="text-sm font-semibold text-ink mb-2">
                   Návštevy ({detail.visits.length})
                 </h3>
                 {detail.visits.length === 0 ? (
-                  <p className="text-sm text-slate-400 dark:text-slate-500 italic">Zatiaľ žiadne návštevy.</p>
+                  <p className="text-sm text-ink-faint italic">Zatiaľ žiadne návštevy.</p>
                 ) : (
-                  <div className="rounded-lg border border-slate-200 dark:border-slate-800 divide-y divide-slate-100 dark:divide-slate-800 max-h-48 overflow-y-auto">
+                  <div className="rounded-lg border border-hairline divide-y divide-hairline max-h-48 overflow-y-auto">
                     {detail.visits.map((v) => (
                       <div key={v.id} className="flex items-center justify-between px-3 py-2 text-sm">
                         <div className="min-w-0">
                           <span className="font-medium text-slate-800 dark:text-slate-200">{v.city}</span>
-                          <span className="text-slate-400 dark:text-slate-500"> · {v.country}</span>
+                          <span className="text-ink-faint"> · {v.country}</span>
                         </div>
-                        <div className="flex items-center gap-2 shrink-0 text-xs text-slate-500 dark:text-slate-400">
+                        <div className="flex items-center gap-2 shrink-0 text-xs text-ink-muted">
                           <span>{format(new Date(v.visit_date), 'd.M.yyyy')}</span>
                           {v.photo_count > 0 && (
                             <span className="inline-flex items-center gap-0.5">
@@ -140,18 +140,18 @@ export function UserDetailModal({ user, onClose }: Props) {
 
               {/* Odznaky */}
               <div>
-                <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">
+                <h3 className="text-sm font-semibold text-ink mb-2">
                   Odznaky ({detail.badges.length}/11)
                 </h3>
                 {detail.badges.length === 0 ? (
-                  <p className="text-sm text-slate-400 dark:text-slate-500 italic">Zatiaľ žiadne odznaky.</p>
+                  <p className="text-sm text-ink-faint italic">Zatiaľ žiadne odznaky.</p>
                 ) : (
                   <div className="flex flex-wrap gap-2">
                     {detail.badges.map((b) => (
                       <span
                         key={b.code}
                         title={format(new Date(b.earned_at), 'd. M. yyyy')}
-                        className="inline-flex items-center gap-1 rounded-full bg-slate-100 dark:bg-slate-800 px-2 py-1 text-xs text-slate-700 dark:text-slate-300"
+                        className="inline-flex items-center gap-1 rounded-full bg-paper-dim px-2 py-1 text-xs text-ink-secondary"
                       >
                         <span>{b.icon}</span> {b.name}
                       </span>
@@ -163,17 +163,17 @@ export function UserDetailModal({ user, onClose }: Props) {
               {/* Výlety a spolucestujúci */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-1.5">
-                    <Luggage className="w-4 h-4 text-slate-400" /> Výlety ({detail.trips.length})
+                  <h3 className="text-sm font-semibold text-ink mb-2 flex items-center gap-1.5">
+                    <Luggage className="w-4 h-4 text-ink-faint" /> Výlety ({detail.trips.length})
                   </h3>
                   {detail.trips.length === 0 ? (
-                    <p className="text-sm text-slate-400 dark:text-slate-500 italic">Žiadne.</p>
+                    <p className="text-sm text-ink-faint italic">Žiadne.</p>
                   ) : (
-                    <ul className="text-sm text-slate-600 dark:text-slate-300 space-y-1">
+                    <ul className="text-sm text-ink-secondary space-y-1">
                       {detail.trips.map((t) => (
                         <li key={t.id}>
                           {t.name}{' '}
-                          <span className="text-xs text-slate-400 dark:text-slate-500">
+                          <span className="text-xs text-ink-faint">
                             ({t.role === 'owner' ? 'vlastník' : 'člen'})
                           </span>
                         </li>
@@ -182,13 +182,13 @@ export function UserDetailModal({ user, onClose }: Props) {
                   )}
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-1.5">
-                    <Users2 className="w-4 h-4 text-slate-400" /> Spolucestujúci ({detail.companions.length})
+                  <h3 className="text-sm font-semibold text-ink mb-2 flex items-center gap-1.5">
+                    <Users2 className="w-4 h-4 text-ink-faint" /> Spolucestujúci ({detail.companions.length})
                   </h3>
                   {detail.companions.length === 0 ? (
-                    <p className="text-sm text-slate-400 dark:text-slate-500 italic">Žiadni.</p>
+                    <p className="text-sm text-ink-faint italic">Žiadni.</p>
                   ) : (
-                    <ul className="text-sm text-slate-600 dark:text-slate-300 space-y-1">
+                    <ul className="text-sm text-ink-secondary space-y-1">
                       {detail.companions.map((c, i) => (
                         <li key={i}>
                           {c.name}

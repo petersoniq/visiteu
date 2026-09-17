@@ -44,13 +44,13 @@ export function MemoryBanner({ memories }: Props) {
       )}
 
       <div className="flex-1 min-w-0">
-        <p className="text-sm text-slate-700 dark:text-slate-300 flex items-center gap-1.5 flex-wrap">
+        <p className="text-sm text-ink-secondary flex items-center gap-1.5 flex-wrap">
           <Sparkles className="w-3.5 h-3.5 text-accent-text shrink-0" />
           Presne {yearsAgoLabel(primary.yearsAgo)} si bol v{' '}
-          <span className="font-semibold text-slate-900 dark:text-slate-100">{primary.visit.capital.city}</span>
+          <span className="font-semibold text-ink">{primary.visit.capital.city}</span>
         </p>
         {memories.length > 1 && (
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+          <p className="text-xs text-ink-muted mt-0.5">
             +{memories.length - 1} {memories.length - 1 === 1 ? 'ďalšia spomienka' : 'ďalšie spomienky'} z tohto dňa
           </p>
         )}
@@ -58,7 +58,7 @@ export function MemoryBanner({ memories }: Props) {
 
       <button
         onClick={handleDismiss}
-        className="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 shrink-0"
+        className="text-ink-faint hover:text-slate-600 dark:hover:text-slate-300 shrink-0"
         aria-label="Zavrieť pripomienku"
       >
         <X className="w-4 h-4" />

@@ -205,24 +205,24 @@ export function ProfilePage() {
       <div>
         <Link
           to="/dashboard"
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-accent transition mb-3"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-muted hover:text-accent transition mb-3"
         >
           <ArrowLeft className="w-4 h-4" /> Späť do appky
         </Link>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-1">Môj profil</h1>
-        <p className="text-slate-500 dark:text-slate-400">Uprav si osobné údaje, profilovú fotku a heslo.</p>
+        <h1 className="text-2xl font-bold text-ink mb-1">Môj profil</h1>
+        <p className="text-ink-muted">Uprav si osobné údaje, profilovú fotku a heslo.</p>
       </div>
 
       {/* Vzhľad */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-5">
-        <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-4 flex items-center gap-2">
+      <div className="bg-paper rounded-xl border border-hairline shadow-sm p-5">
+        <h3 className="font-semibold text-ink mb-4 flex items-center gap-2">
           <Palette className="w-4 h-4" /> Vzhľad
         </h3>
 
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Tmavý režim</p>
-            <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Prepni medzi svetlým a tmavým vzhľadom appky.</p>
+            <p className="text-sm font-medium text-ink-secondary">Tmavý režim</p>
+            <p className="text-xs text-ink-faint mt-0.5">Prepni medzi svetlým a tmavým vzhľadom appky.</p>
           </div>
           <button
             type="button"
@@ -241,8 +241,8 @@ export function ProfilePage() {
           </button>
         </div>
 
-        <div className="mt-5 pt-5 border-t border-slate-100 dark:border-slate-800">
-          <p className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-4">Farba zvýraznenia</p>
+        <div className="mt-5 pt-5 border-t border-hairline">
+          <p className="text-sm font-medium text-ink-secondary mb-4">Farba zvýraznenia</p>
           <div className="grid grid-cols-3 sm:grid-cols-6 gap-y-5">
             {Object.values(ACCENT_PALETTES).map((palette) => (
               <button
@@ -260,7 +260,7 @@ export function ProfilePage() {
                 >
                   {accent === palette.id && <Check className="w-4 h-4 text-white" strokeWidth={3} />}
                 </span>
-                <span className="text-[11px] text-slate-500 dark:text-slate-400 text-center leading-tight px-0.5">
+                <span className="text-[11px] text-ink-muted text-center leading-tight px-0.5">
                   {palette.label}
                 </span>
               </button>
@@ -270,15 +270,15 @@ export function ProfilePage() {
       </div>
 
       {/* Avatar */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-5">
-        <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-4">Profilová fotka</h3>
+      <div className="bg-paper rounded-xl border border-hairline shadow-sm p-5">
+        <h3 className="font-semibold text-ink mb-4">Profilová fotka</h3>
         <div className="flex items-center gap-4">
           <div className="relative">
-            <div className="w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 overflow-hidden flex items-center justify-center">
+            <div className="w-20 h-20 rounded-full bg-paper-dim border border-hairline overflow-hidden flex items-center justify-center">
               {avatarPreview ? (
                 <img src={avatarPreview} alt="Avatar" className="w-full h-full object-cover" />
               ) : (
-                <UserIcon className="w-8 h-8 text-slate-400 dark:text-slate-500" />
+                <UserIcon className="w-8 h-8 text-ink-faint" />
               )}
             </div>
             <button
@@ -304,7 +304,7 @@ export function ProfilePage() {
             >
               Nahrať novú fotku
             </button>
-            <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">JPG, PNG alebo WebP, max. 3 MB.</p>
+            <p className="text-xs text-ink-faint mt-1">JPG, PNG alebo WebP, max. 3 MB.</p>
             {avatarError && <p className="text-sm text-red-600 dark:text-red-400 mt-1">{avatarError}</p>}
           </div>
         </div>
@@ -318,15 +318,15 @@ export function ProfilePage() {
       </div>
 
       {/* Základné údaje */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-5">
-        <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-4">Základné údaje</h3>
+      <div className="bg-paper rounded-xl border border-hairline shadow-sm p-5">
+        <h3 className="font-semibold text-ink mb-4">Základné údaje</h3>
         <form onSubmit={handleProfileSubmit(onProfileSubmit)} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Prezývka</label>
+            <label className="block text-sm font-medium text-ink-secondary mb-1">Prezývka</label>
             <input
               type="text"
               {...registerProfile('username')}
-              className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+              className="w-full rounded-lg border border-hairline bg-paper text-ink px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
             />
             {profileErrors.username && (
               <p className="text-xs text-red-600 dark:text-red-400 mt-1">{profileErrors.username.message}</p>
@@ -334,11 +334,11 @@ export function ProfilePage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Celé meno (voliteľné)</label>
+            <label className="block text-sm font-medium text-ink-secondary mb-1">Celé meno (voliteľné)</label>
             <input
               type="text"
               {...registerProfile('full_name')}
-              className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+              className="w-full rounded-lg border border-hairline bg-paper text-ink px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
               placeholder="Ako ťa majú vidieť ostatní"
             />
             {profileErrors.full_name && (
@@ -347,14 +347,14 @@ export function ProfilePage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email</label>
+            <label className="block text-sm font-medium text-ink-secondary mb-1">Email</label>
             <input
               type="email"
               value={user?.email ?? ''}
               disabled
-              className="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 px-3 py-2 text-sm text-slate-400 dark:text-slate-500 cursor-not-allowed"
+              className="w-full rounded-lg border border-hairline bg-paper-dim px-3 py-2 text-sm text-ink-faint cursor-not-allowed"
             />
-            <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">Email nie je možné zmeniť.</p>
+            <p className="text-xs text-ink-faint mt-1">Email nie je možné zmeniť.</p>
           </div>
 
           {profileServerError && (
@@ -380,17 +380,17 @@ export function ProfilePage() {
       </div>
 
       {/* Zmena hesla */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-5">
-        <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-4 flex items-center gap-2">
+      <div className="bg-paper rounded-xl border border-hairline shadow-sm p-5">
+        <h3 className="font-semibold text-ink mb-4 flex items-center gap-2">
           <KeyRound className="w-4 h-4" /> Zmena hesla
         </h3>
         <form onSubmit={handlePasswordSubmit(onPasswordSubmit)} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nové heslo</label>
+            <label className="block text-sm font-medium text-ink-secondary mb-1">Nové heslo</label>
             <input
               type="password"
               {...registerPassword('newPassword')}
-              className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+              className="w-full rounded-lg border border-hairline bg-paper text-ink px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
               placeholder="••••••••"
             />
             {passwordErrors.newPassword && (
@@ -399,11 +399,11 @@ export function ProfilePage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Potvrď nové heslo</label>
+            <label className="block text-sm font-medium text-ink-secondary mb-1">Potvrď nové heslo</label>
             <input
               type="password"
               {...registerPassword('confirmPassword')}
-              className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+              className="w-full rounded-lg border border-hairline bg-paper text-ink px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
               placeholder="••••••••"
             />
             {passwordErrors.confirmPassword && (
@@ -434,11 +434,11 @@ export function ProfilePage() {
       </div>
 
       {/* Moje dáta - záloha/export denníka */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-5">
-        <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-1 flex items-center gap-2">
+      <div className="bg-paper rounded-xl border border-hairline shadow-sm p-5">
+        <h3 className="font-semibold text-ink mb-1 flex items-center gap-2">
           <DatabaseBackup className="w-4 h-4" /> Moje dáta
         </h3>
-        <p className="text-xs text-slate-400 dark:text-slate-500 mb-4">
+        <p className="text-xs text-ink-faint mb-4">
           Stiahni si zálohu celého cestovateľského denníka - všetky návštevy, výlety, poznámky
           a odkazy na fotky. Odporúčame si dáta občas zálohovať, nech tvoje spomienky nezávisia
           len od tejto appky.
@@ -449,7 +449,7 @@ export function ProfilePage() {
             type="button"
             onClick={() => handleExport('json')}
             disabled={exporting !== null}
-            className="flex-1 flex items-center justify-center gap-2 rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition disabled:opacity-50"
+            className="flex-1 flex items-center justify-center gap-2 rounded-lg border border-hairline px-4 py-2 text-sm font-medium text-ink-secondary hover:bg-paper-dim transition disabled:opacity-50"
           >
             {exporting === 'json' ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileJson className="w-4 h-4" />}
             Stiahnuť JSON zálohu
@@ -458,7 +458,7 @@ export function ProfilePage() {
             type="button"
             onClick={() => handleExport('csv')}
             disabled={exporting !== null}
-            className="flex-1 flex items-center justify-center gap-2 rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition disabled:opacity-50"
+            className="flex-1 flex items-center justify-center gap-2 rounded-lg border border-hairline px-4 py-2 text-sm font-medium text-ink-secondary hover:bg-paper-dim transition disabled:opacity-50"
           >
             {exporting === 'csv' ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileSpreadsheet className="w-4 h-4" />}
             Stiahnuť CSV (Excel/Sheets)
@@ -470,7 +470,7 @@ export function ProfilePage() {
             type="button"
             onClick={handleZipExport}
             disabled={exporting !== null}
-            className="w-full flex items-center justify-center gap-2 rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition disabled:opacity-50"
+            className="w-full flex items-center justify-center gap-2 rounded-lg border border-hairline px-4 py-2 text-sm font-medium text-ink-secondary hover:bg-paper-dim transition disabled:opacity-50"
           >
             {exporting === 'zip' ? (
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -488,7 +488,7 @@ export function ProfilePage() {
           </p>
         )}
 
-        <p className="text-xs text-slate-400 dark:text-slate-500 mt-3">
+        <p className="text-xs text-ink-faint mt-3">
           JSON obsahuje kompletnú štruktúru dát (odporúčané pre archiváciu). CSV je vhodné na
           otvorenie v tabuľkovom editore. JSON a CSV obsahujú len odkazy na fotky v Supabase
           Storage - ak chceš mať fotky skutočne stiahnuté a nezávislé od appky, použi ZIP export.

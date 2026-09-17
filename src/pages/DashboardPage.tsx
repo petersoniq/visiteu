@@ -92,11 +92,11 @@ export function DashboardPage() {
     <div className="max-w-6xl mx-auto p-6 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-1">Ahoj, {profile?.username} 👋</h1>
-          <p className="text-slate-500 dark:text-slate-400">Tu je tvoj prehľad cestovania po EÚ.</p>
+          <h1 className="text-2xl font-bold text-ink mb-1">Ahoj, {profile?.username} 👋</h1>
+          <p className="text-ink-muted">Tu je tvoj prehľad cestovania po EÚ.</p>
         </div>
 
-        <div className="flex gap-1 border border-slate-200 dark:border-slate-800 rounded-lg p-1 bg-white dark:bg-slate-900 self-start overflow-x-auto">
+        <div className="flex gap-1 border border-hairline rounded-lg p-1 bg-paper self-start overflow-x-auto">
           {tabs.map((t) => (
             <button
               key={t.key}
@@ -104,7 +104,7 @@ export function DashboardPage() {
               className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition whitespace-nowrap ${
                 tab === t.key
                   ? 'bg-accent text-white'
-                  : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'
+                  : 'text-ink-muted hover:bg-paper-dim'
               }`}
             >
               {t.icon} {t.label}

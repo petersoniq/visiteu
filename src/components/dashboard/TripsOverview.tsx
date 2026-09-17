@@ -151,7 +151,7 @@ export function TripsOverview({
     return (
       <div className="space-y-4 animate-pulse">
         {[0, 1].map((i) => (
-          <div key={i} className="h-32 rounded-xl bg-slate-100 dark:bg-slate-800" />
+          <div key={i} className="h-32 rounded-xl bg-paper-dim" />
         ))}
       </div>
     )
@@ -162,14 +162,14 @@ export function TripsOverview({
       {/* Vytvorenie nového výletu */}
       <form
         onSubmit={handleCreate}
-        className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-4 flex flex-col sm:flex-row gap-3"
+        className="bg-paper rounded-xl border border-hairline shadow-sm p-4 flex flex-col sm:flex-row gap-3"
       >
         <input
           type="text"
           value={newName}
           onChange={(e) => setNewName(e.target.value)}
           placeholder="Názov nového výletu, napr. Interrail leto 2026"
-          className="flex-1 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+          className="flex-1 rounded-lg border border-hairline bg-paper text-ink px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
         />
         <button
           type="submit"
@@ -184,10 +184,10 @@ export function TripsOverview({
 
       {/* Zoznam výletov */}
       {summaries.length === 0 ? (
-        <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="text-center py-16 bg-paper rounded-xl border border-hairline shadow-sm">
           <Luggage className="w-8 h-8 text-slate-300 dark:text-slate-700 mx-auto mb-3" strokeWidth={1.5} />
-          <p className="text-slate-500 dark:text-slate-400">Zatiaľ žiadne výlety.</p>
-          <p className="text-sm text-slate-400 dark:text-slate-500 mt-1">
+          <p className="text-ink-muted">Zatiaľ žiadne výlety.</p>
+          <p className="text-sm text-ink-faint mt-1">
             Vytvor výlet vyššie, alebo ho priraď priamo pri pridávaní návštevy mesta.
           </p>
         </div>
@@ -196,7 +196,7 @@ export function TripsOverview({
           {summaries.map(({ trip, visits: tripVisits, cityCount, totalNights, dateRangeLabel, coverPhotoUrl, isOwner }) => (
             <div
               key={trip.id}
-              className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden"
+              className="bg-paper rounded-xl border border-hairline shadow-sm overflow-hidden"
             >
               <div className="flex">
                 {coverPhotoUrl && (
@@ -214,17 +214,17 @@ export function TripsOverview({
                           value={editName}
                           onChange={(e) => setEditName(e.target.value)}
                           autoFocus
-                          className="flex-1 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+                          className="flex-1 rounded-md border border-hairline bg-paper text-ink px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                         />
                         <button onClick={() => saveEdit(trip.id)} className="text-accent-text">
                           <Check className="w-4 h-4" />
                         </button>
-                        <button onClick={() => setEditingId(null)} className="text-slate-400 dark:text-slate-500">
+                        <button onClick={() => setEditingId(null)} className="text-ink-faint">
                           <X className="w-4 h-4" />
                         </button>
                       </div>
                     ) : (
-                      <h3 className="font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-2 min-w-0">
+                      <h3 className="font-semibold text-ink flex items-center gap-2 min-w-0">
                         <Luggage className="w-4 h-4 text-accent-text shrink-0" />
                         <span className="truncate">{trip.name}</span>
                       </h3>
@@ -235,7 +235,7 @@ export function TripsOverview({
                         <button
                           onClick={() => handleInvite(trip.id)}
                           disabled={busyTripId === trip.id}
-                          className="p-1 text-slate-400 dark:text-slate-500 hover:text-accent-text"
+                          className="p-1 text-ink-faint hover:text-accent-text"
                           title="Pozvať spolucestovateľa"
                         >
                           {busyTripId === trip.id ? (
@@ -246,7 +246,7 @@ export function TripsOverview({
                         </button>
                         <button
                           onClick={() => startEdit(trip)}
-                          className="p-1 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300"
+                          className="p-1 text-ink-faint hover:text-slate-600 dark:hover:text-slate-300"
                           title="Premenovať"
                         >
                           <Pencil className="w-3.5 h-3.5" />
@@ -255,7 +255,7 @@ export function TripsOverview({
                           <button
                             onClick={() => handleDelete(trip.id)}
                             disabled={busyTripId === trip.id}
-                            className="p-1 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400"
+                            className="p-1 text-ink-faint hover:text-red-600 dark:hover:text-red-400"
                             title="Zmazať výlet"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -264,7 +264,7 @@ export function TripsOverview({
                           <button
                             onClick={() => handleLeave(trip.id)}
                             disabled={busyTripId === trip.id}
-                            className="p-1 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400"
+                            className="p-1 text-ink-faint hover:text-red-600 dark:hover:text-red-400"
                             title="Opustiť výlet"
                           >
                             <LogOut className="w-3.5 h-3.5" />
@@ -274,7 +274,7 @@ export function TripsOverview({
                     )}
                   </div>
 
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{dateRangeLabel}</p>
+                  <p className="text-xs text-ink-muted mt-1">{dateRangeLabel}</p>
 
                   {/* Členovia výletu */}
                   {trip.members.length > 1 && (
@@ -288,7 +288,7 @@ export function TripsOverview({
                           {m.avatarUrl ? (
                             <img src={m.avatarUrl} alt={m.username} className="w-full h-full object-cover" />
                           ) : (
-                            <span className="text-[10px] font-medium text-slate-600 dark:text-slate-300">
+                            <span className="text-[10px] font-medium text-ink-secondary">
                               {initials(m.username)}
                             </span>
                           )}
@@ -303,7 +303,7 @@ export function TripsOverview({
                       <input
                         readOnly
                         value={inviteLink.url}
-                        className="flex-1 min-w-0 bg-transparent text-xs text-slate-700 dark:text-slate-300 focus:outline-none truncate"
+                        className="flex-1 min-w-0 bg-transparent text-xs text-ink-secondary focus:outline-none truncate"
                         onFocus={(e) => e.target.select()}
                       />
                       <button
@@ -320,7 +320,7 @@ export function TripsOverview({
                   )}
 
                   {tripVisits.length > 0 && (
-                    <div className="flex items-center gap-3 mt-2 text-xs text-slate-500 dark:text-slate-400">
+                    <div className="flex items-center gap-3 mt-2 text-xs text-ink-muted">
                       <span className="flex items-center gap-1">
                         <MapPin className="w-3 h-3" /> {cityCount} {cityCount === 1 ? 'mesto' : 'miest'}
                       </span>
@@ -336,17 +336,17 @@ export function TripsOverview({
                         <span
                           key={v.id}
                           title={`Pridal(a) ${v.addedBy.username}`}
-                          className="text-xs bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-full px-2.5 py-1"
+                          className="text-xs bg-slate-50 dark:bg-slate-800 text-ink-secondary rounded-full px-2.5 py-1"
                         >
                           {v.capital.city}
                           {trip.members.length > 1 && (
-                            <span className="text-slate-400 dark:text-slate-500"> · {v.addedBy.username}</span>
+                            <span className="text-ink-faint"> · {v.addedBy.username}</span>
                           )}
                         </span>
                       ))}
                     </div>
                   ) : (
-                    <p className="text-xs text-slate-400 dark:text-slate-500 italic mt-3">
+                    <p className="text-xs text-ink-faint italic mt-3">
                       Zatiaľ žiadne mestá - priraď ich pri pridávaní návštevy.
                     </p>
                   )}

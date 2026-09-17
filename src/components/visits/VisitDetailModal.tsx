@@ -200,13 +200,13 @@ export function VisitDetailModal({ capital, existingVisits, trips, suggestedTrip
 
   return (
     <div className="fixed inset-0 z-[2000] bg-black/40 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6">
+      <div className="bg-paper rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6">
         <div className="flex items-start justify-between mb-4">
           <div>
-            <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">{capital.city}</h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400">{capital.country}</p>
+            <h2 className="text-xl font-bold text-ink">{capital.city}</h2>
+            <p className="text-sm text-ink-muted">{capital.country}</p>
           </div>
-          <button onClick={onClose} className="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300">
+          <button onClick={onClose} className="text-ink-faint hover:text-slate-600 dark:hover:text-slate-300">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -218,13 +218,13 @@ export function VisitDetailModal({ capital, existingVisits, trips, suggestedTrip
               return (
                 <div
                   key={visit.id}
-                  className="border border-slate-200 dark:border-slate-800 rounded-lg p-3 flex items-start justify-between"
+                  className="border border-hairline rounded-lg p-3 flex items-start justify-between"
                 >
                   <div>
-                    <p className="font-medium text-slate-900 dark:text-slate-100">
+                    <p className="font-medium text-ink">
                       {format(new Date(visit.visit_date), 'd. MMMM yyyy')}
                     </p>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">
+                    <p className="text-sm text-ink-muted">
                       {TRANSPORT_OPTIONS.find((t) => t.value === visit.transport_mode)?.label} ·{' '}
                       {visit.duration_nights} nocí
                     </p>
@@ -234,7 +234,7 @@ export function VisitDetailModal({ capital, existingVisits, trips, suggestedTrip
                       </p>
                     )}
                     {visit.notes && (
-                      <p className="text-sm text-slate-600 dark:text-slate-400 mt-1 line-clamp-2">{visit.notes}</p>
+                      <p className="text-sm text-ink-muted mt-1 line-clamp-2">{visit.notes}</p>
                     )}
                   </div>
                   <div className="flex gap-1 shrink-0 ml-2">
@@ -262,7 +262,7 @@ export function VisitDetailModal({ capital, existingVisits, trips, suggestedTrip
 
             <button
               onClick={startNewVisit}
-              className="w-full flex items-center justify-center gap-2 rounded-lg border border-dashed border-slate-300 dark:border-slate-700 px-4 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-400 hover:border-accent hover:text-accent transition"
+              className="w-full flex items-center justify-center gap-2 rounded-lg border border-dashed border-hairline px-4 py-2.5 text-sm font-medium text-ink-muted hover:border-accent hover:text-accent transition"
             >
               <Plus className="w-4 h-4" /> Pridať ďalšiu návštevu
             </button>
@@ -273,11 +273,11 @@ export function VisitDetailModal({ capital, existingVisits, trips, suggestedTrip
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Dátum návštevy</label>
+                <label className="block text-sm font-medium text-ink-secondary mb-1">Dátum návštevy</label>
                 <input
                   type="date"
                   {...register('visit_date')}
-                  className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+                  className="w-full rounded-lg border border-hairline bg-paper text-ink px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                 />
                 {errors.visit_date && (
                   <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.visit_date.message}</p>
@@ -285,12 +285,12 @@ export function VisitDetailModal({ capital, existingVisits, trips, suggestedTrip
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Počet nocí</label>
+                <label className="block text-sm font-medium text-ink-secondary mb-1">Počet nocí</label>
                 <input
                   type="number"
                   min={0}
                   {...register('duration_nights')}
-                  className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+                  className="w-full rounded-lg border border-hairline bg-paper text-ink px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                 />
                 {errors.duration_nights && (
                   <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.duration_nights.message}</p>
@@ -299,10 +299,10 @@ export function VisitDetailModal({ capital, existingVisits, trips, suggestedTrip
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Spôsob dopravy</label>
+              <label className="block text-sm font-medium text-ink-secondary mb-1">Spôsob dopravy</label>
               <select
                 {...register('transport_mode')}
-                className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+                className="w-full rounded-lg border border-hairline bg-paper text-ink px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                 defaultValue=""
               >
                 <option value="" disabled>Vyber...</option>
@@ -316,13 +316,13 @@ export function VisitDetailModal({ capital, existingVisits, trips, suggestedTrip
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 flex items-center gap-1.5">
+              <label className="block text-sm font-medium text-ink-secondary mb-1 flex items-center gap-1.5">
                 <Luggage className="w-3.5 h-3.5" /> Výlet (voliteľné)
               </label>
 
               {showTripSuggestion && suggestedTrip && (
                 <div className="flex items-center justify-between gap-2 rounded-lg bg-accent/10 border border-accent/30 px-3 py-2 text-sm mb-2">
-                  <p className="text-slate-700 dark:text-slate-300 min-w-0">
+                  <p className="text-ink-secondary min-w-0">
                     Pridať do výletu <span className="font-medium">{suggestedTrip.name}</span>?
                   </p>
                   <div className="flex items-center gap-3 shrink-0">
@@ -339,7 +339,7 @@ export function VisitDetailModal({ capital, existingVisits, trips, suggestedTrip
                     <button
                       type="button"
                       onClick={() => setTripSuggestionDismissed(true)}
-                      className="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300"
+                      className="text-ink-faint hover:text-slate-600 dark:hover:text-slate-300"
                       aria-label="Zavrieť ponuku"
                     >
                       <X className="w-3.5 h-3.5" />
@@ -351,7 +351,7 @@ export function VisitDetailModal({ capital, existingVisits, trips, suggestedTrip
               <select
                 value={tripSelection}
                 onChange={(e) => setTripSelection(e.target.value)}
-                className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+                className="w-full rounded-lg border border-hairline bg-paper text-ink px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
               >
                 <option value="">Bez výletu</option>
                 {trips.map((t) => (
@@ -365,19 +365,19 @@ export function VisitDetailModal({ capital, existingVisits, trips, suggestedTrip
                   value={newTripName}
                   onChange={(e) => setNewTripName(e.target.value)}
                   placeholder="Napr. Interrail leto 2026"
-                  className="w-full mt-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+                  className="w-full mt-2 rounded-lg border border-hairline bg-paper text-ink px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                 />
               )}
-              <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
+              <p className="text-xs text-ink-faint mt-1">
                 Zoskup túto návštevu s ďalšími mestami z tej istej cesty.
               </p>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Hodnotenie (voliteľné)</label>
+              <label className="block text-sm font-medium text-ink-secondary mb-1">Hodnotenie (voliteľné)</label>
               <select
                 {...register('rating')}
-                className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+                className="w-full rounded-lg border border-hairline bg-paper text-ink px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                 defaultValue=""
               >
                 <option value="">Bez hodnotenia</option>
@@ -388,11 +388,11 @@ export function VisitDetailModal({ capital, existingVisits, trips, suggestedTrip
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Poznámky / recenzia</label>
+              <label className="block text-sm font-medium text-ink-secondary mb-1">Poznámky / recenzia</label>
               <textarea
                 {...register('notes')}
                 rows={3}
-                className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+                className="w-full rounded-lg border border-hairline bg-paper text-ink px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                 placeholder="Ako sa ti tam páčilo? Čo odporúčaš vidieť?"
               />
               {errors.notes && <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.notes.message}</p>}
@@ -406,7 +406,7 @@ export function VisitDetailModal({ capital, existingVisits, trips, suggestedTrip
                 onPhotosChange={setPhotos}
               />
             ) : (
-              <p className="text-xs text-slate-400 dark:text-slate-500 italic">
+              <p className="text-xs text-ink-faint italic">
                 Fotky budeš môcť pridať hneď po uložení návštevy.
               </p>
             )}
@@ -431,7 +431,7 @@ export function VisitDetailModal({ capital, existingVisits, trips, suggestedTrip
                 <button
                   type="button"
                   onClick={() => setMode('list')}
-                  className="flex-1 rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
+                  className="flex-1 rounded-lg border border-hairline px-4 py-2 text-sm font-medium text-ink-secondary hover:bg-paper-dim"
                 >
                   Späť na zoznam
                 </button>

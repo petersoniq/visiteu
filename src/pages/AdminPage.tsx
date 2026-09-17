@@ -29,15 +29,15 @@ export function AdminPage() {
       <div>
         <Link
           to="/dashboard"
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-accent transition mb-3"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-muted hover:text-accent transition mb-3"
         >
           <ArrowLeft className="w-4 h-4" /> Späť do appky
         </Link>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-1">Admin panel</h1>
-        <p className="text-slate-500 dark:text-slate-400">Správa používateľov a obsahu aplikácie visitEU.</p>
+        <h1 className="text-2xl font-bold text-ink mb-1">Admin panel</h1>
+        <p className="text-ink-muted">Správa používateľov a obsahu aplikácie visitEU.</p>
       </div>
 
-      <div className="flex gap-1 border-b border-slate-200 dark:border-slate-800 overflow-x-auto">
+      <div className="flex gap-1 border-b border-hairline overflow-x-auto">
         {tabs.map((t) => (
           <button
             key={t.key}
@@ -45,7 +45,7 @@ export function AdminPage() {
             className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition whitespace-nowrap shrink-0 ${
               tab === t.key
                 ? 'border-accent text-accent-text'
-                : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+                : 'border-transparent text-ink-muted hover:text-slate-700 dark:hover:text-slate-200'
             }`}
           >
             {t.icon} {t.label}
@@ -57,7 +57,7 @@ export function AdminPage() {
         (overviewLoading ? (
           <div className="space-y-4">
             <SkeletonStatCards />
-            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div className="bg-paper rounded-xl border border-hairline shadow-sm">
               <SkeletonRows rows={6} />
             </div>
           </div>
@@ -70,7 +70,7 @@ export function AdminPage() {
         ))}
       {tab === 'users' &&
         (loading ? (
-          <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="bg-paper rounded-xl border border-hairline shadow-sm">
             <SkeletonRows rows={6} />
           </div>
         ) : (

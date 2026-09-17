@@ -4,7 +4,7 @@ interface SkeletonProps {
 
 /** Základný "kosť" pre skeleton loading - pulzujúci obdĺžnik nahradzujúci obsah, kým sa načítava. */
 export function Skeleton({ className = '' }: SkeletonProps) {
-  return <div className={`animate-pulse bg-slate-100 dark:bg-slate-800 rounded ${className}`} />
+  return <div className={`animate-pulse bg-paper-dim rounded ${className}`} />
 }
 
 interface SkeletonListProps {
@@ -19,7 +19,7 @@ interface SkeletonListProps {
  */
 export function SkeletonRows({ rows = 6, className = '' }: SkeletonListProps) {
   return (
-    <div className={`divide-y divide-slate-100 dark:divide-slate-800 ${className}`}>
+    <div className={`divide-y divide-hairline ${className}`}>
       {Array.from({ length: rows }).map((_, i) => (
         <div key={i} className="px-4 py-3.5 flex items-center gap-3">
           <Skeleton className="w-8 h-8 rounded-full shrink-0" />
@@ -40,7 +40,7 @@ export function SkeletonStatCards({ count = 5 }: { count?: number }) {
       {Array.from({ length: count }).map((_, i) => (
         <div
           key={i}
-          className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-4 flex items-center gap-3"
+          className="bg-paper rounded-xl border border-hairline shadow-sm p-4 flex items-center gap-3"
         >
           <Skeleton className="w-9 h-9 rounded-lg shrink-0" />
           <div className="flex-1 space-y-1.5">

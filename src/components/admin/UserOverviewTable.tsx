@@ -21,13 +21,13 @@ function formatBytes(bytes: number): string {
 
 function StatCard({ icon, label, value }: { icon: ReactNode; label: string; value: string }) {
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-4 flex items-center gap-3">
+    <div className="bg-paper rounded-xl border border-hairline shadow-sm p-4 flex items-center gap-3">
       <div className="w-9 h-9 rounded-lg bg-accent/15 text-accent-text flex items-center justify-center shrink-0">
         {icon}
       </div>
       <div className="min-w-0">
-        <p className="text-lg font-semibold text-slate-900 dark:text-slate-100 leading-tight truncate">{value}</p>
-        <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{label}</p>
+        <p className="text-lg font-semibold text-ink leading-tight truncate">{value}</p>
+        <p className="text-xs text-ink-muted truncate">{label}</p>
       </div>
     </div>
   )
@@ -57,10 +57,10 @@ export function UserOverviewTable({ rows }: Props) {
         <StatCard icon={<BadgeCheck className="w-4 h-4" />} label="Priem. miest / os." value={summary.avgVisited.toFixed(1)} />
       </div>
 
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+      <div className="bg-paper rounded-xl border border-hairline shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-left">
+            <thead className="bg-paper-dim text-ink-muted text-left">
               <tr>
                 <th className="px-4 py-3 font-medium">Používateľ</th>
                 <th className="px-4 py-3 font-medium">Email</th>
@@ -75,12 +75,12 @@ export function UserOverviewTable({ rows }: Props) {
                 <th className="px-4 py-3 font-medium text-right">Detail</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+            <tbody className="divide-y divide-hairline">
               {rows.map((u) => (
-                <tr key={u.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                <tr key={u.id} className="hover:bg-paper-dim/50">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <span className="font-medium text-slate-900 dark:text-slate-100">{u.username}</span>
+                      <span className="font-medium text-ink">{u.username}</span>
                       {u.is_admin && (
                         <span
                           title="Administrátor"
@@ -90,27 +90,27 @@ export function UserOverviewTable({ rows }: Props) {
                         </span>
                       )}
                     </div>
-                    {u.full_name && <div className="text-xs text-slate-500 dark:text-slate-400">{u.full_name}</div>}
+                    {u.full_name && <div className="text-xs text-ink-muted">{u.full_name}</div>}
                   </td>
-                  <td className="px-4 py-3 text-slate-600 dark:text-slate-300">
-                    {u.email ?? <span className="text-slate-400 dark:text-slate-500 italic">neznámy</span>}
+                  <td className="px-4 py-3 text-ink-secondary">
+                    {u.email ?? <span className="text-ink-faint italic">neznámy</span>}
                     {!u.email_confirmed_at && (
                       <span className="ml-1.5 text-[10px] uppercase tracking-wide text-amber-600 dark:text-amber-400">
                         nepotvrdený
                       </span>
                     )}
                   </td>
-                  <td className="px-4 py-3 text-slate-500 dark:text-slate-400 whitespace-nowrap">
+                  <td className="px-4 py-3 text-ink-muted whitespace-nowrap">
                     {format(new Date(u.created_at), 'd.M.yyyy')}
                   </td>
-                  <td className="px-4 py-3 text-slate-500 dark:text-slate-400 whitespace-nowrap">
+                  <td className="px-4 py-3 text-ink-muted whitespace-nowrap">
                     {u.last_sign_in_at ? (
                       formatDistanceToNow(new Date(u.last_sign_in_at), { addSuffix: true, locale: sk })
                     ) : (
                       <span className="italic">nikdy</span>
                     )}
                   </td>
-                  <td className="px-4 py-3 text-center text-slate-700 dark:text-slate-300">{u.visited_count}/27</td>
+                  <td className="px-4 py-3 text-center text-ink-secondary">{u.visited_count}/27</td>
                   <td className="px-4 py-3 text-center">
                     {u.pending_visits_count > 0 ? (
                       <span className="inline-flex items-center rounded-full bg-amber-100 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 px-2 py-0.5 text-xs font-medium">
@@ -120,15 +120,15 @@ export function UserOverviewTable({ rows }: Props) {
                       <span className="text-slate-300 dark:text-slate-600">—</span>
                     )}
                   </td>
-                  <td className="px-4 py-3 text-center text-slate-700 dark:text-slate-300">{u.badges_earned}/11</td>
-                  <td className="px-4 py-3 text-center text-slate-700 dark:text-slate-300">
+                  <td className="px-4 py-3 text-center text-ink-secondary">{u.badges_earned}/11</td>
+                  <td className="px-4 py-3 text-center text-ink-secondary">
                     {u.photos_count}
                     {u.storage_bytes > 0 && (
-                      <div className="text-[11px] text-slate-400 dark:text-slate-500">{formatBytes(u.storage_bytes)}</div>
+                      <div className="text-[11px] text-ink-faint">{formatBytes(u.storage_bytes)}</div>
                     )}
                   </td>
-                  <td className="px-4 py-3 text-center text-slate-700 dark:text-slate-300">{u.trips_count}</td>
-                  <td className="px-4 py-3 text-center text-slate-700 dark:text-slate-300">{u.companions_count}</td>
+                  <td className="px-4 py-3 text-center text-ink-secondary">{u.trips_count}</td>
+                  <td className="px-4 py-3 text-center text-ink-secondary">{u.companions_count}</td>
                   <td className="px-4 py-3 text-right">
                     <button
                       onClick={() => setSelectedUserId(u.id)}

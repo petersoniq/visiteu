@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.20.0](https://github.com/petersoniq/visiteu/compare/v1.19.0...v1.20.0) (2026-09-17)
+
+
+### Features
+
+* jednotný dizajnový systém naprieč celou appkou ([f4becc8](https://github.com/petersoniq/visiteu/commit/f4becc8516c1447df14388cc5bf80e548b7e2bb0))
+
 ## [1.19.0](https://github.com/petersoniq/visiteu/compare/v1.18.1...v1.19.0) (2026-09-16)
 
 
